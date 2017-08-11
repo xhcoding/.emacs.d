@@ -57,7 +57,12 @@
 	(message "Indented buffer.")))))
 (global-set-key (kbd "C-M-\\") 'indent-region-or-buffer)
 
-(window-numbering-mode t)
 
+;; window number
+(window-numbering-mode t)
+ 
+;; auto save
+(require 'auto-save)
+(auto-save-enable)
 
 (provide 'init-better-default)
