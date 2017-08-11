@@ -1,0 +1,89 @@
+;; Object semanticdb-project-database-file
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "semanticdb-project-database-file"
+  :tables
+  (list
+    (semanticdb-table "semanticdb-table"
+      :major-mode c++-mode
+      :tags 
+        '( ("iostream" include (:system-flag t) nil [1 20])
+            ("fstream" include (:system-flag t) nil [21 39])
+            ("query_text/TextQuery.h" include nil nil [40 73])
+            ("query/Query_base.h" include nil nil [74 103])
+            ("handle/Query.h" include nil nil [104 129])
+            ("command/command.h" include nil nil [130 158])
+            ("std" using (:type ("std" type
+                 (:prototype t
+                  :type "namespace")
+                  nil nil)) nil [159 179])
+            ("make_plural" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("" variable (:type ("set" type
+                         (:template-specifier 
+                            ( ("TextQuery::line_no" type nil nil nil))                            
+                          :type "class")
+                          nil nil)) (reparse-symbol arg-sub-list) [207 231])
+                    ("ctr" variable (:type ("size_type" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [232 246])
+                    ("word" variable
+                       (:reference 1
+                        :constant-flag t
+                        :type ("string" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [247 266])
+                    ("ending" variable
+                       (:reference 1
+                        :constant-flag t
+                        :type ("string" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [267 288]))                  
+                :type ("string" type (:type "class") nil nil))
+                nil [181 338])
+            ("open_file" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("infile" variable
+                       (:reference 1
+                        :type ("ifstream" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [367 384])
+                    ("filename" variable
+                       (:reference 1
+                        :constant-flag t
+                        :type ("string" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [385 408]))                  
+                :type ("ifstream" type (:type "class") nil nil))
+                nil [340 506])
+            ("print_results" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("locs" variable
+                       (:reference 1
+                        :constant-flag t
+                        :type ("set" type
+                             (:template-specifier 
+                                ( ("TextQuery::line_no" type nil nil nil))                                
+                              :type "class")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [534 570])
+                    ("file" variable
+                       (:reference 1
+                        :constant-flag t
+                        :type ("TextQuery" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [571 593]))                  
+                :type "void")
+                nil [508 947])
+            ("main" function
+               (:arguments 
+                  ( ("argc" variable (:type "int") (reparse-symbol arg-sub-list) [958 967])
+                    ("argv" variable
+                       (:pointer 2
+                        :type "char")
+                        (reparse-symbol arg-sub-list) [968 980]))                  
+                :type "int")
+                nil [949 1441]))          
+      :file "main.cpp"
+      :pointmax 1442
+      :fsize 1441
+      :lastmodtime '(22669 52855 0 0)
+      :unmatched-syntax '((punctuation 231 . 232) (punctuation 230 . 231))))
+  :file "!home!xhcoding!Source!C++!C++_Primer!TextQuery!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.2")
