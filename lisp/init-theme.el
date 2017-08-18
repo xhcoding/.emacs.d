@@ -4,7 +4,7 @@
 (maybe-require-package 'color-theme-sanityinc-solarized)
 (maybe-require-package 'color-theme-sanityinc-tomorrow)
 
-(setq-default custom-enabled-themes '(sanityinc-solarized-dark))
+(setq-default custom-enabled-themes '(sanityinc-solarized-light))
 	      
 (defun reapply-themes ()
   "Forcibly load the themes listed in `custom-enabled-themes'."

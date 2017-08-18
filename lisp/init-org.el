@@ -17,9 +17,30 @@
 
 
 
+
+(defun org-custom-img-link-follow (path)
+  (org-open-file-with-emacs path))
+
+(defun org-custom-img-link-export (path desc backend)
+  (cond
+   ((eq 'html backend)
+    (setq image-name (file-name-nondirectory path))
+    (format "<img src=\"http://ivme.xhcoding.cn/%s\" alt=\"%s\" />" image-name desc)
+    )))
+
+;; [[img-hexo:image-path]]
+(org-link-set-parameters
+ "img-hexo"
+ :follow 'org-custom-img-link-follow  ;;  click link
+ :export 'org-custom-img-link-export  ;;  export html
+ :help-echo "Click me to display image")
+
+
+
+
 (defun xhcoding/insert-org-or-md-img-link (prefix imagename)
   (if (equal (file-name-extension (buffer-file-name)) "org")
-      (insert (format "[[%s%s]]" prefix imagename))
+      (insert (format "[[img-hexo:%s%s]]" prefix imagename))
     (insert (format "![%s](%s%s)" imagename prefix imagename))))
 
 
@@ -30,12 +51,22 @@
   (interactive "sScreenshot name: ")
   (if (equal basename "")
       (setq basename (concat (file-name-base buffer-file-name) (format-time-string "_%H%M%S"))))
-  (setq fullpath (concat "/home/xhcoding/Documents/Blog/hexo/images/" basename))
-  (suspend-frame)
-  (call-process-shell-command "scrot" nil nil nil nil "-s" (concat fullpath ".png"))
-  (call-process-shell-command "/home/xhcoding/Tools/qshell-v2.0.7/qshell qupload /home/xhcoding/Tools/qshell-v2.0.7/upload_config.json")
-  (xhcoding/insert-org-or-md-img-link "http://ivme.xhcoding.cn/" (concat basename ".png"))
+  (setq savepath "/home/xhcoding/Documents/Blog/hexo/images/")
+  (setq fullpath (concat savepath basename))
+  ;; miximize the window by call xdotool trigger a system global shortcut
+  (call-process-shell-command "xdotool key super+n")
+  ;; if emacs is gui mode 
+  ;; (suspend-frame)
+  (sleep-for 1)
+  ;; use scrot
+  ;; (call-process-shell-command "scrot" nil nil nil nil "-s" (concat fullpath ".png"))
+  ;; use deepin-screenshot
+  (call-process-shell-command (concat "deepin-screenshot -i -s" (concat fullpath ".jpg")))
+  ;;(call-process-shell-command "/home/xhcoding/Tools/qshell-v2.0.7/qshell qupload /home/xhcoding/Tools/qshell-v2.0.7/upload_config.json")
+  (xhcoding/insert-org-or-md-img-link savepath (concat basename ".jpg"))
   (insert "\n"))
+
+
 
 
 (provide 'init-org)
