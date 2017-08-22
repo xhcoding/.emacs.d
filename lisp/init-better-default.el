@@ -14,7 +14,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;;高亮当前行
-(global-hl-line-mode t)   
+(global-hl-line-mode t)  
 
 ;; hungry-delete 一下删除所有空格
 (global-hungry-delete-mode t)
@@ -64,5 +64,8 @@
 ;; auto save
 (require 'auto-save)
 (auto-save-enable)
+
+;; 关掉emacs退出时把剪贴板的内容保存到桌面管理器的剪贴板管理器，因为退出时会一直卡在这一步
+(setq-default x-select-enable-clipboard-manager nil)
 
 (provide 'init-better-default)

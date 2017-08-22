@@ -57,10 +57,14 @@
 (require 'init-spc-keybindings)
 ;; c/c++ 开发设置
 (require 'init-cc)
+;; java 开发设置
+(require 'init-java)
 ;; js.php
 (require 'init-web)
 ;; 远程管理
 (require 'init-tramp)
+;; plantuml
+(require 'init-plantuml)
 ;载入custom.el
 (when (file-exists-p custom-file)
   (load custom-file))
