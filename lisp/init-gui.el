@@ -5,8 +5,8 @@
 (menu-bar-mode -1)
 
 ;; 开启行号
-;(global-linum-mode t)
-;(setq linum-delay t)
+				      ;(global-linum-mode t)
+					;(setq linum-delay t)
 ;; 开启列号
 (column-number-mode t)
 
@@ -24,4 +24,5 @@
 ;;打开时全屏
 (setq initial-frame-alist (quote ((fullscreen . maximized))))
 
+;;mode-line
 (provide 'init-gui)

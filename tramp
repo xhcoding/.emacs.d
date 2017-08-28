@@ -1,4 +1,4 @@
-;; -*- emacs-lisp -*- <17/04/27 21:41:24 /home/xhcoding/.emacs.d/tramp>
+;; -*- emacs-lisp -*- <17/08/28 20:23:16 /home/xhcoding/.emacs.d/tramp>
 ;; Tramp connection history.  Don't change this file.
 ;; You can delete it, forcing Tramp to reapply the checks.
 
@@ -19,7 +19,7 @@
   ("gid-integer" 0)
   ("gid-string" "root")
   ("uid-integer" 0))
- (["sudo" "root" "115.159.108.48" nil nil]
+ (["ssh" "root" "smb" nil nil]
   nil)
- (["ssh" "root" "sudo" nil nil]
+ (["ssh" "root" "vagrant" nil nil]
   nil))

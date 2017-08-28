@@ -16,7 +16,10 @@
 (setq org-octopress-directory-org-posts "~/Documents/Blog/hexo/blog")
 
 
-
+;; 同步博客图片目录到七牛云
+(defun sync-blog-img-to-qiniu()
+  (interactive)
+  (call-process-shell-command "/home/xhcoding/Tools/qshell-v2.0.7/qshell qupload /home/xhcoding/Tools/qshell-v2.0.7/upload_config.json"))
 
 (defun org-custom-img-link-follow (path)
   (org-open-file-with-emacs path))
@@ -62,7 +65,7 @@
   ;; (call-process-shell-command "scrot" nil nil nil nil "-s" (concat fullpath ".png"))
   ;; use deepin-screenshot
   (call-process-shell-command (concat "deepin-screenshot -i -s" (concat fullpath ".jpg")))
-  ;;(call-process-shell-command "/home/xhcoding/Tools/qshell-v2.0.7/qshell qupload /home/xhcoding/Tools/qshell-v2.0.7/upload_config.json")
+  (sync-blog-img-to-qiniu)
   (xhcoding/insert-org-or-md-img-link savepath (concat basename ".jpg"))
   (insert "\n"))
 

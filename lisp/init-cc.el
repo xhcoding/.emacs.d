@@ -4,7 +4,9 @@
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 
 ;; 代码风格
-(setq c-default-style "linux")
+(require 'google-c-style)
+(add-hook 'c-mode-common-hook 'google-set-c-style)
+(setq c-default-style "google")
 (setq c-basic-offset 4)
 
 
@@ -28,6 +30,10 @@
 			    file)))))
   (set-compile-command command))
 
+(defun compile-not-ask()
+  (interactive)
+  (compile compile-command))
+
 (add-hook 'c-mode-common-hook 'my-compile-command)
 (require 'cc-mode)
 
@@ -47,11 +53,13 @@
 
 (defun compile-and-run()
   (interactive)
-  (compile compile-command)
-  (run-buffer-file))
+  (progn
+    (compile compile-command)
+    (run-buffer-file)))
 
-(define-key c++-mode-map (kbd "<f7>") 'compile)
+(define-key c++-mode-map (kbd "<f7>") 'compile-not-ask)
 (define-key c++-mode-map (kbd "<f8>") 'run-buffer-file)
+(define-key c-mode-map (kbd "<f8>") 'run-buffer-file)
 (define-key c++-mode-map (kbd "<f9>") 'compile-and-run)
 
 (provide 'init-cc)

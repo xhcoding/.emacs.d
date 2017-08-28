@@ -18,5 +18,9 @@
 (global-evil-leader-mode t)
 (evil-leader/set-leader "<SPC>")
 
+;; redefine some keybinds 
+(define-key evil-insert-state-map (kbd "C-p") 'previous-line)
+(define-key evil-insert-state-map (kbd "C-n") 'next-line)
+
 
 (provide 'init-evil)

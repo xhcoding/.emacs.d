@@ -30,8 +30,6 @@
 (require 'init-theme)
 ;; gui配置
 (require 'init-gui)
-;; mode line 优化
-;;(require 'init-modeline)
 ;; 最近文件
 (require 'init-recentf)
 ;; 括号，引号的配对及括号高亮配置
