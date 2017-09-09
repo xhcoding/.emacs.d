@@ -6,7 +6,6 @@
 ;; 代码风格
 (require 'google-c-style)
 (add-hook 'c-mode-common-hook 'google-set-c-style)
-(setq c-default-style "google")
 (setq c-basic-offset 4)
 
 
