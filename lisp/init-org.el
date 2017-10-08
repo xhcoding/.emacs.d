@@ -1,25 +1,37 @@
 
-;; basic config
 (setq org-src-fontify-natively t)
 
+(use-package markdown-mode)
 
-;; blog config
+;; hexo blog
 
-(require-package 'org-octopress)
-(require-package 'ox-latex-chinese)
-(require-package 'uimage)
-
-(require 'org-octopress)
-(setq org-octopress-directory-top "~/Documents/Blog/hexo/source")
-(setq org-octopress-directory-posts "~/Documents/Blog/hexo/source/_posts")
-(setq org-octopress-directory-org-top "~/Documents/Blog/hexo/")
-(setq org-octopress-directory-org-posts "~/Documents/Blog/hexo/blog")
+(defvar my-blog-top-dir
+  "~/Blog/"
+  "Blog root directory")
 
 
-;; 同步博客图片目录到七牛云
+(use-package orglue
+  :defer t)
+
+(use-package org-octopress
+  :config
+  (progn
+    (require 'org-octopress)
+    (setq
+     org-octopress-directory-top (expand-file-name "source" my-blog-top-dir)
+     org-octopress-directory-posts (expand-file-name "source/_posts" my-blog-top-dir)
+     org-octopress-directory-org-top my-blog-top-dir
+     org-octopress-directory-org-posts (expand-file-name "blog" my-blog-top-dir)
+     org-octopress-setup-file (expand-file-name "setupfile.org" my-blog-top-dir)
+     )))
+
+
+
+;; sync images
 (defun sync-blog-img-to-qiniu()
   (interactive)
   (call-process-shell-command "/home/xhcoding/Tools/qshell-v2.0.7/qshell qupload /home/xhcoding/Tools/qshell-v2.0.7/upload_config.json"))
+
 
 (defun org-custom-img-link-follow (path)
   (org-open-file-with-emacs path))
@@ -31,7 +43,16 @@
     (format "<img src=\"http://ivme.xhcoding.cn/%s\" alt=\"%s\" />" image-name desc)
     )))
 
-;; [[img-hexo:image-path]]
+;; (defun org-custom-img-link-export-md (path desc backend)
+;;   (cond
+;;    ((eq 'md backend)
+;;     (setq image-name (file-name-nondirectory path))
+;;     (format "![%s](http://ivme.xhcoding.cn/%s)" desc image-name)
+;;     )))
+
+
+
+;; ;; [[img-hexo:image-pathG]]
 (org-link-set-parameters
  "img-hexo"
  :follow 'org-custom-img-link-follow  ;;  click link
@@ -54,7 +75,7 @@
   (interactive "sScreenshot name: ")
   (if (equal basename "")
       (setq basename (concat (file-name-base buffer-file-name) (format-time-string "_%H%M%S"))))
-  (setq savepath "/home/xhcoding/Documents/Blog/hexo/images/")
+  (setq savepath (expand-file-name "images/" my-blog-top-dir))
   (setq fullpath (concat savepath basename))
   ;; miximize the window by call xdotool trigger a system global shortcut
   (call-process-shell-command "xdotool key super+n")
@@ -68,7 +89,6 @@
   (sync-blog-img-to-qiniu)
   (xhcoding/insert-org-or-md-img-link savepath (concat basename ".jpg"))
   (insert "\n"))
-
 
 
 (provide 'init-org)
