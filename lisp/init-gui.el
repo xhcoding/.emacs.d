@@ -264,14 +264,30 @@
 ;;======================================
 
 ;;==========font============
-;; setting english font
-(set-face-attribute 'default nil :font (format   "%s:pixelsize=%d" "Source Code Pro" 17))
-;; chinese font
-(dolist (charset '(kana han symbol cjk-misc bopomofo))
-  (set-fontset-font (frame-parameter nil 'font)
-		    charset
-		    (font-spec :family "WenQuanYi Micro Hei Mono" :size 20)))
+
+(defun my-default-font()
+  (interactive)
+  
+  ;; english font
+  (set-face-attribute 'default nil :font (format   "%s:pixelsize=%d" "Source Code Pro" 17))
+  ;; chinese font
+  (dolist (charset '(kana han symbol cjk-misc bopomofo))
+    (set-fontset-font (frame-parameter nil 'font)
+		      charset
+		      (font-spec :family "WenQuanYi Micro Hei Mono" :size 20))))
 
 
+(add-to-list 'after-make-frame-functions
+	     (lambda (new-frame)
+	       (select-frame new-frame)
+	       (if window-system
+		   (my-default-font)
+		 )))
+
+(if window-system
+    (my-default-font)
+  )
+
+;;============================
 
 (provide 'init-gui)

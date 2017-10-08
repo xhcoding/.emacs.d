@@ -22,8 +22,8 @@
 	  (lambda()
 	    (add-to-list 'TeX-command-list '("XeLaTeX" "%`xelatex%(mode)%' %t" TeX-run-TeX nil t))
 	   ;; (setq TeX-command-default "XeLaTeX")
-	    (setq TeX-save-querynil )
-	    (setq TeX-show-compilation t)
+	    (setq TeX-save-querynil t)
+	    (setq TeX-show-compilation nil)
 	    ))
 
 (provide 'init-tex)
