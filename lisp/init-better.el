@@ -81,7 +81,7 @@
 (use-package which-key
   :defer t
   :diminish which-key-mode
-  :config
+  :init
   (progn
     (setq which-key-idle-delay 0.1)
     (which-key-mode)

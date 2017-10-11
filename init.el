@@ -30,6 +30,9 @@
 ;; cpp
 (require 'init-cpp)
 
+;; java
+(require 'init-java)
+
 ;; vv
 (require 'init-vc)
 
