@@ -33,6 +33,9 @@
 ;; java
 (require 'init-java)
 
+;; python
+(require 'init-python)
+
 ;; vv
 (require 'init-vc)
 

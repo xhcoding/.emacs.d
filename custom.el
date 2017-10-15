@@ -13,7 +13,7 @@
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(package-selected-packages
    (quote
-    (groovy-mode meghanada company-auctex company-math auctex markdown-mode cmake-mode request typing magit bing-dict nasm-mode dracula-theme elpa-mirror ctable orglue htmlize evil-leader evil-escape evil popwin emacs-ctable org-octopress org-octpress anzu cyphejor abbrev counsel-gtags counsel-projectile projectile zenburn-theme cpputils-cmake monokai-theme monokai smart-mode-line org expand-region which-key window-numbering auto-save hungry-delete flycheck-irony company-irony company-irony-c-headers irony yasnippet flycheck evil-tutor evil-visualstar evil-surround rainbow-delimiters smartparens company guide-key undo-tree color-theme-sanityinc-solarized miniedit counsel swiper ivy dash auto-compile use-package)))
+    (company-jedi elpy python-mode py-autopep8 groovy-mode meghanada company-auctex company-math auctex markdown-mode cmake-mode request typing magit bing-dict nasm-mode dracula-theme elpa-mirror ctable orglue htmlize evil-leader evil-escape evil popwin emacs-ctable org-octopress org-octpress anzu cyphejor abbrev counsel-gtags counsel-projectile projectile zenburn-theme cpputils-cmake monokai-theme monokai smart-mode-line org expand-region which-key window-numbering auto-save hungry-delete flycheck-irony company-irony company-irony-c-headers irony yasnippet flycheck evil-tutor evil-visualstar evil-surround rainbow-delimiters smartparens company guide-key undo-tree color-theme-sanityinc-solarized miniedit counsel swiper ivy dash auto-compile use-package)))
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

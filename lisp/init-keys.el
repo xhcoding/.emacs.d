@@ -18,6 +18,7 @@
   "x 3" 'split-window-right
   "x 2" 'split-window-below
   "s" 'swiper
+  "q" 'quit-window
   "0" 'delete-window
   "1" 'select-window-1
   "2" 'select-window-2

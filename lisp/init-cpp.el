@@ -15,19 +15,19 @@
     ;;(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
     )
   :config
-    (use-package company-irony-c-headers)
-    (use-package company-irony
-      :config
-      (add-hook 'c-mode-common-hook
-		(lambda ()
-		  (add-to-list (make-local-variable 'company-backends)
-			       '(company-irony company-irony-c-headers))))
-      )
-    (use-package flycheck-irony
-      :defer t
-      :init
-      (flycheck-irony-setup))
+  (use-package company-irony-c-headers)
+  (use-package company-irony
+    :config
+    (add-hook 'c-mode-common-hook
+	      (lambda ()
+		(add-to-list (make-local-variable 'company-backends)
+			     '(company-irony company-irony-c-headers))))
     )
+  (use-package flycheck-irony
+    :defer t
+    :init
+    (flycheck-irony-setup))
+  )
 
 
 
@@ -59,5 +59,41 @@
 				   "/usr/include"))
     (add-hook 'c-mode-hook 'counsel-gtags-mode)
     (add-hook 'c++-mode-hook 'counsel-gtags-mode)))
+
+
+;; setting compile command by current buffer
+
+(defun set-compile-command()
+  "Setting compile command by current buffer"
+  (interactive)
+  (progn
+    (setq file-path (buffer-file-name))
+    (setq file-name-extension (file-name-extension file-path))
+    (setq file-name (concat (file-name-base file-path) "." file-name-extension)))
+  (cond
+   ((file-exists-p "Makefile")
+    (setq compile-command "make"))
+   ((string-equal "c" file-name-extension)
+    (setq compile-command (concat "gcc -Wall -Werror -std=c11 -o " (file-name-base file-path) " " file-name))
+    )
+   ((string-equal "cpp" file-name-extension)
+    (setq compile-command (concat "g++ -Wall -Werror -std=c++11 -o " (file-name-base file-path) " " file-name))
+    )
+   ))
+
+(defun compile-current-buffer()
+  "Compile current buffer"
+  (interactive)
+  (set-compile-command)
+  (compile compile-command))
+
+(use-package cc-mode
+  :config
+  (progn
+(define-key c-mode-map (kbd "<f7>") 'compile-current-buffer)
+(define-key c++-mode-map (kbd "<f7>") 'compile-current-buffer)
+))
+
+
 
 (provide 'init-cpp)
