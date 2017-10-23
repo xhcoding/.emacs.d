@@ -247,4 +247,10 @@
 (use-package nasm-mode
   :mode "\\.nas\\'")
 
+;; asm86
+(autoload 'asm86-mode "asm86-mode.el")
+ (setq auto-mode-alist 
+    (append '(("\\.asm\\'" . asm86-mode) ("\\.inc\\'" . asm86-mode)) 
+    auto-mode-alist))
+
 (provide 'init-better)
