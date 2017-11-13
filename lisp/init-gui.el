@@ -33,13 +33,19 @@
     (setq-default custom-enabled-themes '(zenburn))))
 
 
-(use-package color-theme-sanityinc-solarized
+;; (use-package color-theme-sanityinc-solarized
+;;   :disabled
+;;   :if window-system
+;;   :init
+;;   (progn
+;;     (setq-default custom-enabled-themes '(sanityinc-solarized-dark))
+;;     ))
+
+(use-package dracula-theme
   :if window-system
   :init
   (progn
-    (setq-default custom-enabled-themes '(sanityinc-solarized-dark))
-    ))
-
+    (setq-default custom-enabled-themes '(dracula))))
 
 ;; toggle between light and night
 (defun light ()
@@ -229,6 +235,9 @@
 
 	       " "
 
+	       '(:eval (list nyan-create))
+	       
+	       " "
 	       ;; global-mode-string goes in mode-line-misc-info
 	       mode-line-misc-info
 

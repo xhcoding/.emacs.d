@@ -74,10 +74,10 @@
    ((file-exists-p "Makefile")
     (setq compile-command "make"))
    ((string-equal "c" file-name-extension)
-    (setq compile-command (concat "gcc -Wall -Werror -std=c11 -o " (file-name-base file-path) " " file-name))
+    (setq compile-command (concat "gcc -g -Wall -Werror -std=c11 -o " (file-name-base file-path) " " file-name))
     )
    ((string-equal "cpp" file-name-extension)
-    (setq compile-command (concat "g++ -Wall -Werror -std=c++11 -o " (file-name-base file-path) " " file-name))
+    (setq compile-command (concat "g++ -g -Wall -Werror -std=c++11 -o " (file-name-base file-path) " " file-name))
     )
    ))
 

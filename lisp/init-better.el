@@ -9,6 +9,7 @@
 ;; sentence end with a single space
 (setq sentence-end-double-space nil)
 
+
 ;; popwin
 (use-package popwin
   :config
@@ -243,14 +244,20 @@
   (if (file-exists-p abbrev-file-name)
       (quietly-read-abbrev-file)))
 
+;; buffer
+(defun kill-other-buffers ()
+  "Kill all other buffers."
+  (interactive)
+  (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
+
 
 (use-package nasm-mode
   :mode "\\.nas\\'")
 
 ;; asm86
 (autoload 'asm86-mode "asm86-mode.el")
- (setq auto-mode-alist 
-    (append '(("\\.asm\\'" . asm86-mode) ("\\.inc\\'" . asm86-mode)) 
-    auto-mode-alist))
+(setq auto-mode-alist 
+      (append '(("\\.asm\\'" . asm86-mode) ("\\.inc\\'" . asm86-mode))
+	      auto-mode-alist))
 
 (provide 'init-better)
