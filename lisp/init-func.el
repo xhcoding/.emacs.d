@@ -80,4 +80,15 @@
 
 (add-hook 'after-init-hook 'reapply-themes)
 
+(defun replace-line-regexp(filename regexp to-string)
+  "Replace things of the file after point matching REGEXP with TO-STRING."
+  (progn
+    (set-buffer (find-file-noselect filename))
+    (re-search-forward regexp)
+    (replace-match to-string)
+    (save-buffer)
+    (kill-buffer)))
+
+
+
 (provide 'init-func)

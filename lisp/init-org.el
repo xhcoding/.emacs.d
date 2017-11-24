@@ -1,9 +1,34 @@
+;;; Package --- init-org.el
+;;; Commentary:
+;;; org config
 
-(setq org-src-fontify-natively t)
+
+;;; Code:
 
 (use-package markdown-mode)
+(require 'org)
+(add-to-list 'org-modules 'org-habit)
+(require 'org-habit)
 
-;; hexo blog
+
+(defun xhcoding/yank-link()
+  (interactive)
+  (insert "[[")
+  (yank)
+  (insert "]]"))
+
+(setq org-src-fontify-natively t)
+(setq org-default-notes-file (concat org-directory "/notes.org"))
+
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!/!)")))
+
+(setq org-log-done t)
+(setq org-log-into-drawer "LOGBOOK")
+
+
+
+;;=================== hexo blog====================
 
 (defvar my-blog-top-dir
   "~/Blog/"
@@ -89,6 +114,9 @@
   (sync-blog-img-to-qiniu)
   (xhcoding/insert-org-or-md-img-link savepath (concat basename ".jpg"))
   (insert "\n"))
+
+
+;;===============================================
 
 
 (provide 'init-org)

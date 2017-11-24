@@ -36,11 +36,15 @@
 ;; python
 (require 'init-python)
 
+;; asm
+(require 'init-asm)
+
 ;; vv
 (require 'init-vc)
 
 ;; latex
 (require 'init-tex)
+
 ;; keybindings
 (require 'init-keys)
 

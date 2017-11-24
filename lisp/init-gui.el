@@ -20,17 +20,13 @@
 ;; change cursor-type
 (setq-default cursor-type 'bar)
 
+
 ;; highline
 (global-hl-line-mode)
 
 
 ;;==============theme===================
 
-(use-package zenburn-theme
-  :unless window-system
-  :init
-  (progn
-    (setq-default custom-enabled-themes '(zenburn))))
 
 
 ;; (use-package color-theme-sanityinc-solarized
@@ -42,7 +38,6 @@
 ;;     ))
 
 (use-package dracula-theme
-  :if window-system
   :init
   (progn
     (setq-default custom-enabled-themes '(dracula))))
@@ -59,6 +54,7 @@
   (interactive)
   (setq custom-enabled-themes '(sanityinc-solarized-dark))
   (reapply-themes))
+
 
 
 ;;==============theme===================

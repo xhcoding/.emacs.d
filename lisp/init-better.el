@@ -1,8 +1,36 @@
+;;; Package --- init-better.el
+;;; Commentary:
+
+;;; Code:
+
 ;; change "yes or no" to "y or n"
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; turn off auto backup
-(setq make-backup-files nil)
+(setq make-backup-files t)
+
+
+(setq backup-directory-alist
+      `(("." . "~/Backup/emacs-dir/")))
+
+(defun make-backup-file-name--custom-function (file)
+  "Custom function for `make-backup-file-name'.
+Normally this just returns FILE's name with `~' appended.
+It searches for a match for FILE in `backup-directory-alist'.
+If the directory for the backup doesn't exist, it is created."
+  (if (and (eq system-type 'ms-dos)
+           (not (msdos-long-file-names)))
+      (let ((fn (file-name-nondirectory file)))
+        (concat (file-name-directory file)
+                (or (and (string-match "\\`[^.]+\\'" fn)
+                         (concat (match-string 0 fn) ".~"))
+                    (and (string-match "\\`[^.]+\\.\\(..?\\)?" fn)
+                         (concat (match-string 0 fn) "~")))))
+    (concat (make-backup-file-name-1 file) "~"
+	    (format-time-string "%Y-%m-%d-%H%M%S"))))
+
+
+(setq make-backup-file-name-function 'make-backup-file-name--custom-function)
 
 (global-auto-revert-mode t) ;; auto revert
 
@@ -250,14 +278,15 @@
   (interactive)
   (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
 
+(use-package highlight-indent-guides
+  :init
+  (progn
+  (setq highlight-indent-guides-method 'character)
+  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)))
 
-(use-package nasm-mode
-  :mode "\\.nas\\'")
-
-;; asm86
-(autoload 'asm86-mode "asm86-mode.el")
-(setq auto-mode-alist 
-      (append '(("\\.asm\\'" . asm86-mode) ("\\.inc\\'" . asm86-mode))
-	      auto-mode-alist))
+(use-package column-enforce-mode
+  :init
+  (add-hook 'prog-mode-hook 'column-enforce-mode))
 
 (provide 'init-better)
+;;; init-better.el ends here

@@ -25,7 +25,14 @@
   "3" 'select-window-3
   "4" 'select-window-4
   "5" 'select-window-5
+  ;; org
+  "o l" 'org-insert-link-global
+  "o o" 'org-open-at-point-global
+  "o c" 'org-capture
+  "o y" 'xhcoding/yank-link
+  "o a" 'org-agenda
   )
+
 
 ;; about help
 (evil-leader/set-key
@@ -91,5 +98,13 @@
   "m s" 'magit-status
   "m h" 'magit-dispatch-popup)
 
+;; org
+(evil-leader/set-key-for-mode 'org-mode
+  "o t" 'org-todo
+  "o #" 'org-update-statistics-cookies
+  "o ." 'org-time-stamp
+  "o >" 'org-goto-calendar)
+
+(evil-leader/set-leader)
 
 (provide 'init-keys)
