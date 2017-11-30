@@ -90,9 +90,9 @@
 (use-package cc-mode
   :config
   (progn
-(define-key c-mode-map (kbd "<f7>") 'compile-current-buffer)
-(define-key c++-mode-map (kbd "<f7>") 'compile-current-buffer)
-))
+    (define-key c-mode-map (kbd "<f7>") 'compile-current-buffer)
+    (define-key c++-mode-map (kbd "<f7>") 'compile-current-buffer)
+    ))
 
 
 

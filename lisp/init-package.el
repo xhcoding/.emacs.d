@@ -28,7 +28,7 @@
 
 (use-package elpa-mirror
   :init
-  (setq elpamr-default-output-directory "~/planB/myelpa"))
+  (setq elpamr-default-output-directory "~/Backup/myelpa"))
 
 
 (provide 'init-package)

@@ -3,6 +3,7 @@
 
 ;;; Code:
 
+
 ;; change "yes or no" to "y or n"
 (fset 'yes-or-no-p 'y-or-n-p)
 

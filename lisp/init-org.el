@@ -32,7 +32,7 @@
 
 (defvar my-blog-top-dir
   "~/Blog/"
-  "Blog root directory")
+  "Blog root directory.")
 
 
 (use-package orglue
@@ -110,7 +110,7 @@
   ;; use scrot
   ;; (call-process-shell-command "scrot" nil nil nil nil "-s" (concat fullpath ".png"))
   ;; use deepin-screenshot
-  (call-process-shell-command (concat "deepin-screenshot -i -s" (concat fullpath ".jpg")))
+  (call-process-shell-command (concat "scrot -s " (concat fullpath ".jpg")))
   (sync-blog-img-to-qiniu)
   (xhcoding/insert-org-or-md-img-link savepath (concat basename ".jpg"))
   (insert "\n"))
