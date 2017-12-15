@@ -17,6 +17,7 @@
   "x k" 'kill-buffer
   "x 3" 'split-window-right
   "x 2" 'split-window-below
+  "g" 'goto-line
   "s" 'swiper
   "q" 'quit-window
   "0" 'delete-window
@@ -105,6 +106,5 @@
   "o ." 'org-time-stamp
   "o >" 'org-goto-calendar)
 
-(evil-leader/set-leader)
 
 (provide 'init-keys)

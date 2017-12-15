@@ -95,5 +95,24 @@
     ))
 
 
+(defun ins-c++-curly ()
+  "Insert {}.
+Threat is as function body when from endline before )"
+  (interactive)
+  (if (looking-back "\\()\\|) \\|try\\|else[ ]\\|const\\|:\\)[ ]?$"
+		    (line-beginning-position))
+      (progn
+        (insert " {\n\n}")
+        (indent-according-to-mode)
+        (forward-line -1)
+        (indent-according-to-mode))
+    (insert "{}")
+    (backward-char)))
+
+(add-hook 'c-mode-common-hook 'my-c-common-hook)
+
+(defun my-c-common-hook ()
+  (define-key c-mode-base-map "{" 'ins-c++-curly))
+
 
 (provide 'init-cpp)
