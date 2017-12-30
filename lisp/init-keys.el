@@ -17,7 +17,7 @@
   "x k" 'kill-buffer
   "x 3" 'split-window-right
   "x 2" 'split-window-below
-  "g" 'goto-line
+  "l" 'goto-line
   "s" 'swiper
   "q" 'quit-window
   "0" 'delete-window

@@ -203,6 +203,7 @@ If the directory for the backup doesn't exist, it is created."
   :config
   (progn
     (evil-mode t)
+
     (use-package evil-escape
       :diminish evil-escape-mode
       :init
@@ -282,8 +283,8 @@ If the directory for the backup doesn't exist, it is created."
 (use-package highlight-indent-guides
   :init
   (progn
-  (setq highlight-indent-guides-method 'character)
-  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)))
+    (setq highlight-indent-guides-method 'character)
+    (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)))
 
 (use-package column-enforce-mode
   :init
