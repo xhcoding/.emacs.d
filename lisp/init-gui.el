@@ -37,10 +37,10 @@
 ;;     (setq-default custom-enabled-themes '(sanityinc-solarized-dark))
 ;;     ))
 
-(use-package dracula-theme
-  :init
-  (progn
-    (setq-default custom-enabled-themes '(dracula))))
+;; (use-package dracula-theme
+;;   :init
+;;   (progn
+;;     (setq-default custom-enabled-themes '(dracula))))
 
 ;; toggle between light and night
 (defun light ()
@@ -229,9 +229,6 @@
 	       ;; git info
 	       `(vc-mode vc-mode)
 
-	       " "
-
-	       '(:eval (list nyan-create))
 	       
 	       " "
 	       ;; global-mode-string goes in mode-line-misc-info

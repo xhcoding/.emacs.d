@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: copyright
+# key: cr
+# --
+`(yas-trimmed-comment-start)` `(concat "Copyright (c) " (format-time-string "%Y") " " (user-full-name) ". All right reserved.")` 
+$0

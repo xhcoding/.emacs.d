@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: file header
+# key: head
+# --
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-

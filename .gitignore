@@ -8,3 +8,5 @@ tramp
 project*
 meghanada
 .python-*
+/pyim
+srecode-map.el

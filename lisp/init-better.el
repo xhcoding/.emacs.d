@@ -3,12 +3,24 @@
 
 ;;; Code:
 
+(setq user-full-name "xhcoding")
+(setq user-mail-address "xhcoding@163.com")
+
 
 ;; change "yes or no" to "y or n"
 (fset 'yes-or-no-p 'y-or-n-p)
 
+;;不要烦人的 redefine warning
+(setq ad-redefinition-action 'accept)        
+
 ;; turn off auto backup
 (setq make-backup-files t)
+(setq kept-old-versions 10)                                         ;备份老版本的数量
+(setq kept-new-versions 20)                                         ;备份新版本的数量
+(setq delete-old-versions t)                                        ;自动删除老版本
+(setq backup-by-copying t)                                          ;拷贝时自动备份
+(setq version-control t)                                            ;多版本备份
+
 
 
 (setq backup-directory-alist
@@ -29,7 +41,6 @@ If the directory for the backup doesn't exist, it is created."
                          (concat (match-string 0 fn) "~")))))
     (concat (make-backup-file-name-1 file) "~"
 	    (format-time-string "%Y-%m-%d-%H%M%S"))))
-
 
 (setq make-backup-file-name-function 'make-backup-file-name--custom-function)
 
@@ -67,14 +78,17 @@ If the directory for the backup doesn't exist, it is created."
   (progn
     (setq-default ivy-use-virtual-buffers t)
     (setq enable-recursive-minibuffers t)
-    (ivy-mode t)
-    (use-package swiper
-      :bind ("C-s" . swiper))
-    (use-package counsel
-      :bind (("M-x" . counsel-M-x)
-	     ("C-x C-f" . counsel-find-file))))
+    (ivy-mode t))
   :bind ("<f6>" . ivy-resume))
 
+(use-package swiper
+  :after ivy
+  :bind ("C-s" . swiper))
+
+(use-package counsel
+  :after ivy
+  :bind (("M-x" . counsel-M-x)
+	 ("C-x C-f" . counsel-find-file)))
 
 (use-package hungry-delete ;; hungry-delete
   :diminish hungry-delete-mode
@@ -109,9 +123,8 @@ If the directory for the backup doesn't exist, it is created."
 
 ;; guide key
 (use-package which-key
-  :defer t
   :diminish which-key-mode
-  :init
+  :config
   (progn
     (setq which-key-idle-delay 0.1)
     (which-key-mode)
@@ -152,7 +165,7 @@ If the directory for the backup doesn't exist, it is created."
 
 (use-package rainbow-delimiters
   :defer t
-  :init
+  :config
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
 ;; expand reggion
@@ -166,7 +179,7 @@ If the directory for the backup doesn't exist, it is created."
 (use-package hideshow
   :ensure nil
   :diminish hs-minor-mode
-  :init
+  :config
   (progn
     (add-hook 'prog-mode-hook 'hs-minor-mode)))
 
@@ -270,15 +283,15 @@ If the directory for the backup doesn't exist, it is created."
 (use-package abbrev
   :ensure nil
   :diminish abbrev-mode "AB"
+  :init
+  (setq-default abbrev-mode t)
   :config
-  (if (file-exists-p abbrev-file-name)
-      (quietly-read-abbrev-file)))
+  (progn
+    (if (file-exists-p abbrev-file-name)
+	(quietly-read-abbrev-file))
+    ))
 
-;; buffer
-(defun kill-other-buffers ()
-  "Kill all other buffers."
-  (interactive)
-  (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
+
 
 (use-package highlight-indent-guides
   :init

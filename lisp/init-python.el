@@ -1,18 +1,19 @@
 
 (use-package python-mode
   :defer nil
-  :init
+  :config
   (progn
+    (setq python-indent-offset 4)
     (add-to-list 'auto-mode-alist '("\.py\'" . python-mode))))
 
 (use-package elpy
-  :init
+  :config
   (progn
     (add-hook 'python-mode-hook 'elpy-enable)
     ))
 
 (use-package company-jedi
-  :init
+  :config
   (progn
     (add-hook 'python-mode-hook
 	      (lambda ()

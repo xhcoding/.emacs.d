@@ -1,6 +1,4 @@
 
-
-
 ;; package archives
 (setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
                          ("melpa" . "http://elpa.emacs-china.org/melpa/")
@@ -16,9 +14,17 @@
     (package-install 'use-package)))
 
 (use-package use-package-chords)
-(require 'use-package)
+(use-package diminish)
+(use-package bind-key)
+
 (setq use-package-verbose t)
+
 (setq use-package-always-ensure t)
+
+(eval-when-compile
+  (require 'use-package))
+
+
 
 (use-package auto-compile
   :config (auto-compile-on-load-mode))
@@ -27,7 +33,7 @@
 
 
 (use-package elpa-mirror
-  :init
+  :config
   (setq elpamr-default-output-directory "~/Backup/myelpa"))
 
 

@@ -12,6 +12,7 @@
 	      auto-mode-alist))
 
 
+
 (defun compile-masm-with-dosbox()
   "Compile masm code with dosbox."
   (interactive)

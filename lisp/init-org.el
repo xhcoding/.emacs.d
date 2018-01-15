@@ -7,8 +7,8 @@
 
 (use-package markdown-mode)
 (require 'org)
-(add-to-list 'org-modules 'org-habit)
 (require 'org-habit)
+(add-to-list 'org-modules 'org-habit)
 
 
 (defun xhcoding/yank-link()
@@ -21,7 +21,8 @@
 (setq org-default-notes-file (concat org-directory "/notes.org"))
 
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!/!)")))
+      '((sequence "TODO(t)" "STARTED(s)" "NEXT(n)" "|" "DONE(d!/!)" "CANCELLED")))
+
 
 (setq org-log-done t)
 (setq org-log-into-drawer "LOGBOOK")
@@ -38,9 +39,18 @@
 (use-package orglue
   :defer t)
 
+;; 临时修复BUG
+(defun org-bug()
+  (interactive)
+  (load-file (expand-file-name
+	      "elpa/org-octopress-20170820.2115/ox-jekyll.el"
+	      user-emacs-directory)))
+
+
 (use-package org-octopress
-  :config
+  :init
   (progn
+
     (require 'org-octopress)
     (setq
      org-octopress-directory-top (expand-file-name "source" my-blog-top-dir)
@@ -110,7 +120,9 @@
   ;; use scrot
   ;; (call-process-shell-command "scrot" nil nil nil nil "-s" (concat fullpath ".png"))
   ;; use deepin-screenshot
-  (call-process-shell-command (concat "scrot -s " (concat fullpath ".jpg")))
+  (call-process-shell-command
+   (concat
+    "flatpak run --branch=master --arch=x86_64 --command=deepin-screenshot com.deepin.Screenshot -i -s " (concat fullpath ".png")))
   (sync-blog-img-to-qiniu)
   (xhcoding/insert-org-or-md-img-link savepath (concat basename ".jpg"))
   (insert "\n"))
@@ -120,3 +132,4 @@
 
 
 (provide 'init-org)
+

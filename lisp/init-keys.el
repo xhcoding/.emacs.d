@@ -8,16 +8,15 @@
 
 ;; global
 (evil-leader/set-key
-  "c r" 'recentf-open-files
-  "c c" 'hs-toggle-hiding
+  "c h" 'hs-toggle-hiding
+  "c c" 'comment-or-uncomment-region
   "x s" 'save-buffer
   "x c" 'save-buffers-kill-terminal
   "x h" 'mark-whole-buffer
   "x d" 'dired
-  "x k" 'kill-buffer
+  "x k" 'kill-buffer-and-window
   "x 3" 'split-window-right
   "x 2" 'split-window-below
-  "l" 'goto-line
   "s" 'swiper
   "q" 'quit-window
   "0" 'delete-window
@@ -105,6 +104,5 @@
   "o #" 'org-update-statistics-cookies
   "o ." 'org-time-stamp
   "o >" 'org-goto-calendar)
-
 
 (provide 'init-keys)

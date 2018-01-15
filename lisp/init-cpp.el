@@ -11,8 +11,6 @@
     (setq irony-additional-clang-options '("-std=c++11"))
     (add-hook 'c-mode-hook 'irony-mode)
     (add-hook 'c++-mode-hook 'irony-mode)
-    ;;(add-hook 'objc-mode-hook 'irony-mode)
-    ;;(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
     )
   :config
   (use-package company-irony-c-headers)
@@ -30,7 +28,7 @@
   )
 
 
-
+(use-package srefactor)
 
 
 
@@ -74,10 +72,10 @@
    ((file-exists-p "Makefile")
     (setq compile-command "make"))
    ((string-equal "c" file-name-extension)
-    (setq compile-command (concat "gcc -g -Wall -Werror -std=c11 -o " (file-name-base file-path) " " file-name))
+    (setq compile-command (concat "gcc -g -Wall -std=c11 -o " (file-name-base file-path) " " file-name))
     )
    ((string-equal "cpp" file-name-extension)
-    (setq compile-command (concat "g++ -g -Wall -Werror -std=c++11 -o " (file-name-base file-path) " " file-name))
+    (setq compile-command (concat "g++ -g -Wall  -std=c++11 -o " (file-name-base file-path) " " file-name))
     )
    ))
 
@@ -109,10 +107,11 @@ Threat is as function body when from endline before )"
     (insert "{}")
     (backward-char)))
 
-(add-hook 'c-mode-common-hook 'my-c-common-hook)
-
 (defun my-c-common-hook ()
   (define-key c-mode-base-map "{" 'ins-c++-curly))
+
+
+(add-hook 'c-mode-common-hook 'my-c-common-hook)
 
 
 (provide 'init-cpp)
