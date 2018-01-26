@@ -257,7 +257,7 @@ If the directory for the backup doesn't exist, it is created."
 	  company-dabbrev-downcase nil
 	  company-backends
 	  '((company-files
-	     company-keywords
+	     ;;company-keywords
 	     company-capf
 	     company-yasnippet
 	     )

@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
-# name: file header
-# key: head
+# name: python3-head
+# key: head3
 # --
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-

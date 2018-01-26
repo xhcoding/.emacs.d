@@ -3,8 +3,42 @@
 (setq c-basic-offset 4)
 
 
+(use-package lsp-mode)
+
+(use-package cquery
+  :load-path "site-lisp/"
+  :config
+  (progn
+    (require 'cquery)
+    (setq cquery-executable
+	  "/home/xhcoding/Tools/cquery/build/release/bin/cquery")
+    (setq cquery-extra-init-params '(:enableComments 2 :cacheFormat "msgpack"))
+    (setq cquery-sem-highlight-method 'font-lock)
+    (add-hook 'c-mode-common-hook 'lsp-cquery-enable)
+
+    
+    (use-package company-lsp
+      :config
+      (add-hook 'c-mode-common-hook
+		(lambda ()
+		  (add-to-list (make-local-variable 'company-backends)
+			       '(company-lsp)))) )
+    
+    (use-package lsp-ui
+      :config
+      (progn
+	(require 'lsp-ui)
+	(add-hook 'lsp-mode-hook 'lsp-ui-mode)
+	))))
+
+(use-package ivy-xref
+  :config
+  :after 'ivy
+  :config
+  (setq xref-show-xrefs-function 'ivy-xref-show-xrefs))
+
 ;; irony
-(use-package irony
+(use-package irony :disabled t
   :diminish irony-mode "IR"
   :init
   (progn
@@ -13,8 +47,10 @@
     (add-hook 'c++-mode-hook 'irony-mode)
     )
   :config
-  (use-package company-irony-c-headers)
+  (use-package company-irony-c-headers
+    :disabled t)
   (use-package company-irony
+    :disabled t
     :config
     (add-hook 'c-mode-common-hook
 	      (lambda ()
@@ -23,12 +59,12 @@
     )
   (use-package flycheck-irony
     :defer t
+    :disabled t
     :init
     (flycheck-irony-setup))
   )
 
 
-(use-package srefactor)
 
 
 
@@ -50,6 +86,7 @@
     ))
 
 (use-package counsel-gtags
+  :disabled t
   :diminish counsel-gtags-mode "CG"
   :config
   (progn
