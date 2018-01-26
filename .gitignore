@@ -10,3 +10,4 @@ meghanada
 .python-*
 /pyim
 srecode-map.el
+.mc-lists.el
