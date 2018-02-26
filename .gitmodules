@@ -1,0 +1,3 @@
+[submodule "site-lisp/emacs-cquery"]
+	path = site-lisp/emacs-cquery
+	url = https://github.com/cquery-project/emacs-cquery

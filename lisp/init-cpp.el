@@ -6,29 +6,34 @@
 (use-package lsp-mode)
 
 (use-package cquery
-  :load-path "site-lisp/"
+  :load-path "site-lisp/emacs-cquery"
   :config
   (progn
     (require 'cquery)
     (setq cquery-executable
-	  "/home/xhcoding/Tools/cquery/build/release/bin/cquery")
-    (setq cquery-extra-init-params '(:enableComments 2 :cacheFormat "msgpack"))
-    (setq cquery-sem-highlight-method 'font-lock)
+	  "/usr/bin/cquery")
     (add-hook 'c-mode-common-hook 'lsp-cquery-enable)
 
     
     (use-package company-lsp
       :config
-      (add-hook 'c-mode-common-hook
-		(lambda ()
-		  (add-to-list (make-local-variable 'company-backends)
-			       '(company-lsp)))) )
+      (progn
+	(setq
+	 company-transformers nil
+	 company-lsp-async t
+	 company-lsp-cache-candidates nil)
+	(add-hook 'c-mode-common-hook
+		  (lambda ()
+		    (add-to-list (make-local-variable 'company-backends)
+				 '(company-lsp)))) ))
     
     (use-package lsp-ui
       :config
       (progn
 	(require 'lsp-ui)
 	(add-hook 'lsp-mode-hook 'lsp-ui-mode)
+	(setq lsp-enable-flycheck nil)
+	(setq lsp-ui-flycheck-enable nil)
 	))))
 
 (use-package ivy-xref

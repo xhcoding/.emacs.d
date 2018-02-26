@@ -46,7 +46,7 @@
 (require 'init-vc)
 
 ;; latex
-(require 'init-tex)
+;; (require 'init-tex)
 
 ;; keybindings
 (require 'init-keys)

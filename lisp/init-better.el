@@ -10,8 +10,17 @@
 ;; change "yes or no" to "y or n"
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;;不要烦人的 redefine warning
-(setq ad-redefinition-action 'accept)        
+;; 不要烦人的 redefine warning
+(setq ad-redefinition-action 'accept)
+
+;; 滚动屏幕时保持光标位置，对所有的滚动屏幕都有效
+(setq scroll-preserve-screen-position t)
+
+;; 高亮显示行尾的空格 delete-trailing-whitespace 删除行尾的空格
+(setq-default show-trailing-whitespace t)
+
+;; 在finge 显示末尾的空行
+(setq-default indicate-empty-lines t)
 
 ;; turn off auto backup
 (setq make-backup-files t)
@@ -154,7 +163,7 @@ If the directory for the backup doesn't exist, it is created."
     (smartparens-global-mode t)
     (sp-local-pair 'emacs-lisp-mode "'" nil :actions nil)
     (setq show-paren-delay 0)
-
+    (setq sp-escape-quotes-after-insert nil)
     (define-advice show-paren-function (:around (fn) fix-show-paren-function)
       "Highlight enclosing parens"
       (cond ((looking-at-p "\\s(") (funcall fn))
@@ -225,7 +234,7 @@ If the directory for the backup doesn't exist, it is created."
 		      evil-escape-delay 0.2)))
     :config
     (evil-escape-mode t))
-  
+
   (use-package evil-leader
     :diminish evil-leader-mode
     :config
@@ -257,7 +266,7 @@ If the directory for the backup doesn't exist, it is created."
 	  company-dabbrev-downcase nil
 	  company-backends
 	  '((company-files
-	     ;;company-keywords
+	     company-keywords
 	     company-capf
 	     company-yasnippet
 	     )
