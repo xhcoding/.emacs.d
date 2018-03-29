@@ -9,6 +9,8 @@
 
 ;; change "yes or no" to "y or n"
 (fset 'yes-or-no-p 'y-or-n-p)
+;; 关掉提示音
+(setq ring-bell-function 'ignore)
 
 ;; 不要烦人的 redefine warning
 (setq ad-redefinition-action 'accept)
@@ -17,10 +19,10 @@
 (setq scroll-preserve-screen-position t)
 
 ;; 高亮显示行尾的空格 delete-trailing-whitespace 删除行尾的空格
-(setq-default show-trailing-whitespace t)
+;; (setq-default show-trailing-whitespace t)
 
 ;; 在finge 显示末尾的空行
-(setq-default indicate-empty-lines t)
+;; (setq-default indicate-empty-lines t)
 
 ;; turn off auto backup
 (setq make-backup-files t)
@@ -97,7 +99,8 @@ If the directory for the backup doesn't exist, it is created."
 (use-package counsel
   :after ivy
   :bind (("M-x" . counsel-M-x)
-	 ("C-x C-f" . counsel-find-file)))
+	 ("C-x C-f" . counsel-find-file)
+	 ("C-c a g" . counsel-ag)))
 
 (use-package hungry-delete ;; hungry-delete
   :diminish hungry-delete-mode
@@ -174,7 +177,7 @@ If the directory for the backup doesn't exist, it is created."
 
 (use-package rainbow-delimiters
   :defer t
-  :config
+  :init
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
 ;; expand reggion
@@ -264,6 +267,7 @@ If the directory for the backup doesn't exist, it is created."
 	  company-require-match nil
 	  company-dabbrev-ignore-case nil
 	  company-dabbrev-downcase nil
+	  company-show-numbers t
 	  company-backends
 	  '((company-files
 	     company-keywords
@@ -311,6 +315,50 @@ If the directory for the backup doesn't exist, it is created."
 (use-package column-enforce-mode
   :init
   (add-hook 'prog-mode-hook 'column-enforce-mode))
+
+(defun bury-compile-buffer-if-successful (buffer string)
+  "Bury a compilation buffer if succeeded without warnings "
+  (when (and
+         (buffer-live-p buffer)
+         (string-match "compilation" (buffer-name buffer))
+         (string-match "finished" string)
+         (not
+          (with-current-buffer buffer
+            (goto-char (point-min))
+            (search-forward "warning" nil t))))
+    (run-with-timer 0.5 nil
+                    (lambda (buf)
+                      (bury-buffer buf)
+                      ;;(switch-to-prev-buffer (get-buffer-window buf) 'kill)
+		      (delete-windows-on buf)
+		      )
+                    buffer)))
+(add-hook 'compilation-finish-functions 'bury-compile-buffer-if-successful)
+
+(defun xhcoding/open-or-close-guake()
+  "Open or close guake terminal."
+  (interactive)
+  (shell-command "guake"))
+
+(use-package visual-regexp)
+(use-package visual-regexp-steroids
+  :bind ("C-c r" . vr/replace)
+  ("C-c q" . vr/query-replace))
+
+
+
+(defun toggle-transparency ()
+   (interactive)
+   (let ((alpha (frame-parameter nil 'alpha)))
+     (set-frame-parameter
+      nil 'alpha
+      (if (eql (cond ((numberp alpha) alpha)
+                     ((numberp (cdr alpha)) (cdr alpha))
+                     ;; Also handle undocumented (<active> <inactive>) form.
+                     ((numberp (cadr alpha)) (cadr alpha)))
+               100)
+          '(85 . 50) '(100 . 100)))))
+ (global-set-key (kbd "C-c t") 'toggle-transparency)
 
 (provide 'init-better)
 ;;; init-better.el ends here

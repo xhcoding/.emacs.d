@@ -89,6 +89,14 @@
     (save-buffer)
     (kill-buffer)))
 
+(defun xhcoding/replace-regexp-group(from to group)
+  "In all matches for regexp FROM, replace the content of GROUP with TO."
+  (interactive "sFrom: \nsTo: \nnGroup: ")
+  (while (re-search-forward from nil t)
+    (replace-match to nil nil nil group)))
+
+
+
 ;; buffer
 (defun kill-other-buffers ()
   "Kill all other buffers."

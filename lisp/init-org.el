@@ -10,6 +10,15 @@
 (require 'org-habit)
 (add-to-list 'org-modules 'org-habit)
 
+;; plantuml
+;; active Org-babel languages
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '(;; other Babel languages
+   (plantuml . t)))
+
+(setq org-plantuml-jar-path
+      (expand-file-name (concat user-emacs-directory "plantuml/plantuml.jar")))
 
 (defun xhcoding/yank-link()
   (interactive)
@@ -18,10 +27,11 @@
   (insert "]]"))
 
 (setq org-src-fontify-natively t)
-(setq org-default-notes-file (concat org-directory "/notes.org"))
-
+(setq org-directory "~/Documents/Life")
+(setq org-default-notes-file "~/Documents/Org/inbox.org")
+(setq-default org-agenda-files '("~/Documents/Org/notes.org"))
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "STARTED(s)" "NEXT(n)" "|" "DONE(d!/!)" "CANCELLED")))
+      '((sequence "TODO(t)" "ROUTINE(r)" "STARTED(s)" "NEXT(n)" "|" "DONE(d!/!)" "CANCELLED")))
 
 
 (setq org-log-done t)
@@ -50,7 +60,7 @@
 (use-package org-octopress
   :init
   (progn
-
+    (require 'ox-jekyll)
     (require 'org-octopress)
     (setq
      org-octopress-directory-top (expand-file-name "source" my-blog-top-dir)
@@ -130,6 +140,27 @@
 
 ;;===============================================
 
+;; test
+(setq org-publish-project-alist
+      '(("test-publish"
+	 :base-directory "~/Documents/Blog/blog"
+	 :publishing-directory "~/Documents/Blog/source/_posts"
+	 :base-extension "org"
+	 :recursive t
+	 :htmlized-source t
+	 :publishing-function org-html-publish-to-html
+	 :with-toc nil
+	 )))
+
+(use-package blog-admin
+:init
+(progn
+  ;; your config
+  (setq blog-admin-backend-type 'hexo)
+  (setq blog-admin-backend-path "~/Documents/Blog")
+  (setq blog-admin-backend-new-post-in-drafts t)
+  (setq blog-admin-backend-new-post-with-same-name-dir t)
+  ))
 
 (provide 'init-org)
 

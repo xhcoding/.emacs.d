@@ -2,17 +2,36 @@
 
 (setq c-basic-offset 4)
 
+;;=============================cquery==========================================
 
-(use-package lsp-mode)
+(use-package lsp-mode
+  :config
+  (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-gcc))
+  (setq lsp-ui-flycheck-enable t)
+  (setq lsp-highlight-symbol-at-point nil)
+  (defun cquery/base () (interactive) (lsp-ui-peek-find-custom 'base "$cquery/base"))
+  (defun cquery/callers () (interactive) (lsp-ui-peek-find-custom 'callers "$cquery/callers"))
+  (defun cquery/derived () (interactive) (lsp-ui-peek-find-custom 'derived "$cquery/derived"))
+  (defun cquery/vars () (interactive) (lsp-ui-peek-find-custom 'vars "$cquery/vars"))
+  (defun cquery/random () (interactive) (lsp-ui-peek-find-custom 'random "$cquery/random"))
+  )
 
 (use-package cquery
-  :load-path "site-lisp/emacs-cquery"
   :config
   (progn
     (require 'cquery)
     (setq cquery-executable
 	  "/usr/bin/cquery")
-    (add-hook 'c-mode-common-hook 'lsp-cquery-enable)
+    ;;   (setq cquery-sem-highlight-method 'font-lock)
+    ;; (cquery-use-default-rainbow-sem-highlight)
+    (setq cquery-extra-init-params
+          '(:cacheFormat "msgpack" :completion (:detailedLabel t) :xref (:container t)
+                         :diagnostics (:frequencyMs 5000)))
+    (require 'projectile)
+    (add-to-list 'projectile-globally-ignored-directories ".cquery_cached_index")
+    (add-to-list 'projectile-globally-ignored-directories "build")
+    (add-hook 'c-mode-hook 'lsp-cquery-enable)
+    (add-hook 'c++-mode-hook 'lsp-cquery-enable)
 
     
     (use-package company-lsp
@@ -25,55 +44,65 @@
 	(add-hook 'c-mode-common-hook
 		  (lambda ()
 		    (add-to-list (make-local-variable 'company-backends)
-				 '(company-lsp)))) ))
+				 '(company-lsp))))
+	))
     
     (use-package lsp-ui
       :config
       (progn
 	(require 'lsp-ui)
 	(add-hook 'lsp-mode-hook 'lsp-ui-mode)
-	(setq lsp-enable-flycheck nil)
-	(setq lsp-ui-flycheck-enable nil)
+	(define-key c-mode-base-map (kbd "M-.") 'lsp-ui-peek-find-definitions)
+	(define-key c-mode-base-map (kbd "M-?") 'lsp-ui-peek-find-references)
+	(define-key lsp-ui-peek-mode-map (kbd "h") 'lsp-ui-peek--select-prev-file)
+	(define-key lsp-ui-peek-mode-map (kbd "l") 'lsp-ui-peek--select-next-file)
+	(define-key lsp-ui-peek-mode-map (kbd "j") 'lsp-ui-peek--select-next)
+	(define-key lsp-ui-peek-mode-map (kbd "k") 'lsp-ui-peek--select-prev)
+	(setq lsp-ui-doc-include-signature nil)
+	(setq lsp-ui-sideline-enable nil)
+	(setq lsp-ui-sideline-show-symbol nil)  ;;don't show symbol on the right of info
+	(setq lsp-ui-sideline-ignore-duplicate t)
 	))))
 
 (use-package ivy-xref
+  :disabled t
   :config
   :after 'ivy
   :config
   (setq xref-show-xrefs-function 'ivy-xref-show-xrefs))
 
+
+;;=====================================================================
+
 ;; irony
-(use-package irony :disabled t
-  :diminish irony-mode "IR"
-  :init
-  (progn
-    (setq irony-additional-clang-options '("-std=c++11"))
-    (add-hook 'c-mode-hook 'irony-mode)
-    (add-hook 'c++-mode-hook 'irony-mode)
-    )
-  :config
-  (use-package company-irony-c-headers
-    :disabled t)
-  (use-package company-irony
-    :disabled t
-    :config
-    (add-hook 'c-mode-common-hook
-	      (lambda ()
-		(add-to-list (make-local-variable 'company-backends)
-			     '(company-irony company-irony-c-headers))))
-    )
-  (use-package flycheck-irony
-    :defer t
-    :disabled t
-    :init
-    (flycheck-irony-setup))
-  )
+;; (use-package irony
+;;   :diminish irony-mode "IR"
+;;   :init
+;;   (progn
+;;     (setq irony-additional-clang-options '("-std=c++11"))
+;;     (add-hook 'c-mode-hook 'irony-mode)
+;;     (add-hook 'c++-mode-hook 'irony-mode)
+;;     )
+;;   :config
+;;   (use-package company-irony-c-headers)
+;;   (use-package company-irony
+;;     :config
+;;     (add-hook 'c-mode-common-hook
+;; 	      (lambda ()
+;; 		(add-to-list (make-local-variable 'company-backends)
+;; 			     '(company-irony company-irony-c-headers))))
+;;     )
+;;   (use-package flycheck-irony
+;;     :defer t
+;;     :init
+;;     (flycheck-irony-setup))
+;;   )
 
 
 
+(use-package cmake-mode)
 
-
-(use-package cpputils-cmake :disabled t
+(use-package cpputils-cmake
   :config
   (progn
     (add-hook 'c-mode-common-hook
@@ -82,12 +111,14 @@
 		    (cppcm-reload-all)
 		  )))
     ;; OPTIONAL, somebody reported that they can use this package with Fortran
-    (add-hook 'c90-mode-hook (lambda () (cppcm-reload-all)))
+    ;;(add-hook 'c90-mode-hook (lambda () (cppcm-reload-all)))
     ;; OPTIONAL, avoid typing full path when starting gdb
     (global-set-key (kbd "C-c C-g")
 		    '(lambda ()(interactive) (gud-gdb (concat "gdb --fullname " (cppcm-get-exe-path-current-buffer)))))
+    (global-set-key (kbd "<f7>") 'compile)
+    
     ;; OPTIONAL, some users need specify extra flags forwarded to compiler
-    (setq cppcm-extra-preprocss-flags-from-user '("-I/usr/src/linux-headers-4.9.0-deepin11-amd64/include" "-DNDEBUG"))
+    ;;(setq cppcm-extra-preprocss-flags-from-user '("-I/usr/src/linux-headers-4.9.0-deepin11-amd64/include" "-DNDEBUG"))
     ))
 
 (use-package counsel-gtags
@@ -130,9 +161,10 @@
 (use-package cc-mode
   :config
   (progn
-    (define-key c-mode-map (kbd "<f7>") 'compile-current-buffer)
-    (define-key c++-mode-map (kbd "<f7>") 'compile-current-buffer)
+    (define-key c-mode-base-map (kbd "S-<f7>") 'compile-current-buffer)
+    (define-key c-mode-base-map (kbd "M-f") 'ff-find-other-file)
     ))
+
 
 
 (defun ins-c++-curly ()
@@ -149,11 +181,12 @@ Threat is as function body when from endline before )"
     (insert "{}")
     (backward-char)))
 
+
+
 (defun my-c-common-hook ()
   (define-key c-mode-base-map "{" 'ins-c++-curly))
 
 
 (add-hook 'c-mode-common-hook 'my-c-common-hook)
-
 
 (provide 'init-cpp)

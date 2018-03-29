@@ -1,5 +1,5 @@
 ;; (use-package meghanada
-;;   :init
+;;   :config
 ;;   (progn
 ;;     (add-hook 'java-mode-hook
 ;; 	      (lambda ()
@@ -15,5 +15,18 @@
 
 
 (use-package groovy-mode)
+
+(use-package lsp-java
+  :config
+  (require 'lsp-java)
+  (require 'lsp-mode)
+  (add-hook 'java-mode-hook #'lsp-java-enable)
+  (define-key java-mode-map (kbd "C-M-/") 'company-capf)
+  )
+
+;;(use-package lsp-intellij
+;;   :config
+;;   (require 'lsp-intellij)
+;;   (add-hook 'java-mode-hook #'lsp-intellij-enable))
 
 (provide 'init-java)

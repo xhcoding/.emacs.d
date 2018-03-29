@@ -37,4 +37,8 @@
     (setq TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view")))))
 
 
+(use-package company-auctex
+  :config
+  (company-auctex-init))
+
 (provide 'init-tex)

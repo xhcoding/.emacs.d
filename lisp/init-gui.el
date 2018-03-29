@@ -37,10 +37,10 @@
 ;;     (setq-default custom-enabled-themes '(sanityinc-solarized-dark))
 ;;     ))
 
-;; (use-package dracula-theme
-;;   :init
-;;   (progn
-;;     (setq-default custom-enabled-themes '(dracula))))
+(use-package dracula-theme
+  :init
+  (progn
+    (setq-default custom-enabled-themes '(dracula))))
 
 ;; toggle between light and night
 (defun light ()
@@ -59,6 +59,7 @@
 
 ;;==============theme===================
 
+(set-cursor-color "#ffffff")
 
 ;;==============mode-line===============
 

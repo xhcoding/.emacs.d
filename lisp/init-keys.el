@@ -5,7 +5,6 @@
 (global-set-key (kbd "C-M-\\") 'indent-region-or-buffer)
 
 ;; use <SPC> as evil leader
-
 ;; global
 (evil-leader/set-key
   "c h" 'hs-toggle-hiding
@@ -19,6 +18,7 @@
   "x 2" 'split-window-below
   "s" 'swiper
   "q" 'quit-window
+  "t" 'xhcoding/open-or-close-guake
   "0" 'delete-window
   "1" 'select-window-1
   "2" 'select-window-2
@@ -77,7 +77,9 @@
 ;; about projectile
 (evil-leader/set-key
   "p o" 'sr-open-file
-  "p t" 'my-simple-todo)
+  "p t" 'my-simple-todo
+  "p a" 'counsel-projectile-ag
+  "p s" 'counsel-projectile-switch-project)
 
 ;; about blog
 (evil-leader/set-key

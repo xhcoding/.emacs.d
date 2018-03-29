@@ -19,7 +19,7 @@
 (require 'init-func)
 
 ;; emacs chinese input method
-(require 'init-pyim)
+;;(require 'init-pyim)
 
 ;; let emacs perform better
 (require 'init-better)
@@ -34,7 +34,10 @@
 (require 'init-cpp)
 
 ;; java
-(require 'init-java)
+;;(require 'init-java)
+
+;; javascript
+;;(require 'init-javascript)
 
 ;; python
 (require 'init-python)
@@ -46,10 +49,11 @@
 (require 'init-vc)
 
 ;; latex
-;; (require 'init-tex)
+(require 'init-tex)
 
 ;; keybindings
 (require 'init-keys)
+
 
 ;; custom-file
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
