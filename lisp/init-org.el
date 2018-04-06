@@ -97,7 +97,7 @@
 
 
 
-;; ;; [[img-hexo:image-pathG]]
+;; ;; [[img-hexo:image-path]]
 (org-link-set-parameters
  "img-hexo"
  :follow 'org-custom-img-link-follow  ;;  click link
@@ -124,7 +124,7 @@
   (setq fullpath (concat savepath basename))
   ;; miximize the window by call xdotool trigger a system global shortcut
   (call-process-shell-command "xdotool key super+n")
-  ;; if emacs is gui mode 
+  ;; if emacs is gui mode
   ;; (suspend-frame)
   (sleep-for 1)
   ;; use scrot
