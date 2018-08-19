@@ -1,7 +1,0 @@
-#name : class ... { ... }
-# key: class
-# --
-class ${1:name} {
-public:
-    $0
-};
