@@ -82,7 +82,7 @@
 (defvar cp-cmake-compile-commands "compile_commands.json"
   "CMake compile commands filename.")
 
-(defvar cp-default-run-terminal-buffer "eshell"
+(defvar cp-default-run-terminal-buffer "*eshell*"
   "Run in terminal buffer.")
 
 ;;; Functions

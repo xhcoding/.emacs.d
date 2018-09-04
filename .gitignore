@@ -17,3 +17,5 @@ srecode-map.el
 company-*
 /lisp/init-javascript.el
 /plantuml
+bookmarks
+
