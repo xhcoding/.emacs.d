@@ -12,7 +12,7 @@
 (setq user-emacs-directory (file-name-directory load-file-name))
 (setq package-user-dir (concat mage-package-dir "elpa/"))
 (unless (file-directory-p package-user-dir)
-  (make-directory package-user-dir))
+  (make-directory package-user-dir t))
 
 (setq-default custom-file                  (concat mage-emacs-dir "custom.el")
 	  abbrev-file-name             (concat mage-local-dir "abbrev.el")
