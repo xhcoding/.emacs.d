@@ -35,16 +35,18 @@
 * 定义常用的目录
 *** 常用目录
     #+BEGIN_SRC emacs-lisp
-(defconst mage-emacs-dir
-  (eval-when-compile (file-truename user-emacs-directory)))
-(defconst mage-local-dir (concat mage-emacs-dir ".local/"))
-(defconst mage-package-dir (concat mage-local-dir "packages/"))
-(defconst mage-cache-dir (concat mage-local-dir "cache/"))
-(defconst mage-etc-dir (concat mage-local-dir "etc/"))
-(defconst mage-ext-dir (concat mage-emacs-dir "site-lisp/"))
+	  (defconst mage-emacs-dir
+		(eval-when-compile (file-truename user-emacs-directory)))
+	  (defconst mage-local-dir (concat mage-emacs-dir ".local/"))
+	  (defconst mage-package-dir (concat mage-local-dir "packages/"))
+	  (defconst mage-cache-dir (concat mage-local-dir "cache/"))
+	  (defconst mage-etc-dir (concat mage-local-dir "etc/"))
+	  (defconst mage-ext-dir (concat mage-emacs-dir "site-lisp/"))
 
-(setq user-emacs-directory (file-name-directory load-file-name))
-(setq package-user-dir (concat mage-package-dir "elpa/"))
+	  (setq user-emacs-directory (file-name-directory load-file-name))
+	  (setq package-user-dir (concat mage-package-dir "elpa/"))
+	  (unless (file-directory-p package-user-dir)
+		(make-directory package-user-dir))
     #+END_SRC
   
 
