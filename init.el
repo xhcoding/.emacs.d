@@ -469,7 +469,7 @@
 (use-package company-english-helper
   :defer t
   :commands (toggle-company-english-helper)
-  :load-path (lambda() (concat mage-ext-dir "/english-helper")))
+  :load-path (lambda() (concat mage-ext-dir "/company-english-helper")))
 
 (use-package helpful
   :defer 1

@@ -14,7 +14,6 @@ srecode-map.el
 .mc-lists.el
 /cquery
 /eclipse*
-company-*
 /lisp/init-javascript.el
 /plantuml
 bookmarks
