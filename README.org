@@ -1,5 +1,5 @@
 * INSTALL
 #+BEGIN_SRC shell
 git clone https://github.com/xhcoding/.emacs.d.git .emacs.d
-git submoudle update init
+git submoudle update --init
 #+END_SRC
