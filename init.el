@@ -469,7 +469,7 @@
 (use-package company-english-helper
   :defer t
   :commands (toggle-company-english-helper)
-  :load-path (lambda() (concat mage-ext-dir "/company-english-helper")))
+  :load-path (lambda() (concat mage-ext-dir "/english-helper")))
 
 (use-package helpful
   :defer 1
@@ -603,9 +603,9 @@
   (use-package cmake-project
 :ensure-system-package cmake
 :defer 1
-:load-path (mage-ext-dir)
-:bind (("<f7>" . cp-cmake-build-project)
-   ("<f8>" . cp-cmake-run-project-with-args)))
+:load-path (lambda() (concat mage-ext-dir "cmake-project/"))
+:bind (("<f7>" . cp-project-build-project)
+   ("<f8>" . cp-project-run)))
 
 (use-package modern-cpp-font-lock
   :config
@@ -658,9 +658,6 @@
   :defer 1
   :config
   (add-hook 'org-mode-hook #'org-bullets-mode))
-
-(use-package ox-pandoc
-  :defer 1)
 
 (setq org-default-notes-file (expand-file-name "inbox.org" mage-org-dir))
 (global-set-key (kbd "C-c c") #'org-capture)

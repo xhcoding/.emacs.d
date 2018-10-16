@@ -7,3 +7,6 @@
 [submodule "site-lisp/org-octopress"]
 	path = site-lisp/org-octopress
 	url = https://github.com/xhcoding/org-octopress.git
+[submodule "site-lisp/cmake-project"]
+	path = site-lisp/cmake-project
+	url = git@github.com:xhcoding/cmake-project.git
