@@ -24,6 +24,20 @@
             (setq gc-cons-percentage 0.1)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                   计算启动时间                            ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defvar talon-init-time 'nil)
+(defun talon-display-benchmark()
+  "计算启动时间."
+  (message "Talon loaded %s packages in %.03fs"
+           (length package-activated-list)
+           (or talon-init-time
+               (setq talon-init-time
+                     (float-time (time-subtract (current-time) before-init-time))))))
+(add-hook 'emacs-startup-hook #'talon-display-benchmark)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                              定义一些有用的常量                           ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -82,9 +96,13 @@
 ;; 增加 emacs 更新 UI 的时间
 (setq idle-update-delay 1)
 
+;; yes 太长了
+(fset 'yes-or-no-p 'y-or-n-p)
+
+
 ;; custom
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-
+(load custom-file t t t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                  use-package                              ;;
