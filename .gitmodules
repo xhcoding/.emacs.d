@@ -10,3 +10,6 @@
 [submodule ".\\extensions\\awesome-tray"]
 	path = .\\extensions\\awesome-tray
 	url = https://github.com/manateelazycat/awesome-tray.git
+[submodule ".\\extensions\\snails"]
+	path = .\\extensions\\snails
+	url = https://github.com/manateelazycat/snails.git

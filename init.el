@@ -217,4 +217,13 @@
   :config
   (load-theme 'lazycat-dark t))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                      全局搜索                             ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package snails
+  :load-path (lambda() (expand-file-name "snails" talon-ext-dir))
+  :commands (snails snails-search-point)
+  :bind (("C-s" . snails)))
+
 ;;; init.el ends here
