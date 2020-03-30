@@ -13,3 +13,6 @@
 [submodule ".\\extensions\\snails"]
 	path = .\\extensions\\snails
 	url = https://github.com/manateelazycat/snails.git
+[submodule ".\\extensions\\awesome-pair"]
+	path = .\\extensions\\awesome-pair
+	url = https://github.com/manateelazycat/awesome-pair.git

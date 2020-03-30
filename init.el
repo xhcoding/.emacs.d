@@ -237,8 +237,66 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package rainbow-delimiters
-  :defer 1
   :hook (prog-mode . rainbow-delimiters-mode))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                   配对的括号                              ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package awesome-pair
+  :demand
+  :load-path (lambda() (expand-file-name "awesome-pair" talon-ext-dir))
+  :hook ((
+          c-mode-common
+          c-mode
+          c++-mode
+          java-mode
+          haskell-mode
+          emacs-lisp-mode
+          lisp-interaction-mode
+          lisp-mode
+          maxima-mode
+          ielm-mode
+          sh-mode
+          makefile-gmake-mode
+          php-mode
+          python-mode
+          js-mode
+          go-mode
+          qml-mode
+          jade-mode
+          css-mode
+          ruby-mode
+          coffee-mode
+          rust-mode
+          qmake-mode
+          lua-mode
+          swift-mode
+          minibuffer-inactive-mode
+          ) . awesome-pair-mode)
+  :bind (:map awesome-pair-mode-map
+          ("(" . awesome-pair-open-round)
+          ("[" . awesome-pair-open-bracket)
+          ("{" . awesome-pair-open-curly)
+          ("}" . awesome-pair-close-round)
+          ("]" . awesome-pair-close-bracket)
+          ("}" . awesome-pair-close-curly)
+          ("=" . awesome-pair-equal)
+          ("%" . awesome-pair-match-paren)
+          ("\"" . awesome-pair-double-quote)
+          ("SPC" . awesome-pair-space)
+          ("M-o" . awesome-pair-backward-delete)
+          ("C-d" . awesome-pair-forward-delete)
+          ("C-k" . awesome-pair-kill)
+          ("M-\"" . awesome-pair-wrap-double-quote)
+          ("M-[" . awesome-pair-wrap-bracket)
+          ("M-{" . awesome-pair-wrap-curly)
+          ("M-(" . awesome-pair-wrap-round)
+          ("M-)" . awesome-pair-unwrap)
+          ("M-p" . awesome-pair-jump-right)
+          ("M-n" . awesome-pair-jump-left)
+          ("M-:" . awesome-pair-jump-out-pair-and-newline)
+          ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                      全局搜索                             ;;
