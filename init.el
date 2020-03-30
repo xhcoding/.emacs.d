@@ -138,9 +138,8 @@
 
 ;; 使用 auto-save
 (use-package auto-save
+  :defer 1
   :load-path (lambda() (expand-file-name "auto-save" talon-ext-dir))
-  :init
-  (require 'auto-save)
   :config
   (auto-save-enable)
   (setq auto-save-silent t)
@@ -177,10 +176,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package awesome-tab
+  :demand
   :load-path (lambda() (expand-file-name "awesome-tab" talon-ext-dir))
-  :init
-  (awesome-tab-mode +1)
   :config
+  (awesome-tab-mode +1)
   (setq awesome-tab-height 100))
 
 ;;; init.el ends here
