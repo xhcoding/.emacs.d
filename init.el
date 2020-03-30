@@ -9,7 +9,7 @@
   (error "This require Emacs 17.0.50 and above"))
 
 ;; 取个名字真难。“刀下生，刀下死”
-(defconst talon-verrsion "1.0.0")
+(defconst talon-version "1.0.0")
 
 ;; 增加启动速度的措施，毕竟大家都加了
 (defvar default-file-name-handler-alist file-name-handler-alist)
@@ -90,6 +90,14 @@
 ;;                                  use-package                              ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; HACK: DO NOT copy package-selected-packages to init/custom file forcibly.
+;; https://github.com/jwiegley/use-package/issues/383#issuecomment-247801751
+(defun my-save-selected-packages (&optional value)
+  "Set `package-selected-packages' to VALUE but don't save to `custom-file'."
+  (when value
+    (setq package-selected-packages value)))
+(advice-add 'package--save-selected-packages :override #'my-save-selected-packages)
+
 ;; 插件镜像
 (setq package-archives
       '(("melpa-cn" . "http://elpa.emacs-china.org/melpa/")
@@ -100,6 +108,13 @@
 (unless (bound-and-true-p package--initialized)
   (setq package-enable-at-startup nil)
   (package-initialize))
+
+;; 安装 quelpa
+(unless (package-installed-p 'quelpa)
+    (with-temp-buffer
+      (url-insert-file-contents "https://github.com/quelpa/quelpa/raw/master/quelpa.el")
+      (eval-buffer)
+      (quelpa-self-upgrade)))
 
 ;; 安装 use-package
 (unless (package-installed-p 'use-package)
@@ -120,6 +135,14 @@
 (use-package diminish)
 (use-package bind-key)
 
+;; 手动下载的扩展
+(defun add-subdirs-to-load-path (dir)
+  "Recursive add DIR to `load-path'."
+  (let ((default-directory (file-name-as-directory dir)))
+    (add-to-list 'load-path dir)
+    (normal-top-level-add-subdirs-to-load-path)))
+(add-subdirs-to-load-path talon-ext-dir)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                备份设置                                   ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -130,7 +153,7 @@
 
 ;; 使用 auto-save
 (use-package auto-save
-  :load-path (lambda() (expand-file-name "auto-save" talon-ext-dir))
+  :ensure nil
   :config
   (auto-save-enable)
   (setq auto-save-silent t)
@@ -161,5 +184,15 @@
   :defer 1
   :config
   (which-key-mode +1))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                   awesome-tab                             ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package awesome-tab
+  :ensure nil
+  :load-path "extensions/awesome-tab"
+  :config
+  (awesome-tab-mode +1))
 
 ;;; init.el ends here
