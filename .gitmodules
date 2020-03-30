@@ -4,3 +4,9 @@
 [submodule ".\\extensions\\auto-save"]
 	path = .\\extensions\\auto-save
 	url = https://github.com/manateelazycat/auto-save.git
+[submodule ".\\extensions\\lazycat-theme"]
+	path = .\\extensions\\lazycat-theme
+	url = https://github.com/manateelazycat/lazycat-theme.git
+[submodule ".\\extensions\\awesome-tray"]
+	path = .\\extensions\\awesome-tray
+	url = https://github.com/manateelazycat/awesome-tray.git

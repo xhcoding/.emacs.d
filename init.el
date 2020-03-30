@@ -200,4 +200,21 @@
   (awesome-tab-mode +1)
   (setq awesome-tab-height 100))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                   主题设置                                ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package awesome-tray
+  :demand
+  :load-path (lambda() (expand-file-name "awesome-tray" talon-ext-dir))
+  :config
+  (awesome-tray-mode +1))
+
+(use-package lazycat-theme
+  :demand
+  :load-path (lambda() (expand-file-name "lazycat-theme" talon-ext-dir))
+  :commands (lazycat-theme-toggle)
+  :config
+  (load-theme 'lazycat-dark t))
+
 ;;; init.el ends here
