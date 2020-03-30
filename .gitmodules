@@ -1,0 +1,6 @@
+[submodule ".\\extensions\\awesome-tab"]
+	path = .\\extensions\\awesome-tab
+	url = https://github.com/manateelazycat/awesome-tab.git
+[submodule ".\\extensions\\auto-save"]
+	path = .\\extensions\\auto-save
+	url = https://github.com/manateelazycat/auto-save.git
