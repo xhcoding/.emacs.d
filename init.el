@@ -111,10 +111,18 @@
 
 ;; 安装 quelpa
 (unless (package-installed-p 'quelpa)
-    (with-temp-buffer
-      (url-insert-file-contents "https://github.com/quelpa/quelpa/raw/master/quelpa.el")
-      (eval-buffer)
-      (quelpa-self-upgrade)))
+  (with-temp-buffer
+    (url-insert-file-contents "https://github.com/quelpa/quelpa/raw/master/quelpa.el")
+    (eval-buffer)
+    (quelpa-self-upgrade)))
+
+;; 安装 quelpa-use-package
+(unless (package-installed-p 'quelpa-use-package)
+  (quelpa
+   '(quelpa-use-package
+     :fetcher git
+     :url "https://github.com/quelpa/quelpa-use-package.git")))
+
 
 ;; 安装 use-package
 (unless (package-installed-p 'use-package)
@@ -129,19 +137,12 @@
   (setq use-package-enable-imenu-support t))
 
 (eval-when-compile
-  (require 'use-package))
+  (require 'use-package)
+  (require 'quelpa-use-package))
 
 ;; use-package 需要这两个包
 (use-package diminish)
 (use-package bind-key)
-
-;; 手动下载的扩展
-(defun add-subdirs-to-load-path (dir)
-  "Recursive add DIR to `load-path'."
-  (let ((default-directory (file-name-as-directory dir)))
-    (add-to-list 'load-path dir)
-    (normal-top-level-add-subdirs-to-load-path)))
-(add-subdirs-to-load-path talon-ext-dir)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                备份设置                                   ;;
