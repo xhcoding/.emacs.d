@@ -153,4 +153,13 @@
                 (lambda (file) (file-in-directory-p file package-user-dir))))
   :config (push (expand-file-name recentf-save-file) recentf-exclude))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                   which key                               ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package which-key
+  :defer 1
+  :config
+  (which-key-mode +1))
+
 ;;; init.el ends here
