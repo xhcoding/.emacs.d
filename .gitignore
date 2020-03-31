@@ -3,3 +3,5 @@ elpa
 flycheck*
 recentf
 quelpa
+.lsp*
+projectile*

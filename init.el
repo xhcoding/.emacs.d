@@ -163,13 +163,32 @@
   (setq auto-save-silent t)
   (setq auto-save-delete-trailing-whitespace t))
 
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                   Evil                                    ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package evil
+  :demand
+  :config
+  (evil-mode +1))
+
+(use-package evil-leader
+  :demand
+  :after evil
+  :init
+  :config
+  (global-evil-leader-mode +1)
+  (evil-leader/set-leader "<SPC>"))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                             最近打开文件                                  ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package recentf
   :ensure nil
-  :bind (("C-x C-r" . recentf-open-files))
   :hook (after-init . recentf-mode)
   :init (setq recentf-max-saved-items 300
               recentf-exclude
@@ -178,7 +197,12 @@
                 "\\.?ido\\.last$" "\\.revive$" "/G?TAGS$" "/.elfeed/"
                 "^/tmp/" "^/var/folders/.+$" ; "^/ssh:"
                 (lambda (file) (file-in-directory-p file package-user-dir))))
-  :config (push (expand-file-name recentf-save-file) recentf-exclude))
+  :config
+  (push (expand-file-name recentf-save-file) recentf-exclude)
+  (evil-leader/set-key
+   "fr" 'recentf-open-files)
+  )
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   which key                               ;;
@@ -274,7 +298,7 @@
           swift-mode
           minibuffer-inactive-mode
           ) . awesome-pair-mode)
-  :bind (:map awesome-pair-mode-map
+  :bind (:map evil-insert-state-map
           ("(" . awesome-pair-open-round)
           ("[" . awesome-pair-open-bracket)
           ("{" . awesome-pair-open-curly)
@@ -341,10 +365,85 @@
         company-frontends '(company-pseudo-tooltip-frontend company-echo-metadata-frontend)
         company-backends '((:separate company-capf company-yasnippet))))
 
-(use-package company-box
-  :hook (company-mode . company-box-mode))
+(use-package company-posframe
+  :hook (company-mode . company-posframe-mode))
 
 
+(use-package ivy
+  :bind ([remap switch-to-buffer] . #'ivy-switch-buffer)
+  :config
+  (setq ivy-initial-inputs-alist nil
+        ivy-wrap t
+        ivy-height 15
+        ivy-fixed-height-minibuffer t
+        ivy-format-function #'ivy-format-function-line
+        )
+  (ivy-mode +1))
 
+(use-package ivy-posframe
+  :after (ivy)
+  :config
+  (setq ivy-display-function #'ivy-posframe-display-at-point
+        ivy-fixed-height-minibuffer nil
+        ivy-posframe-parameters
+        `((min-width . 90)
+          (min-height .,ivy-height)
+          (internal-border-width . 10))))
+
+(use-package counsel
+  :after (ivy)
+  :bind (([remap execute-extended-command] . counsel-M-x)
+         ([remap find-file]                . counsel-find-file)
+         ([remap find-library]             . find-library)
+         ([remap imenu]                    . counsel-imenu)
+         ([remap recentf-open-files]       . counsel-recentf)
+         ([remap org-capture]              . counsel-org-capture)
+         ([remape swiper]                  . counsel-grep-or-swiper)
+         ([remap describe-face]            . counsel-describe-face)
+         ([remap describe-function]        . counsel-describe-function)
+         ([remap describe-variable]        . counsel-describe-variable))
+
+  :config
+  (setq counsel-find-file-ignore-regexp "\\(?:^[#.]\\)\\|\\(?:[#~]$\\)\\|\\(?:^Icon?\\)"
+        counsel-rg-base-command "rg -zS --no-heading --line-number --color never %s ."
+        counsel-ag-base-command "ag -zS --nocolor --nogroup %s"
+        counsel-pt-base-command "pt -zS --nocolor --nogroup -e %s")
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                   Projectile!!!                           ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package projectile
+  :hook (after-init . projectile-mode)
+  :init
+  (setq projectile-enable-caching (not noninteractive)
+        projectile-indexing-method 'alien
+        projectile-require-project-root t
+        projectile-globally-ignored-file-suffixes '(".elc" ".pyc" ".o")
+        projectile-ignored-projects '("~/" "/tmp" "/usr/include")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                   LSP!!!                                  ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package nox
+  :defer 1
+  :load-path (lambda() (expand-file-name "nox" talon-ext-dir))
+  :config
+  (dolist (hook (list
+                 'js-mode-hook
+                 'rust-mode-hook
+                 'python-mode-hook
+                 'ruby-mode-hook
+                 'java-mode-hook
+                 'sh-mode-hook
+                 'php-mode-hook
+                 'c-mode-common-hook
+                 'c-mode-hook
+                 'c++-mode-hook
+                 'haskell-mode-hook
+                 ))
+    (add-hook hook '(lambda () (nox-ensure)))))
 
 ;;; init.el ends here

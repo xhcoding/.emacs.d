@@ -16,3 +16,6 @@
 [submodule ".\\extensions\\awesome-pair"]
 	path = .\\extensions\\awesome-pair
 	url = https://github.com/manateelazycat/awesome-pair.git
+[submodule ".\\extensions\\nox"]
+	path = .\\extensions\\nox
+	url = https://github.com/manateelazycat/nox.git
