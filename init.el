@@ -11,7 +11,7 @@
 ;; 取个名字真难。“刀下生，刀下死”
 (defconst talon-version "1.0.0")
 
-;; 增加启动速度的措施，毕竟大家都加了
+;; 增加启动速度的措施，毕竟大家都加了。
 (defvar default-file-name-handler-alist file-name-handler-alist)
 (setq file-name-handler-alist nil)
 (setq gc-cons-threshold most-positive-fixnum
@@ -29,7 +29,7 @@
 
 (defvar talon-init-time 'nil)
 (defun talon-display-benchmark()
-  "计算启动时间."
+  "计算启动时间。"
   (message "Talon loaded %s packages in %.03fs"
            (length package-activated-list)
            (or talon-init-time
@@ -49,6 +49,11 @@
 
 ;; 第三方插件的目录，如 git, 或者单个文件
 (defconst talon-ext-dir (expand-file-name "extensions" user-emacs-directory))
+
+;; 一些动态库的目录
+(defconst talon-lib-dir (expand-file-name "lib" user-emacs-directory))
+
+(add-to-list 'load-path talon-lib-dir)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                             默认值的设置                                  ;;
@@ -326,10 +331,27 @@
 ;;                                      全局搜索                             ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-package fuz
+  :load-path (lambda() (expand-file-name "fuz" talon-ext-dir))
+  :config
+  (unless (require 'fuz-core nil t)
+    (fuz-build-and-load-dymod)))
+
 (use-package snails
   :load-path (lambda() (expand-file-name "snails" talon-ext-dir))
   :commands (snails snails-search-point)
-  :bind (("C-s" . snails)))
+  :bind (("C-s" . snails)
+         ([remap execute-extended-command] . (lambda()(interactive)(snails '(snails-backend-command)))))
+  :config
+  (evil-set-initial-state 'snails-mode 'emacs)
+  )
+
+(use-package color-rg
+  :load-path (lambda() (expand-file-name "color-rg" talon-ext-dir))
+  :commands (color-rg-search-input)
+  :config
+  (evil-set-initial-state 'color-rg-mode 'emacs)
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                       补全                                ;;
@@ -368,47 +390,6 @@
 (use-package company-posframe
   :hook (company-mode . company-posframe-mode))
 
-
-(use-package ivy
-  :bind ([remap switch-to-buffer] . #'ivy-switch-buffer)
-  :config
-  (setq ivy-initial-inputs-alist nil
-        ivy-wrap t
-        ivy-height 15
-        ivy-fixed-height-minibuffer t
-        ivy-format-function #'ivy-format-function-line
-        )
-  (ivy-mode +1))
-
-(use-package ivy-posframe
-  :after (ivy)
-  :config
-  (setq ivy-display-function #'ivy-posframe-display-at-point
-        ivy-fixed-height-minibuffer nil
-        ivy-posframe-parameters
-        `((min-width . 90)
-          (min-height .,ivy-height)
-          (internal-border-width . 10))))
-
-(use-package counsel
-  :after (ivy)
-  :bind (([remap execute-extended-command] . counsel-M-x)
-         ([remap find-file]                . counsel-find-file)
-         ([remap find-library]             . find-library)
-         ([remap imenu]                    . counsel-imenu)
-         ([remap recentf-open-files]       . counsel-recentf)
-         ([remap org-capture]              . counsel-org-capture)
-         ([remape swiper]                  . counsel-grep-or-swiper)
-         ([remap describe-face]            . counsel-describe-face)
-         ([remap describe-function]        . counsel-describe-function)
-         ([remap describe-variable]        . counsel-describe-variable))
-
-  :config
-  (setq counsel-find-file-ignore-regexp "\\(?:^[#.]\\)\\|\\(?:[#~]$\\)\\|\\(?:^Icon?\\)"
-        counsel-rg-base-command "rg -zS --no-heading --line-number --color never %s ."
-        counsel-ag-base-command "ag -zS --nocolor --nogroup %s"
-        counsel-pt-base-command "pt -zS --nocolor --nogroup -e %s")
-  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   Projectile!!!                           ;;

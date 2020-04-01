@@ -19,3 +19,9 @@
 [submodule ".\\extensions\\nox"]
 	path = .\\extensions\\nox
 	url = https://github.com/manateelazycat/nox.git
+[submodule ".\\extensions\\color-rg"]
+	path = .\\extensions\\color-rg
+	url = https://github.com/manateelazycat/color-rg.git
+[submodule ".\\extensions\\fuz"]
+	path = .\\extensions\\fuz
+	url = https://github.com/rustify-emacs/fuz.el.git
