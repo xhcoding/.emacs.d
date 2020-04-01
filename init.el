@@ -438,6 +438,16 @@
   (setq liberime-user-data-dir (expand-file-name "rime" talon-etc-dir))
   )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                   xref                                    ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package xref
+  :ensure nil
+  :bind (:map evil-normal-state-map
+          ("gd" . xref-find-definitions)
+          ("gr" . xref-find-references)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   LSP!!!                                  ;;
@@ -445,8 +455,13 @@
 
 (use-package lsp-mode
   :commands (lsp)
+  :bind (:map lsp-mode-map
+          ([remap xref-find-definitions] . lsp-find-definition)
+          ([remap xref-find-references] . lsp-find-references)
+          )
   :config
-  (setq lsp-auto-guess-root t))
+  (setq lsp-auto-guess-root t)
+  )
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
