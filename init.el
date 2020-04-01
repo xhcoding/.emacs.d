@@ -29,7 +29,7 @@
 
 (defvar talon-init-time 'nil)
 (defun talon-display-benchmark()
-  "计算启动时间。"
+  "计算启动时间."
   (message "Talon loaded %s packages in %.03fs"
            (length package-activated-list)
            (or talon-init-time
@@ -52,6 +52,10 @@
 
 ;; 一些动态库的目录
 (defconst talon-lib-dir (expand-file-name "lib" user-emacs-directory))
+
+;; 一些配置目录
+(defconst talon-etc-dir (expand-file-name "etc" user-emacs-directory))
+
 
 (add-to-list 'load-path talon-lib-dir)
 
@@ -205,7 +209,7 @@
   :config
   (push (expand-file-name recentf-save-file) recentf-exclude)
   (evil-leader/set-key
-   "fr" 'recentf-open-files)
+   "fr" #'(lambda()(interactive)(snails '(snails-backend-recentf))))
   )
 
 
@@ -403,9 +407,37 @@
   :config
   (setq projectile-enable-caching (not noninteractive)
         projectile-indexing-method 'alien
-        projectile-require-project-root t)
-  (evil-leader/set-key
-   "pf" #'(lambda()(interactive)(snails '(snails-backend-projectile)))))
+        projectile-require-project-root t))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                   rime 输入法                             ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package pyim
+  :defer 1
+  :bind (("M-l" . pyim-convert-string-at-point))
+  :config
+  (setq pyim-page-tooltip 'posframe
+        default-input-method "pyim"
+        pyim-default-scheme 'rime)
+  (setq-default pyim-english-input-switch-functions
+                '(
+                  pyim-probe-dynamic-english
+                  pyim-probe-isearch-mode
+                  pyim-probe-program-mode
+                  pyim-probe-org-structure-template))
+
+  (setq-default pyim-punctuation-half-width-functions
+                '(pyim-probe-punctuation-line-beginning
+                  pyim-probe-punctuation-after-punctuation)))
+
+(use-package liberime
+  :defer 1
+  :load-path (lambda()(expand-file-name "liberime" talon-ext-dir))
+  :init
+  (setq liberime-user-data-dir (expand-file-name "rime" talon-etc-dir))
+  )
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   LSP!!!                                  ;;
