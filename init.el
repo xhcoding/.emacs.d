@@ -338,12 +338,15 @@
     (fuz-build-and-load-dymod)))
 
 (use-package snails
+  :demand
   :load-path (lambda() (expand-file-name "snails" talon-ext-dir))
   :commands (snails snails-search-point)
   :bind (("C-s" . snails)
          ([remap execute-extended-command] . (lambda()(interactive)(snails '(snails-backend-command)))))
   :config
   (evil-set-initial-state 'snails-mode 'emacs)
+  (evil-leader/set-key
+   "bb" #'(lambda()(interactive)(snails '(snails-backend-buffer))))
   )
 
 (use-package color-rg
@@ -397,12 +400,12 @@
 
 (use-package projectile
   :hook (after-init . projectile-mode)
-  :init
+  :config
   (setq projectile-enable-caching (not noninteractive)
         projectile-indexing-method 'alien
-        projectile-require-project-root t
-        projectile-globally-ignored-file-suffixes '(".elc" ".pyc" ".o")
-        projectile-ignored-projects '("~/" "/tmp" "/usr/include")))
+        projectile-require-project-root t)
+  (evil-leader/set-key
+   "pf" #'(lambda()(interactive)(snails '(snails-backend-projectile)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   LSP!!!                                  ;;
