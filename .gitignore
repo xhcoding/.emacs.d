@@ -7,3 +7,5 @@ quelpa
 projectile*
 build
 pyim
+*.userdb
+user.yaml

@@ -443,23 +443,20 @@
 ;;                                   LSP!!!                                  ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package nox
-  :defer 1
-  :load-path (lambda() (expand-file-name "nox" talon-ext-dir))
+(use-package lsp-mode
+  :commands (lsp)
   :config
-  (dolist (hook (list
-                 'js-mode-hook
-                 'rust-mode-hook
-                 'python-mode-hook
-                 'ruby-mode-hook
-                 'java-mode-hook
-                 'sh-mode-hook
-                 'php-mode-hook
-                 'c-mode-common-hook
-                 'c-mode-hook
-                 'c++-mode-hook
-                 'haskell-mode-hook
-                 ))
-    (add-hook hook '(lambda () (nox-ensure)))))
+  (setq lsp-auto-guess-root t))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                   C++!!!                                  ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(use-package ccls
+  :hook ((c-mode c++-mode) . lsp)
+  :config
+  (setq ccls-initialization-options `(:cache (:directory ,(expand-file-name "~/Code/ccls_cache"))
+                                             :compilationDatabaseDirectory "build")))
 ;;; init.el ends here
