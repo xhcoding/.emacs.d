@@ -239,7 +239,7 @@
   :load-path (lambda() (expand-file-name "lazycat-theme" talon-ext-dir))
   :commands (lazycat-theme-toggle)
   :config
-  (load-theme 'lazycat-dark t))
+  (load-theme 'lazycat-light t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   好看的图标                              ;;
@@ -471,6 +471,20 @@
           ("gd" . xref-find-definitions)
           ("gr" . xref-find-references)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                   shackle                                 ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package shackle
+  :functions org-switch-to-buffer-other-window
+  :commands shackle-display-buffer
+  :hook (after-init . shackle-mode)
+  :config
+  (setq shackle-default-size 0.4
+        shackle-default-alignment 'below
+        shackle-default-rule nil
+        shackle-rules
+        '((("*Help*" "*Apropos*") :select t :size 0.3 :align 'below :autoclose t))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   LSP!!!                                  ;;
