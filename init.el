@@ -350,15 +350,15 @@
   :config
   (evil-set-initial-state 'snails-mode 'emacs)
   (evil-leader/set-key
-   "bb" #'(lambda()(interactive)(snails '(snails-backend-buffer))))
+   "bb" #'(lambda()(interactive)(snails '(snails-backend-buffer)))
+   "ff" #'(lambda()(interactive)(snails '(snails-backend-fd))))
   )
 
 (use-package color-rg
+  :defer 1
   :load-path (lambda() (expand-file-name "color-rg" talon-ext-dir))
-  :commands (color-rg-search-input)
   :config
-  (evil-set-initial-state 'color-rg-mode 'emacs)
-  )
+  (evil-set-initial-state 'color-rg-mode 'emacs))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                       补全                                ;;
@@ -404,10 +404,29 @@
 
 (use-package projectile
   :hook (after-init . projectile-mode)
+  :init
+  (setq projectile-mode-line-prefix ""
+        projectile-sort-order 'recentf
+        projectile-use-git-grep t)
   :config
-  (setq projectile-enable-caching (not noninteractive)
-        projectile-indexing-method 'alien
-        projectile-require-project-root t))
+  (when (and (not (executable-find "fd"))
+             (executable-find "rg"))
+    (setq projectile-generic-command
+          (let ((rg-cmd ""))
+            (dolist (dir projectile-globally-ignored-directories)
+              (setq rg-cmd (format "%s --glob '!%s'" rg-cmd dir)))
+            (concat "rg -0 --files --color=never --hidden" rg-cmd))))
+
+  (when IS-WINDOWS
+    (setq projectile-git-submodule-command nil)
+    (when (or (executable-find "fd") (executable-find "rg"))
+      (setq projectile-indexing-method 'alien
+            projectile-enable-caching nil)))
+
+
+  (evil-leader/set-key
+   "fp" #'(lambda()(interactive)(snails '(snails-backend-projectile))))
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   rime 输入法                             ;;
@@ -460,8 +479,7 @@
           ([remap xref-find-references] . lsp-find-references)
           )
   :config
-  (setq lsp-auto-guess-root t)
-  )
+  (setq lsp-auto-guess-root t))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -469,9 +487,21 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+(use-package cc-mode
+  :ensure nil
+  :mode ("\\.h\\'" . c++-mode)
+  )
+
+
 (use-package ccls
   :hook ((c-mode c++-mode) . lsp)
   :config
-  (setq ccls-initialization-options `(:cache (:directory ,(expand-file-name "~/Code/ccls_cache"))
-                                             :compilationDatabaseDirectory "build")))
+  (setq ccls-initialization-options
+        `(:cache (:directory ,(expand-file-name "~/Code/ccls_cache"))
+                 :compilationDatabaseDirectory "build")))
+
+
+
+(toggle-frame-fullscreen)
+
 ;;; init.el ends here
