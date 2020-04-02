@@ -71,18 +71,9 @@
 (when (fboundp 'set-charset-priority)
   (set-charset-priority 'unicode))
 (prefer-coding-system 'utf-8)
-(setq locale-coding-system 'utf-8)
 ;; Windows 的剪贴板不支持 utf-8
 (unless IS-WINDOWS
   (setq selection-coding-system 'utf-8))
-
-(when IS-WINDOWS
-  ;;此句保证中文字体设置有效
-  (setq locale-coding-system 'gb18030)
-  ;; 确保file-name-coding-system变量的设置不会无效
-  (setq w32-unicode-filenames 'nil)
-  ;; 设置文件名的编码为gb18030
-  (setq file-name-coding-system 'gb18030))
 
 ;; 关闭重定义警告
 (setq ad-redefinition-action 'accept)
@@ -341,6 +332,7 @@
   (unless (require 'fuz-core nil t)
     (fuz-build-and-load-dymod)))
 
+
 (use-package snails
   :demand
   :load-path (lambda() (expand-file-name "snails" talon-ext-dir))
@@ -351,6 +343,7 @@
   (evil-set-initial-state 'snails-mode 'emacs)
   (evil-leader/set-key
    "bb" #'(lambda()(interactive)(snails '(snails-backend-buffer)))
+   "sb" #'(lambda()(interactive)(snails '(snails-backend-current-buffer)))
    "ff" #'(lambda()(interactive)(snails '(snails-backend-fd))))
   )
 
@@ -409,20 +402,31 @@
         projectile-sort-order 'recentf
         projectile-use-git-grep t)
   :config
-  (when (and (not (executable-find "fd"))
-             (executable-find "rg"))
+(cond
+   ((executable-find "fd")
     (setq projectile-generic-command
-          (let ((rg-cmd ""))
-            (dolist (dir projectile-globally-ignored-directories)
-              (setq rg-cmd (format "%s --glob '!%s'" rg-cmd dir)))
-            (concat "rg -0 --files --color=never --hidden" rg-cmd))))
+          (format "%s . --color=never --type f -0 -H -E .git"
+                  "fd")
+          projectile-git-command projectile-generic-command
+          projectile-git-submodule-command nil
+          ;; ensure Windows users get fd's benefits
+          projectile-indexing-method 'alien))
 
-  (when IS-WINDOWS
-    (setq projectile-git-submodule-command nil)
-    (when (or (executable-find "fd") (executable-find "rg"))
-      (setq projectile-indexing-method 'alien
-            projectile-enable-caching nil)))
+   ((executable-find "rg")
+    (setq projectile-generic-command
+          (concat "rg -0 --files --color=never --hidden"
+                  (cl-loop for dir in projectile-globally-ignored-directories
+                           concat (format " --glob '!%s'" dir)))
+          projectile-git-command projectile-generic-command
+          projectile-git-submodule-command nil
+          ;; ensure Windows users get rg's benefits
+          projectile-indexing-method 'alien))
 
+   ;; Fix breakage on windows in git projects with submodules, since Windows
+   ;; doesn't have tr
+   (IS-WINDOWS
+    (setq projectile-git-submodule-command nil
+          projectile-enable-caching nil)))
 
   (evil-leader/set-key
    "fp" #'(lambda()(interactive)(snails '(snails-backend-projectile))))
