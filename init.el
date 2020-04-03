@@ -99,6 +99,8 @@
 ;; yes 太长了
 (fset 'yes-or-no-p 'y-or-n-p)
 
+;; tab 宽度
+(setq-default tab-width 4)
 
 ;; custom
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -517,7 +519,25 @@
 (use-package yasnippet
   :defer 1
   :config
-  (yas-global-mode 1))
+  (yas-global-mode +1))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                   magit                                   ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package magit
+  :defer 1
+  :config
+  (talon-leader-def
+	:keymaps 'normal
+	"gg" #'magit-status))
+
+(use-package magit-todos
+  :defer 1)
+
+(use-package evil-magit
+  :defer 1)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   LSP!!!                                  ;;
@@ -551,7 +571,15 @@
         `(:cache (:directory ,(expand-file-name "~/Code/ccls_cache"))
                  :compilationDatabaseDirectory "build")))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                   restclient                              ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-package restclient
+  :mode ("\\.rest\\'" . restclient-mode))
+
+(use-package groovy-mode
+  :demand)
 
 (toggle-frame-fullscreen)
 
