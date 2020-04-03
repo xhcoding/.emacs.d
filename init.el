@@ -174,13 +174,34 @@
   :config
   (evil-mode +1))
 
-(use-package evil-leader
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                   Keybindings                             ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defconst talon-leader-key "SPC")
+
+(defconst talon-localleader-key "SPC m")
+
+(use-package general
   :demand
-  :after evil
-  :init
   :config
-  (global-evil-leader-mode +1)
-  (evil-leader/set-leader "<SPC>"))
+  (general-create-definer
+    talon-leader-def
+    :prefix talon-leader-key)
+
+  ;; 默认的键绑定
+  (talon-leader-def
+    :keymaps 'normal
+    ;; window
+    "wq" 'delete-window
+    "wv" 'split-window-horizontally
+    "ws" 'split-window-vertically
+    "wj" 'evil-window-down
+    "wk" 'evil-window-up
+    "wh" 'evil-window-left
+    "wl" 'evil-window-right)
+  )
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -199,8 +220,10 @@
                 (lambda (file) (file-in-directory-p file package-user-dir))))
   :config
   (push (expand-file-name recentf-save-file) recentf-exclude)
-  (evil-leader/set-key
-   "fr" #'(lambda()(interactive)(snails '(snails-backend-recentf))))
+  (talon-leader-def
+    :keymaps 'normal
+    "fr" #'(lambda()(interactive)(snails '(snails-backend-recentf)))
+    )
   )
 
 
@@ -341,10 +364,11 @@
          ([remap execute-extended-command] . (lambda()(interactive)(snails '(snails-backend-command)))))
   :config
   (evil-set-initial-state 'snails-mode 'emacs)
-  (evil-leader/set-key
-   "bb" #'(lambda()(interactive)(snails '(snails-backend-buffer)))
-   "sb" #'(lambda()(interactive)(snails '(snails-backend-current-buffer)))
-   "ff" #'(lambda()(interactive)(snails '(snails-backend-fd))))
+  (talon-leader-def
+    :keymaps 'normal
+    "sb" #'(lambda()(interactive)(snails '(snails-backend-current-buffer)))
+    "bb" #'(lambda()(interactive)(snails '(snails-backend-buffer)))
+    )
   )
 
 (use-package color-rg
@@ -402,7 +426,7 @@
         projectile-sort-order 'recentf
         projectile-use-git-grep t)
   :config
-(cond
+  (cond
    ((executable-find "fd")
     (setq projectile-generic-command
           (format "%s . --color=never --type f -0 -H -E .git"
@@ -420,16 +444,15 @@
           projectile-git-command projectile-generic-command
           projectile-git-submodule-command nil
           ;; ensure Windows users get rg's benefits
-          projectile-indexing-method 'alien))
+          projectile-indexing-method 'alien)))
 
-   ;; Fix breakage on windows in git projects with submodules, since Windows
-   ;; doesn't have tr
-   (IS-WINDOWS
+  (when IS-WINDOWS
     (setq projectile-git-submodule-command nil
-          projectile-enable-caching nil)))
+	  projectile-enable-caching nil))
 
-  (evil-leader/set-key
-   "fp" #'(lambda()(interactive)(snails '(snails-backend-projectile))))
+  (talon-leader-def
+    :keymaps 'normal
+    "sp" #'(lambda()(interactive)(snails '(snails-backend-projectile))))
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -485,6 +508,16 @@
         shackle-default-rule nil
         shackle-rules
         '((("*Help*" "*Apropos*") :select t :size 0.3 :align 'below :autoclose t))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                   snippets                                ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(use-package yasnippet
+  :defer 1
+  :config
+  (yas-global-mode 1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   LSP!!!                                  ;;
