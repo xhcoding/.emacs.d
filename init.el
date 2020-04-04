@@ -63,6 +63,8 @@
 ;;                             默认值的设置                                  ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; visible
+(setq visible-bell 0)
 
 ;; *Message* 里多点 log
 (setq message-log-max 8192)
@@ -187,6 +189,7 @@
 (use-package general
   :demand
   :config
+
   (general-create-definer
     talon-leader-def
     :prefix talon-leader-key)
@@ -370,6 +373,7 @@
     :keymaps 'normal
     "sb" #'(lambda()(interactive)(snails '(snails-backend-current-buffer)))
     "bb" #'(lambda()(interactive)(snails '(snails-backend-buffer)))
+	"f." #'(lambda()(interactive(snails '(snails-backend-directory-files))))
     )
   )
 
@@ -528,12 +532,15 @@
 (use-package magit
   :defer 1
   :config
+  (setq magit-auto-revert-mode nil)
   (talon-leader-def
 	:keymaps 'normal
 	"gg" #'magit-status))
 
 (use-package magit-todos
-  :defer 1)
+  :defer 1
+  :config
+  )
 
 (use-package evil-magit
   :defer 1)
@@ -579,8 +586,7 @@
   :mode ("\\.rest\\'" . restclient-mode))
 
 (use-package groovy-mode
-  :demand)
+  :defer 1)
 
 (toggle-frame-fullscreen)
-
 ;;; init.el ends here

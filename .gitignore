@@ -9,3 +9,5 @@ build
 pyim
 *.userdb
 user.yaml
+server
+transient
