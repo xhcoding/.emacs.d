@@ -1,30 +1,30 @@
-[submodule ".\\extensions\\awesome-tab"]
-	path = .\\extensions\\awesome-tab
+[submodule "extensions/awesome-tab"]
+	path = extensions/awesome-tab
 	url = https://github.com/manateelazycat/awesome-tab.git
-[submodule ".\\extensions\\auto-save"]
-	path = .\\extensions\\auto-save
+[submodule "extensions/auto-save"]
+	path = extensions/auto-save
 	url = https://github.com/manateelazycat/auto-save.git
-[submodule ".\\extensions\\lazycat-theme"]
-	path = .\\extensions\\lazycat-theme
+[submodule "extensions/lazycat-theme"]
+	path = extensions/lazycat-theme
 	url = https://github.com/manateelazycat/lazycat-theme.git
-[submodule ".\\extensions\\awesome-tray"]
-	path = .\\extensions\\awesome-tray
+[submodule "extensions/awesome-tray"]
+	path = extensions/awesome-tray
 	url = https://github.com/manateelazycat/awesome-tray.git
-[submodule ".\\extensions\\snails"]
-	path = .\\extensions\\snails
+[submodule "extensions/snails"]
+	path = extensions/snails
 	url = https://github.com/manateelazycat/snails.git
-[submodule ".\\extensions\\awesome-pair"]
-	path = .\\extensions\\awesome-pair
+[submodule "extensions/awesome-pair"]
+	path = extensions/awesome-pair
 	url = https://github.com/manateelazycat/awesome-pair.git
-[submodule ".\\extensions\\nox"]
-	path = .\\extensions\\nox
+[submodule "extensions/nox"]
+	path = extensions/nox
 	url = https://github.com/manateelazycat/nox.git
-[submodule ".\\extensions\\color-rg"]
-	path = .\\extensions\\color-rg
+[submodule "extensions/color-rg"]
+	path = extensions/color-rg
 	url = https://github.com/manateelazycat/color-rg.git
-[submodule ".\\extensions\\fuz"]
-	path = .\\extensions\\fuz
+[submodule "extensions/fuz"]
+	path = extensions/fuz
 	url = https://github.com/rustify-emacs/fuz.el.git
-[submodule ".\\extensions\\liberime"]
-	path = .\\extensions\\liberime
+[submodule "extensions/liberime"]
+	path = extensions/liberime
 	url = https://github.com/merrickluo/liberime.git
