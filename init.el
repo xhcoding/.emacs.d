@@ -373,7 +373,8 @@
     :keymaps 'normal
     "sb" #'(lambda()(interactive)(snails '(snails-backend-current-buffer)))
     "bb" #'(lambda()(interactive)(snails '(snails-backend-buffer)))
-	"f." #'(lambda()(interactive(snails '(snails-backend-directory-files))))
+	"f." #'(lambda()(interactive(snails '(snails-backend-directory-files) (file-name-directory (buffer-file-name)))))
+	"." #'(lambda()(interactive(snails '(snails-backend-directory-files))))
     )
   )
 
