@@ -11,6 +11,9 @@
 ;; 取个名字真难。“刀下生，刀下死”
 (defconst talon-version "1.0.0")
 
+(setq user-full-name "xhcoding"
+	  user-mail-address "xhcoding@163.com")
+
 ;; 增加启动速度的措施，毕竟大家都加了。
 (defvar default-file-name-handler-alist file-name-handler-alist)
 (setq file-name-handler-alist nil)
@@ -104,6 +107,13 @@
 ;; tab 宽度
 (setq-default tab-width 4)
 
+;; 高亮当前行
+(global-hl-line-mode +1)
+
+;; minibuffer 默认值提示消失
+(setq-default minibuffer-eldef-shorten-default t)
+(minibuffer-electric-default-mode +1)
+
 ;; custom
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file t t t)
@@ -178,6 +188,16 @@
   :config
   (evil-mode +1))
 
+(use-package evil-escape
+  :defer 1
+  :init
+  (setq evil-escape-excluded-states '(normal visual multiedit emacs motion)
+        evil-escape-excluded-major-modes '(neotree-mode treemacs-mode vterm-mode)
+        evil-escape-key-sequence "jk"
+        evil-escape-delay 0.15)
+  :config
+  (evil-escape-mode +1))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   Keybindings                             ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -190,6 +210,13 @@
   :demand
   :config
 
+  (general-define-key
+   :states 'insert
+   "C-f" 'forward-char
+   "C-b" 'backward-char
+   "C-n" 'next-line
+   "C-p" 'previous-line
+   )
   (general-create-definer
     talon-leader-def
     :prefix talon-leader-key)
@@ -204,7 +231,16 @@
     "wj" 'evil-window-down
     "wk" 'evil-window-up
     "wh" 'evil-window-left
-    "wl" 'evil-window-right)
+    "wl" 'evil-window-right
+	;; help
+	"hf" 'describe-function
+	"hk" 'describe-key
+	"hv" 'describe-variable
+
+	;; buffer
+	"bk" 'kill-current-buffer
+	)
+
   )
 
 
@@ -347,8 +383,8 @@
           ("M-)" . awesome-pair-unwrap)
           ("M-p" . awesome-pair-jump-right)
           ("M-n" . awesome-pair-jump-left)
-          ("M-:" . awesome-pair-jump-out-pair-and-newline)
-          ))
+          ("M-:" . awesome-pair-jump-out-pair-and-newline)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                      全局搜索                             ;;
@@ -416,7 +452,7 @@
         company-global-modes
         '(not comint-mode erc-mode message-mode help-mode gud-mode)
         company-frontends '(company-pseudo-tooltip-frontend company-echo-metadata-frontend)
-        company-backends '((:separate company-capf company-yasnippet))))
+        company-backends '(company-capf company-yasnippet)))
 
 (use-package company-posframe
   :hook (company-mode . company-posframe-mode))

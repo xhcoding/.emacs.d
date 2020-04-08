@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: xxx
+# key: xxx
+# --
+`comment-start`XXX: $0`comment-end`
