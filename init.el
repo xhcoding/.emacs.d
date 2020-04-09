@@ -285,8 +285,12 @@
   :demand
   :load-path (lambda() (expand-file-name "awesome-tab" talon-ext-dir))
   :config
+  (setq awesome-tab-height 100)
   (awesome-tab-mode +1)
-  (setq awesome-tab-height 100))
+  (talon-leader-def
+	:keymaps 'normal
+	"t" 'awesome-tab-ace-jump)
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   主题设置                                ;;
@@ -296,6 +300,33 @@
   :demand
   :load-path (lambda() (expand-file-name "awesome-tray" talon-ext-dir))
   :config
+
+  (defun talon-module-flycheck-info ()
+	(when (boundp 'flycheck-last-status-change)
+	  (pcase flycheck-last-status-change
+		(`finished
+		 (let* ((error-counts (flycheck-count-errors flycheck-current-errors))
+				(errors (cdr (assq 'error error-counts)))
+				(warnings (cdr (assq 'warning error-counts))))
+		   (concat "["
+				   (cond
+					(errors (format "❄:%s" errors))
+					(warnings (format "☁:%s" warnings))
+					(t "☀"))
+				   "]"))))))
+
+  (defface talon-module-flycheck-face
+	'((((background light))
+	   :foreground "#cc2444" :bold t)
+	  (t
+	   :foreground "#ff2d55" :bold t))
+	"Evil state face."
+	:group 'awesome-tray)
+
+(add-to-list 'awesome-tray-module-alist
+           '("flycheck" . (talon-module-flycheck-info talon-module-flycheck-face)))
+
+  (setq awesome-tray-active-modules '("flycheck" "evil"  "location" "mode-name" "git" "date"))
   (awesome-tray-mode +1))
 
 (use-package lazycat-theme
@@ -330,6 +361,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   配对的括号                              ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package show-paren
+  :ensure nil
+  :hook (after-init . show-paren-mode))
 
 (use-package awesome-pair
   :demand
@@ -541,16 +576,65 @@
 ;;                                   shackle                                 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Enforce rules for popups
+(defvar shackle--popup-window-list nil) ; all popup windows
+(defvar-local shackle--current-popup-window nil) ; current popup window
+(put 'shackle--current-popup-window 'permanent-local t)
+
 (use-package shackle
   :functions org-switch-to-buffer-other-window
   :commands shackle-display-buffer
   :hook (after-init . shackle-mode)
   :config
+
+  (eval-and-compile
+    ;; Add keyword: `autoclose'
+    (defun shackle-display-buffer-hack (fn buffer alist plist)
+      (let ((window (funcall fn buffer alist plist)))
+        (setq shackle--current-popup-window window)
+
+        (when (plist-get plist :autoclose)
+          (push (cons window buffer) shackle--popup-window-list))
+        window))
+
+    (defun shackle-close-popup-window-hack (&rest _)
+      "Close current popup window via `C-g'."
+      (setq shackle--popup-window-list
+            (cl-loop for (window . buffer) in shackle--popup-window-list
+                     if (and (window-live-p window)
+                             (equal (window-buffer window) buffer))
+                     collect (cons window buffer)))
+      ;; `C-g' can deactivate region
+      (when (and (called-interactively-p 'interactive)
+                 (not (region-active-p)))
+        (let (window buffer)
+          (if (one-window-p)
+              (progn
+                (setq window (selected-window))
+                (when (equal (buffer-local-value 'shackle--current-popup-window
+                                                 (window-buffer window))
+                             window)
+                  (winner-undo)))
+            (setq window (caar shackle--popup-window-list))
+            (setq buffer (cdar shackle--popup-window-list))
+            (when (and (window-live-p window)
+                       (equal (window-buffer window) buffer))
+              (delete-window window)
+
+              (pop shackle--popup-window-list))))))
+
+    (advice-add #'keyboard-quit :before #'shackle-close-popup-window-hack)
+    (advice-add #'shackle-display-buffer :around #'shackle-display-buffer-hack))
+
+  ;; HACK: compatibility issuw with `org-switch-to-buffer-other-window'
+  (advice-add #'org-switch-to-buffer-other-window :override #'switch-to-buffer-other-window)
+
   (setq shackle-default-size 0.4
         shackle-default-alignment 'below
         shackle-default-rule nil
         shackle-rules
-        '((("*Help*" "*Apropos*") :select t :size 0.3 :align 'below :autoclose t))))
+        '((("*Help*" "*Apropos*") :select t :size 0.3 :align 'below :autoclose t)
+		  ("*Flycheck errors*" :select t :size 0.3 :align 'below :autoclose t))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   snippets                                ;;
@@ -582,6 +666,19 @@
 (use-package evil-magit
   :defer 1)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                   flycheck                                ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package flycheck
+  :defer 1
+  :config
+  (general-define-key
+   :states 'normal
+   :keymaps 'flycheck-error-list-mode-map
+   "<RET>" 'flycheck-error-list-goto-error
+   "q"     'quit-window)
+  (global-flycheck-mode +1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   LSP!!!                                  ;;
@@ -594,7 +691,10 @@
           ([remap xref-find-references] . lsp-find-references)
           )
   :config
-  (setq lsp-auto-guess-root t))
+  (setq lsp-auto-guess-root t
+		lsp-prefer-capf t
+		lsp-diagnostic-package :flycheck
+		lsp-enable-file-watchers nil))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -605,6 +705,18 @@
 (use-package cc-mode
   :ensure nil
   :mode ("\\.h\\'" . c++-mode)
+  :config
+  (defun talon-set-c-style()
+	"Set current buffer's c-style to my style."
+	(interactive)
+
+	(c-add-style "talon-style"
+				 '("stroustrup"
+				   (indent-tabs-mode . nil)
+				   (c-basic-offset . 4)
+				   (c-offsets-alist
+					(innamespace . -))
+				   ) t))
   )
 
 
@@ -673,6 +785,7 @@
   )
 
 (defun +my-blog/publish()
+  "Publish my blog."
   (interactive)
   (let ((default-directory +my-blog-root-dir))
     (call-process-shell-command "hugo")
@@ -683,6 +796,7 @@
     (message "publish finished")))
 
 (defun +my-blog/export-all()
+  "Export all org to md."
   (interactive)
   (let ((default-directory (expand-file-name "blog" +my-blog-root-dir))
         (files (directory-files (expand-file-name
@@ -695,7 +809,28 @@
            (org-hugo-export-to-md))))
      files)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                   tramp                                   ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-package tramp
+  :ensure nil
+  :defer 1
+  :config
+  (setq tramp-default-method "ssh"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                   visual-regexp                           ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package visual-regexp
+  :defer 1
+  :commands (vr/query-replace vr/replace)
+  :config
+  (talon-leader-def
+	:keymaps 'normal
+	"rr" 'vr/query-replace
+	"rR" 'vr/replace))
 
 (toggle-frame-fullscreen)
 ;;; init.el ends here
