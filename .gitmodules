@@ -28,3 +28,6 @@
 [submodule "extensions/liberime"]
 	path = extensions/liberime
 	url = https://github.com/merrickluo/liberime.git
+[submodule "extensions/emacs-rime"]
+	path = extensions/emacs-rime
+	url = https://github.com/DogLooksGood/emacs-rime.git

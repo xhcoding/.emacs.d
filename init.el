@@ -537,29 +537,22 @@
 ;;                                   rime 输入法                             ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package pyim
+(use-package rime
   :defer 1
-  :bind (("M-l" . pyim-convert-string-at-point))
-  :config
-  (setq pyim-page-tooltip 'posframe
-        default-input-method "pyim"
-        pyim-default-scheme 'rime)
-  (setq-default pyim-english-input-switch-functions
-                '(
-                  pyim-probe-dynamic-english
-                  pyim-probe-isearch-mode
-                  pyim-probe-program-mode
-                  pyim-probe-org-structure-template))
-
-  (setq-default pyim-punctuation-half-width-functions
-                '(pyim-probe-punctuation-line-beginning
-                  pyim-probe-punctuation-after-punctuation)))
-
-(use-package liberime
-  :defer 1
-  :load-path (lambda()(expand-file-name "liberime" talon-ext-dir))
+  :load-path (lambda()(expand-file-name "emacs-rime" talon-ext-dir))
   :init
-  (setq liberime-user-data-dir (expand-file-name "rime" talon-etc-dir))
+  (setq rime--module-path (expand-file-name (concat "librime-emacs" module-file-suffix) talon-lib-dir))
+  :custom
+  (default-input-method "rime")
+  (rime-show-candidate 'posframe)
+  (rime-share-data-dir (expand-file-name "rime-data" talon-etc-dir))
+  (rime-user-data-dir (expand-file-name "rime-user" talon-etc-dir))
+  :config
+  (setq rime-posframe-properties
+		(list :background-color "#333333"
+              :foreground-color "#dcdccc"
+              :font "微软雅黑"
+              :internal-border-width 10))
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -709,7 +702,6 @@
   (defun talon-set-c-style()
 	"Set current buffer's c-style to my style."
 	(interactive)
-
 	(c-add-style "talon-style"
 				 '("stroustrup"
 				   (indent-tabs-mode . nil)
@@ -717,6 +709,7 @@
 				   (c-offsets-alist
 					(innamespace . -))
 				   ) t))
+  (add-hook 'c++-mode-hook 'talon-set-c-style)
   )
 
 
