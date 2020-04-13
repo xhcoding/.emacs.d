@@ -12,3 +12,5 @@ user.yaml
 server
 transient
 tramp
+.cache
+eaf

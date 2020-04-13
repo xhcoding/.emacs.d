@@ -12,7 +12,7 @@
 (defconst talon-version "1.0.0")
 
 (setq user-full-name "xhcoding"
-	  user-mail-address "xhcoding@163.com")
+      user-mail-address "xhcoding@163.com")
 
 ;; 增加启动速度的措施，毕竟大家都加了。
 (defvar default-file-name-handler-alist file-name-handler-alist)
@@ -59,12 +59,15 @@
 ;; 一些配置目录
 (defconst talon-etc-dir (expand-file-name "etc" user-emacs-directory))
 
+;; org
+(defconst talon-org-dir (expand-file-name "~/Documents/Org/"))
 
 (add-to-list 'load-path talon-lib-dir)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                             默认值的设置                                  ;;
+;;                             默认值的设置                                      ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 ;; visible
 (setq visible-bell 0)
@@ -119,7 +122,7 @@
 (load custom-file t t t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                                  use-package                              ;;
+;;                                  use-package                                  ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; HACK: DO NOT copy package-selected-packages to init/custom file forcibly.
@@ -178,6 +181,35 @@
   (setq auto-save-delete-trailing-whitespace t))
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                备份设置                                   ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(setq-default indent-tabs-mode nil)
+(use-package whitespace
+  :demand
+  :ensure nil
+  :config
+  (defun doom-highlight-non-default-indentation-h ()
+    "Highlight whitespace that doesn't match your `indent-tabs-mode' setting.
+e.g. If you indent with spaces by default, tabs will be highlighted. If you
+indent with tabs, spaces at BOL are highlighted.
+Does nothing if `whitespace-mode' is already active or the current buffer is
+read-only or not file-visiting."
+    (unless (or (eq major-mode 'fundamental-mode)
+                buffer-read-only
+                (null buffer-file-name))
+      (require 'whitespace)
+      (set (make-local-variable 'whitespace-style)
+           (let ((style (if indent-tabs-mode '(indentation) '(tabs tab-mark))))
+             (if whitespace-mode
+                 (cl-union style whitespace-active-style)
+               style)))
+      (cl-pushnew 'face whitespace-style)
+      (whitespace-mode +1)))
+  (add-hook 'after-change-major-mode-hook #'doom-highlight-non-default-indentation-h 'append)
+  )
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   Evil                                    ;;
@@ -185,8 +217,23 @@
 
 (use-package evil
   :demand
+  :init
+  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+  (setq evil-want-keybinding nil)
   :config
-  (evil-mode +1))
+  (evil-mode +1)
+  ;;(setcdr evil-insert-state-map nil)
+  ;; (general-define-key
+  ;;  :states 'insert
+  ;;  "<ESC>" 'evil-normal-state
+  ;;  "M-x" 'execute-extended-command)
+
+  )
+
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init))
 
 (use-package evil-escape
   :defer 1
@@ -232,21 +279,21 @@
     "wk" 'evil-window-up
     "wh" 'evil-window-left
     "wl" 'evil-window-right
-	;; help
-	"hf" 'describe-function
-	"hk" 'describe-key
-	"hv" 'describe-variable
+    ;; help
+    "hf" 'describe-function
+    "hk" 'describe-key
+    "hv" 'describe-variable
 
-	;; buffer
-	"bk" 'kill-current-buffer
-	)
+    ;; buffer
+    "bk" 'kill-current-buffer
+    )
 
   )
 
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                             最近打开文件                                  ;;
+;;                             最近打开文件                                      ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package recentf
@@ -288,8 +335,8 @@
   (setq awesome-tab-height 100)
   (awesome-tab-mode +1)
   (talon-leader-def
-	:keymaps 'normal
-	"t" 'awesome-tab-ace-jump)
+    :keymaps 'normal
+    "t" 'awesome-tab-ace-jump)
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -302,31 +349,45 @@
   :config
 
   (defun talon-module-flycheck-info ()
-	(when (boundp 'flycheck-last-status-change)
-	  (pcase flycheck-last-status-change
-		(`finished
-		 (let* ((error-counts (flycheck-count-errors flycheck-current-errors))
-				(errors (cdr (assq 'error error-counts)))
-				(warnings (cdr (assq 'warning error-counts))))
-		   (concat "["
-				   (cond
-					(errors (format "❄:%s" errors))
-					(warnings (format "☁:%s" warnings))
-					(t "☀"))
-				   "]"))))))
+    (when (boundp 'flycheck-last-status-change)
+      (pcase flycheck-last-status-change
+        (`finished
+         (let* ((error-counts (flycheck-count-errors flycheck-current-errors))
+                (errors (cdr (assq 'error error-counts)))
+                (warnings (cdr (assq 'warning error-counts))))
+           (concat "["
+                   (cond
+                    (errors (format "❄:%s" errors))
+                    (warnings (format "☁:%s" warnings))
+                    (t "☀"))
+                   "]"))))))
 
   (defface talon-module-flycheck-face
-	'((((background light))
-	   :foreground "#cc2444" :bold t)
-	  (t
-	   :foreground "#ff2d55" :bold t))
-	"Evil state face."
-	:group 'awesome-tray)
+    '((((background light))
+       :foreground "#cc2444" :bold t)
+      (t
+       :foreground "#ff2d55" :bold t))
+    "Flycheck state face."
+    :group 'awesome-tray)
 
-(add-to-list 'awesome-tray-module-alist
-           '("flycheck" . (talon-module-flycheck-info talon-module-flycheck-face)))
+  (add-to-list 'awesome-tray-module-alist
+               '("flycheck" . (talon-module-flycheck-info talon-module-flycheck-face)))
 
-  (setq awesome-tray-active-modules '("flycheck" "evil"  "location" "mode-name" "git" "date"))
+  (defun talon-module-rime-info ()
+    (rime-lighter))
+
+  (defface talon-module-rime-face
+    '((((background light))
+       :foreground "#9256B4" :bold t)
+      (t
+       :foreground "#9256B4" :bold t))
+    "Rime module face."
+    :group 'awesome-tray)
+
+  (add-to-list 'awesome-tray-module-alist
+               '("rime" . (talon-module-rime-info talon-module-rime-face)))
+
+  (setq awesome-tray-active-modules '("flycheck" "rime" "evil"  "location" "mode-name" "git" "date"))
   (awesome-tray-mode +1))
 
 (use-package lazycat-theme
@@ -337,29 +398,29 @@
   (load-theme 'lazycat-light t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                                   好看的图标                              ;;
+;;                                   好看的图标                                  ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package all-the-icons
   :defer 1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                                   好看的字体                             ;;
+;;                                   好看的字体                                 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (if IS-WINDOWS
-    (set-frame-font  "-outline-等距更纱黑体 SC-normal-normal-normal-mono-30-*-*-*-c-*-iso8859-1")
+    (set-frame-font      "-outline-等距更纱黑体 SC-normal-normal-normal-mono-30-*-*-*-c-*-iso8859-1")
   (set-frame-font  "-outline-Sarasa Term SC-normal-normal-normal-mono-30-*-*-*-c-*-iso8859-1"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                                   好看的括号                             ;;
+;;                                   好看的括号                                 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                                   配对的括号                              ;;
+;;                                   配对的括号                                  ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package show-paren
@@ -370,7 +431,6 @@
   :demand
   :load-path (lambda() (expand-file-name "awesome-pair" talon-ext-dir))
   :hook ((
-          c-mode-common
           c-mode
           c++-mode
           java-mode
@@ -408,17 +468,9 @@
           ("%" . awesome-pair-match-paren)
           ("\"" . awesome-pair-double-quote)
           ("SPC" . awesome-pair-space)
-          ("M-o" . awesome-pair-backward-delete)
           ("C-d" . awesome-pair-forward-delete)
           ("C-k" . awesome-pair-kill)
-          ("M-\"" . awesome-pair-wrap-double-quote)
-          ("M-[" . awesome-pair-wrap-bracket)
-          ("M-{" . awesome-pair-wrap-curly)
-          ("M-(" . awesome-pair-wrap-round)
-          ("M-)" . awesome-pair-unwrap)
-          ("M-p" . awesome-pair-jump-right)
-          ("M-n" . awesome-pair-jump-left)
-          ("M-:" . awesome-pair-jump-out-pair-and-newline)))
+          ))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -444,8 +496,8 @@
     :keymaps 'normal
     "sb" #'(lambda()(interactive)(snails '(snails-backend-current-buffer)))
     "bb" #'(lambda()(interactive)(snails '(snails-backend-buffer)))
-	"f." #'(lambda()(interactive(snails '(snails-backend-directory-files) (file-name-directory (buffer-file-name)))))
-	"." #'(lambda()(interactive(snails '(snails-backend-directory-files))))
+    "f." #'(lambda()(interactive(snails '(snails-backend-directory-files) (file-name-directory (buffer-file-name)))))
+    "." #'(lambda()(interactive(snails '(snails-backend-directory-files))))
     )
   )
 
@@ -463,18 +515,6 @@
   :diminish
   :hook (after-init . global-company-mode)
   :commands company-cancel
-  :bind (("M-/" . company-complete)
-         ("C-M-i" . company-complete)
-         :map company-mode-map
-         ("<backtab>" . company-yasnippet)
-         :map company-active-map
-         ("C-p" . company-select-previous)
-         ("C-n" . company-select-next)
-         ("<tab>" . company-complete-common-or-cycle)
-         ("<backtab>" . my-company-yasnippet)
-         :map company-search-map
-         ("C-p" . company-select-previous)
-         ("C-n" . company-select-next))
   :init
   (setq company-idle-delay 0.2
         company-tooltip-limit 10
@@ -487,7 +527,7 @@
         company-global-modes
         '(not comint-mode erc-mode message-mode help-mode gud-mode)
         company-frontends '(company-pseudo-tooltip-frontend company-echo-metadata-frontend)
-        company-backends '(company-capf company-yasnippet)))
+        company-backends '(company-capf)))
 
 (use-package company-posframe
   :hook (company-mode . company-posframe-mode))
@@ -526,7 +566,7 @@
 
   (when IS-WINDOWS
     (setq projectile-git-submodule-command nil
-	  projectile-enable-caching nil))
+      projectile-enable-caching nil))
 
   (talon-leader-def
     :keymaps 'normal
@@ -549,10 +589,16 @@
   (rime-user-data-dir (expand-file-name "rime-user" talon-etc-dir))
   :config
   (setq rime-posframe-properties
-		(list :background-color "#333333"
+        (list :background-color "#333333"
               :foreground-color "#dcdccc"
               :font "微软雅黑"
               :internal-border-width 10))
+
+  (dolist (hook (list
+                 'c++-mode-hook))
+    (add-hook hook '(lambda()(setq-local rime-disable-predicates
+                                         '(rime-predicate-evil-mode-p
+                                           rime-predicate-space-after-cc-p)))))
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -627,7 +673,7 @@
         shackle-default-rule nil
         shackle-rules
         '((("*Help*" "*Apropos*") :select t :size 0.3 :align 'below :autoclose t)
-		  ("*Flycheck errors*" :select t :size 0.3 :align 'below :autoclose t))))
+          ("*Flycheck errors*" :select t :size 0.3 :align 'below :autoclose t))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   snippets                                ;;
@@ -648,8 +694,8 @@
   :config
   (setq magit-auto-revert-mode nil)
   (talon-leader-def
-	:keymaps 'normal
-	"gg" #'magit-status))
+    :keymaps 'normal
+    "gg" #'magit-status))
 
 (use-package magit-todos
   :defer 1
@@ -674,7 +720,7 @@
   (global-flycheck-mode +1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                                   LSP!!!                                  ;;
+;;                                   LSP!!!                                      ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package lsp-mode
@@ -685,13 +731,38 @@
           )
   :config
   (setq lsp-auto-guess-root t
-		lsp-prefer-capf t
-		lsp-diagnostic-package :flycheck
-		lsp-enable-file-watchers nil))
+        lsp-prefer-capf t
+        lsp-diagnostic-package :flycheck
+        lsp-enable-file-watchers nil))
 
+(use-package company-lsp
+  :after (company lsp-mode)
+  :init
+  (setq company-lsp-cache-candidates nil)
+  (add-hook 'lsp-mode-hook
+            (lambda()
+              (add-to-list (make-local-variable 'company-backends)
+                           'company-lsp)))
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                                   C++!!!                                  ;;
+;;                                   python                                      ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package python
+  :ensure nil
+  :init
+  (setq python-indent-guess-indent-offset-verbose nil
+        python-indent-guess-indent-offset nil
+        python-indent-offset 4))
+
+(use-package lsp-python-ms
+  :hook (python-mode . (lambda ()
+                          (require 'lsp-python-ms)
+                          (lsp))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                   C++!!!                                      ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -700,16 +771,48 @@
   :mode ("\\.h\\'" . c++-mode)
   :config
   (defun talon-set-c-style()
-	"Set current buffer's c-style to my style."
-	(interactive)
-	(c-add-style "talon-style"
-				 '("stroustrup"
-				   (indent-tabs-mode . nil)
-				   (c-basic-offset . 4)
-				   (c-offsets-alist
-					(innamespace . -))
-				   ) t))
+    "Set current buffer's c-style to my style."
+    (interactive)
+    (c-add-style "talon-style"
+                 '("stroustrup"
+                   (indent-tabs-mode . nil)
+                   (c-basic-offset . 4)
+                   (c-offsets-alist
+                    (innamespace . -))
+                   ) t))
+
+  (defun talon--after-class-p()
+    (save-excursion
+      (beginning-of-line)
+      (looking-at  "\\(class\\|struct\\)")))
+
+  (defun talon--inner-bracket-p()
+    (save-excursion
+      (backward-char)
+      (looking-at "{}")))
+
+  (defun talon--inner-bracket-ret()
+    (when (talon--after-class-p)
+      (save-excursion
+        (end-of-line)
+        (insert ";")))
+    (open-line 1)
+    (newline-and-indent)
+    (save-excursion
+      (next-line)
+      (c-indent-line)))
+
+  (defun talon-c-new-line()
+    "Newline and indent."
+    (interactive)
+    (cond ((talon--inner-bracket-p) (talon--inner-bracket-ret))
+          (t (newline-and-indent))))
+
   (add-hook 'c++-mode-hook 'talon-set-c-style)
+  (general-define-key
+   :states 'insert
+   :keymaps 'c++-mode-map
+   "<RET>" 'talon-c-new-line)
   )
 
 
@@ -721,7 +824,7 @@
                  :compilationDatabaseDirectory "build")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                                   restclient                              ;;
+;;                                   restclient                                  ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package restclient
@@ -821,9 +924,77 @@
   :commands (vr/query-replace vr/replace)
   :config
   (talon-leader-def
-	:keymaps 'normal
-	"rr" 'vr/query-replace
-	"rR" 'vr/replace))
+    :keymaps 'normal
+    "rr" 'vr/query-replace
+    "rR" 'vr/replace))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                   org                                     ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package org
+  :ensure nil
+  :config
+  (setq org-ellipsis " ▼ "
+        org-directory talon-org-dir
+        org-agenda-files (list (concat talon-org-dir "gtd.org"))
+        )
+
+    (setcar (nthcdr 0 org-emphasis-regexp-components) " \t('\"{[:nonascii:]")
+  (setcar (nthcdr 1 org-emphasis-regexp-components) "- \t.,:!?;'\")}\\[[:nonascii:]")
+  (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
+  (org-element-update-syntax)
+  (setq org-confirm-babel-evaluate nil
+        org-src-fontify-natively t
+        org-src-tab-acts-natively t)
+
+  (defvar load-language-list '((emacs-lisp . t)
+                               (perl . t)
+                               (python . t)
+                               (ruby . t)
+                               (js . t)
+                               (css . t)
+                               (sass . t)
+                               (C . t)
+                               (java . t)
+                               (plantuml . t)))
+
+  (org-babel-do-load-languages 'org-babel-load-languages
+                               load-language-list)
+
+  )
+
+;; functions
+(defun talon-rename-this-file-and-buffer (new-name)
+  "Rename both current buffer and file it's visiting to NEW_NAME"
+  (interactive "sNew name: ")
+  (let ((name (buffer-name))
+        (filename (buffer-file-name)))
+    (unless filename
+      (error "Buffer '%s' is not visiting a file" name))
+    (progn
+      (when (file-exists-p filename)
+        (rename-file filename new-name 1))
+      (set-visited-file-name new-name)
+      (rename-buffer new-name))))
+
+
+(use-package format-all
+  :demand
+  )
+
+(use-package websocket)
+
+(use-package eaf
+  :demand
+  :load-path "D:/Code/Elisp/emacs-application-framework"
+  :init
+  (setq eaf-python-command "python")
+  :config
+  (evil-set-initial-state 'eaf-mode 'emacs)
+  (eaf-setq eaf-browser-default-zoom  "2")
+  )
+
 
 (toggle-frame-fullscreen)
 ;;; init.el ends here
