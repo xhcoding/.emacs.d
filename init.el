@@ -76,12 +76,7 @@
 (setq message-log-max 8192)
 
 ;; 设置编码，真让人头疼
-(when (fboundp 'set-charset-priority)
-  (set-charset-priority 'unicode))
 (prefer-coding-system 'utf-8)
-;; Windows 的剪贴板不支持 utf-8
-(unless IS-WINDOWS
-  (setq selection-coding-system 'utf-8))
 
 ;; 关闭重定义警告
 (setq ad-redefinition-action 'accept)
@@ -387,7 +382,37 @@ read-only or not file-visiting."
   (add-to-list 'awesome-tray-module-alist
                '("rime" . (talon-module-rime-info talon-module-rime-face)))
 
-  (setq awesome-tray-active-modules '("flycheck" "rime" "evil"  "location" "mode-name" "git" "date"))
+  (defun talon-module-encoding-info ()
+    (with-current-buffer (buffer-name)
+      (let ((eof (coding-system-eol-type buffer-file-coding-system))
+            (sys (coding-system-plist buffer-file-coding-system))
+            (info ""))
+        (setq info (concat info
+                           (pcase eof
+                             (0 "LF ")
+                             (1 "CRCF ")
+                             (2 "CR "))
+                           (cond ((memq (plist-get sys :category)
+                                        '(coding-category-undecided coding-category-utf-8))
+                                  "UTF-8")
+                                 (t (upcase (symbol-name (plist-get sys :name)))))))
+        info)))
+
+  (defface talon-module-encoding-face
+    '((((background light))
+       :foreground "#1b2bdd" :bold t)
+      (t
+       :foreground "#1b2bdd" :bold t))
+    "Encoding module face."
+    :group 'awesome-tray)
+
+  (add-to-list 'awesome-tray-module-alist
+               '("encoding" . (talon-module-encoding-info talon-module-encoding-face)))
+
+
+
+  (setq awesome-tray-active-modules '("flycheck" "rime" "evil"  "location" "mode-name" "git" "encoding" "date"))
+
   (awesome-tray-mode +1))
 
 (use-package lazycat-theme
@@ -993,7 +1018,10 @@ read-only or not file-visiting."
   :config
   (evil-set-initial-state 'eaf-mode 'emacs)
   (eaf-setq eaf-browser-default-zoom  "2")
-  )
+
+  (defun talon-eaf-open-current-file()
+    (interactive)
+    (eaf-open (buffer-file-name))))
 
 
 (toggle-frame-fullscreen)
