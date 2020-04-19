@@ -720,7 +720,13 @@ read-only or not file-visiting."
   (setq magit-auto-revert-mode nil)
   (talon-leader-def
     :keymaps 'normal
-    "gg" #'magit-status))
+    "gg" #'magit-status)
+
+  (general-define-key
+   :states 'normal
+   "zu" 'smerge-keep-upper
+   "zl" 'smerge-keep-lower)
+  )
 
 (use-package magit-todos
   :defer 1
@@ -1018,7 +1024,7 @@ read-only or not file-visiting."
   :config
   (evil-set-initial-state 'eaf-mode 'emacs)
   (eaf-setq eaf-browser-default-zoom  "2")
-
+  (setq eaf-grip-token "ab9d3961d8564bf818d705ba19f83979d9c2b9a7")
   (defun talon-eaf-open-current-file()
     (interactive)
     (eaf-open (buffer-file-name))))
