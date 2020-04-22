@@ -62,6 +62,11 @@
 ;; org
 (defconst talon-org-dir (expand-file-name "~/Documents/Org/"))
 
+;; code dir
+(if IS-WINDOWS
+    (defconst talon-code-dir (expand-file-name "D:/Code"))
+  (defconst talon-code-dir (expand-file-name "~/Code")))
+
 (add-to-list 'load-path talon-lib-dir)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -112,6 +117,9 @@
 (setq-default minibuffer-eldef-shorten-default t)
 (minibuffer-electric-default-mode +1)
 
+;; auto revert
+(global-auto-revert-mode +1)
+
 ;; custom
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file t t t)
@@ -147,7 +155,7 @@
 ;; use-package 的设置
 (eval-and-compile
   (setq use-package-always-ensure t)
-  (setq use-package-always-defer t)
+  (setq use-package-always-demand t)
   (setq use-package-expand-minimally t)
   (setq use-package-enable-imenu-support t))
 
@@ -168,7 +176,6 @@
 
 ;; 使用 auto-save
 (use-package auto-save
-  :defer 1
   :load-path (lambda() (expand-file-name "auto-save" talon-ext-dir))
   :config
   (auto-save-enable)
@@ -182,7 +189,6 @@
 
 (setq-default indent-tabs-mode nil)
 (use-package whitespace
-  :demand
   :ensure nil
   :config
   (defun doom-highlight-non-default-indentation-h ()
@@ -211,27 +217,17 @@ read-only or not file-visiting."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package evil
-  :demand
   :init
   (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
   (setq evil-want-keybinding nil)
   :config
-  (evil-mode +1)
-  ;;(setcdr evil-insert-state-map nil)
-  ;; (general-define-key
-  ;;  :states 'insert
-  ;;  "<ESC>" 'evil-normal-state
-  ;;  "M-x" 'execute-extended-command)
-
-  )
+  (evil-mode +1))
 
 (use-package evil-collection
   :after evil
-  :config
-  (evil-collection-init))
+  :hook (after-init. evil-collection-init))
 
 (use-package evil-escape
-  :defer 1
   :init
   (setq evil-escape-excluded-states '(normal visual multiedit emacs motion)
         evil-escape-excluded-major-modes '(neotree-mode treemacs-mode vterm-mode)
@@ -239,6 +235,7 @@ read-only or not file-visiting."
         evil-escape-delay 0.15)
   :config
   (evil-escape-mode +1))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   Keybindings                             ;;
@@ -249,9 +246,7 @@ read-only or not file-visiting."
 (defconst talon-localleader-key "SPC m")
 
 (use-package general
-  :demand
   :config
-
   (general-define-key
    :states 'insert
    "C-f" 'forward-char
@@ -309,13 +304,26 @@ read-only or not file-visiting."
     )
   )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                         evil-nerd-commenter                               ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(use-package evil-nerd-commenter
+  :config
+  (general-define-key
+   :states 'insert
+   "C-/" 'evilnc-comment-or-uncomment-lines)
+  (general-define-key
+   :states 'normal
+   "C-/" 'evilnc-comment-or-uncomment-lines))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   which key                               ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package which-key
-  :defer 1
   :config
   (which-key-mode +1))
 
@@ -324,7 +332,6 @@ read-only or not file-visiting."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package awesome-tab
-  :demand
   :load-path (lambda() (expand-file-name "awesome-tab" talon-ext-dir))
   :config
   (setq awesome-tab-height 100)
@@ -416,7 +423,6 @@ read-only or not file-visiting."
   (awesome-tray-mode +1))
 
 (use-package lazycat-theme
-  :demand
   :load-path (lambda() (expand-file-name "lazycat-theme" talon-ext-dir))
   :commands (lazycat-theme-toggle)
   :config
@@ -426,8 +432,7 @@ read-only or not file-visiting."
 ;;                                   好看的图标                                  ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package all-the-icons
-  :defer 1)
+(use-package all-the-icons)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   好看的字体                                 ;;
@@ -448,55 +453,44 @@ read-only or not file-visiting."
 ;;                                   配对的括号                                  ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package show-paren
+(use-package paren
   :ensure nil
   :hook (after-init . show-paren-mode))
 
 (use-package awesome-pair
-  :demand
   :load-path (lambda() (expand-file-name "awesome-pair" talon-ext-dir))
   :hook ((
           c-mode
           c++-mode
-          java-mode
-          haskell-mode
           emacs-lisp-mode
-          lisp-interaction-mode
-          lisp-mode
-          maxima-mode
-          ielm-mode
-          sh-mode
-          makefile-gmake-mode
-          php-mode
           python-mode
           js-mode
-          go-mode
-          qml-mode
-          jade-mode
-          css-mode
-          ruby-mode
-          coffee-mode
-          rust-mode
-          qmake-mode
-          lua-mode
-          swift-mode
-          minibuffer-inactive-mode
           ) . awesome-pair-mode)
-  :bind (:map evil-insert-state-map
-          ("(" . awesome-pair-open-round)
-          ("[" . awesome-pair-open-bracket)
-          ("{" . awesome-pair-open-curly)
-          ("}" . awesome-pair-close-round)
-          ("]" . awesome-pair-close-bracket)
-          ("}" . awesome-pair-close-curly)
-          ("=" . awesome-pair-equal)
-          ("%" . awesome-pair-match-paren)
-          ("\"" . awesome-pair-double-quote)
-          ("SPC" . awesome-pair-space)
-          ("C-d" . awesome-pair-forward-delete)
-          ("C-k" . awesome-pair-kill)
-          ))
-
+  :config
+  (general-define-key
+   :states 'insert
+   "(" 'awesome-pair-open-round
+   ")" 'awesome-pair-close-round
+   "[" 'awesome-pair-open-bracket
+   "]" 'awesome-pair-close-bracket
+   "{" 'awesome-pair-open-curly
+   "}" 'awesome-pair-close-curly
+   "=" 'awesome-pair-equal
+   "%" 'awesome-pair-match-paren
+   "\"" 'awesome-pair-double-quote
+   "SPC" 'awesome-pair-space
+   "M-o" 'awesome-pair-backward-delete
+   "C-k" 'awesome-pair-kill
+   "M-\"" 'awesome-pair-wrap-double-quote
+   "M-(" 'awesome-pair-wrap-round
+   "M-[" 'awesome-pair-wrap-bracket
+   "M-{" 'awesome-pair-wrap-curly
+   "M-]" 'awesome-pair-unwrap
+   "M-p" 'awesome-pair-jump-left
+   "M-n" 'awesome-pair-jump-right
+   "M-;" 'awesome-pair-jump-out-pair-and-newline
+   )
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                      全局搜索                             ;;
@@ -510,7 +504,6 @@ read-only or not file-visiting."
 
 
 (use-package snails
-  :demand
   :load-path (lambda() (expand-file-name "snails" talon-ext-dir))
   :commands (snails snails-search-point)
   :bind (("C-s" . snails)
@@ -527,7 +520,6 @@ read-only or not file-visiting."
   )
 
 (use-package color-rg
-  :defer 1
   :load-path (lambda() (expand-file-name "color-rg" talon-ext-dir))
   :config
   (evil-set-initial-state 'color-rg-mode 'emacs))
@@ -537,7 +529,6 @@ read-only or not file-visiting."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package company
-  :diminish
   :hook (after-init . global-company-mode)
   :commands company-cancel
   :init
@@ -545,6 +536,7 @@ read-only or not file-visiting."
         company-tooltip-limit 10
         company-minimum-prefix-length 2
         company-dabbrev-downcase nil
+        company-show-numbers t
         company-dabbrev-ignore-case nil
         company-dabbrev-code-other-buffers t
         company-tooltip-align-annotations t
@@ -552,7 +544,10 @@ read-only or not file-visiting."
         company-global-modes
         '(not comint-mode erc-mode message-mode help-mode gud-mode)
         company-frontends '(company-pseudo-tooltip-frontend company-echo-metadata-frontend)
-        company-backends '(company-capf)))
+        company-backends '(company-capf))
+  :config
+  (add-hook 'global-company-mode-hook 'evil-collection-company-setup)
+  )
 
 (use-package company-posframe
   :hook (company-mode . company-posframe-mode))
@@ -603,7 +598,6 @@ read-only or not file-visiting."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package rime
-  :defer 1
   :load-path (lambda()(expand-file-name "emacs-rime" talon-ext-dir))
   :init
   (setq rime--module-path (expand-file-name (concat "librime-emacs" module-file-suffix) talon-lib-dir))
@@ -620,9 +614,11 @@ read-only or not file-visiting."
               :internal-border-width 10))
 
   (dolist (hook (list
-                 'c++-mode-hook))
+                 'c++-mode-hook
+                 'org-mode-hook))
     (add-hook hook '(lambda()(setq-local rime-disable-predicates
                                          '(rime-predicate-evil-mode-p
+                                           rime-predicate-punctuation-line-begin-p
                                            rime-predicate-space-after-cc-p)))))
   )
 
@@ -706,7 +702,6 @@ read-only or not file-visiting."
 
 
 (use-package yasnippet
-  :defer 1
   :config
   (yas-global-mode +1))
 
@@ -715,9 +710,9 @@ read-only or not file-visiting."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package magit
-  :defer 1
-  :config
+  :init
   (setq magit-auto-revert-mode nil)
+  :config
   (talon-leader-def
     :keymaps 'normal
     "gg" #'magit-status)
@@ -728,20 +723,15 @@ read-only or not file-visiting."
    "zl" 'smerge-keep-lower)
   )
 
-(use-package magit-todos
-  :defer 1
-  :config
-  )
+(use-package magit-todos)
 
-(use-package evil-magit
-  :defer 1)
+(use-package evil-magit)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   flycheck                                ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package flycheck
-  :defer 1
   :config
   (general-define-key
    :states 'normal
@@ -751,7 +741,7 @@ read-only or not file-visiting."
   (global-flycheck-mode +1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                                   LSP!!!                                      ;;
+;;                                   LSP!!!                                  ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package lsp-mode
@@ -777,7 +767,7 @@ read-only or not file-visiting."
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                                   python                                      ;;
+;;                                   python                                  ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package python
@@ -793,7 +783,7 @@ read-only or not file-visiting."
                           (lsp))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                                   C++!!!                                      ;;
+;;                                   C++!!!                                  ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -854,6 +844,26 @@ read-only or not file-visiting."
         `(:cache (:directory ,(expand-file-name "~/Code/ccls_cache"))
                  :compilationDatabaseDirectory "build")))
 
+;; checkers
+(flycheck-define-checker c/c++-cpplint
+  "A C/C++ style checker using cpplint.
+See URL
+`https://github.com/cpplint/cpplint'"
+  :command ("cpplint" source-original)
+  :error-patterns
+  ((warning line-start (file-name) ":" line ":  " (message) line-end))
+  :modes (c-mode c++-mode))
+
+(add-to-list 'flycheck-checkers 'c/c++-cpplint 'append)
+
+(defun talon-append-checkers()
+  "."
+  (flycheck-add-next-checker 'lsp
+                             '(warning . c/c++-cpplint)))
+
+(add-hook 'lsp-after-initialize-hook 'talon-append-checkers)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   restclient                                  ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -861,8 +871,7 @@ read-only or not file-visiting."
 (use-package restclient
   :mode ("\\.rest\\'" . restclient-mode))
 
-(use-package groovy-mode
-  :defer 1)
+(use-package groovy-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   blog                                    ;;
@@ -897,7 +906,6 @@ read-only or not file-visiting."
      "\n\n")))
 
 (use-package easy-hugo
-  :defer 1
   :commands (easy-hugo)
   :config
   (setq easy-hugo-basedir (expand-file-name +my-blog-root-dir)
@@ -942,7 +950,6 @@ read-only or not file-visiting."
 
 (use-package tramp
   :ensure nil
-  :defer 1
   :config
   (setq tramp-default-method "ssh"))
 
@@ -951,7 +958,6 @@ read-only or not file-visiting."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package visual-regexp
-  :defer 1
   :commands (vr/query-replace vr/replace)
   :config
   (talon-leader-def
@@ -1010,17 +1016,13 @@ read-only or not file-visiting."
       (rename-buffer new-name))))
 
 
-(use-package format-all
-  :demand
-  )
-
-(use-package websocket)
+(use-package format-all)
 
 (use-package eaf
-  :demand
-  :load-path "D:/Code/Elisp/emacs-application-framework"
+  :load-path (lambda()(expand-file-name "ELisp/emacs-application-framework" talon-code-dir))
   :init
-  (setq eaf-python-command "python")
+  (when IS-WINDOWS
+    (setq eaf-python-command "python"))
   :config
   (evil-set-initial-state 'eaf-mode 'emacs)
   (eaf-setq eaf-browser-default-zoom  "2")
@@ -1029,6 +1031,12 @@ read-only or not file-visiting."
     (interactive)
     (eaf-open (buffer-file-name))))
 
+(use-package markdown-toc
+  :commands (markdown-toc-generate-or-refresh-toc))
+
+;; server
+(setq server-name "emacs-server-file")
+(server-start)
 
 (toggle-frame-fullscreen)
 ;;; init.el ends here
