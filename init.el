@@ -217,7 +217,37 @@ read-only or not file-visiting."
 ;;                                   Keybindings                             ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package general)
+(use-package hydra
+  :config
+  (defhydra hydra-zoom (global-map "<f2>")
+    "zoom"
+    ("g" text-scale-increase "in")
+    ("l" text-scale-decrease "out"))
+  (defhydra hydra-move (:color red :body-pre (next-line))
+    "move"
+    ("n" next-line)
+    ("p" previous-line)
+    ("f" forward-char)
+    ("b" backward-char)
+    ("a" beginning-of-line)
+    ("e" move-end-of-line)
+    ("v" scroll-up-command)
+    ;; Converting M-v to V here by analogy.
+    ("V" scroll-down-command)
+    ("l" recenter-top-bottom))
+
+  (global-set-key (kbd "C-n") 'hydra-move/body)
+
+  (defhydra hydra-goto-line (goto-map ""
+                                      :pre (display-line-numbers-mode +1)
+                                      :post (display-line-numbers-mode -1))
+    "goto-line"
+  ("g" goto-line "go")
+  ("m" set-mark-command "mark" :bind nil)
+  ("q" nil "quit"))
+  )
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                             最近打开文件                                      ;;
@@ -386,30 +416,25 @@ read-only or not file-visiting."
           python-mode
           js-mode
           ) . awesome-pair-mode)
-  :config
-  (general-define-key
-   "(" 'awesome-pair-open-round
-   ")" 'awesome-pair-close-round
-   "[" 'awesome-pair-open-bracket
-   "]" 'awesome-pair-close-bracket
-   "{" 'awesome-pair-open-curly
-   "}" 'awesome-pair-close-curly
-   "=" 'awesome-pair-equal
-   "%" 'awesome-pair-match-paren
-   "\"" 'awesome-pair-double-quote
-   "SPC" 'awesome-pair-space
-   "M-o" 'awesome-pair-backward-delete
-   "C-k" 'awesome-pair-kill
-   "M-\"" 'awesome-pair-wrap-double-quote
-   "M-(" 'awesome-pair-wrap-round
-   "M-[" 'awesome-pair-wrap-bracket
-   "M-{" 'awesome-pair-wrap-curly
-   "M-]" 'awesome-pair-unwrap
-   "M-p" 'awesome-pair-jump-left
-   "M-n" 'awesome-pair-jump-right
-   "M-;" 'awesome-pair-jump-out-pair-and-newline
-   )
-  )
+  :bind (:map awesome-pair-mode-map
+              ("(" . awesome-pair-open-round)
+              (")" . awesome-pair-close-round)
+              ("[" . awesome-pair-open-bracket)
+              ("]" . awesome-pair-close-bracket)
+              ("{" . awesome-pair-open-curly)
+              ("}" . awesome-pair-close-curly)
+              ("%" . awesome-pair-match-paren)
+              ("\"" . awesome-pair-double-quote)
+              ("M-o" . awesome-pair-backward-delete)
+              ("C-k" . awesome-pair-kill)
+              ("M-\"" . awesome-pair-wrap-double-quote)
+              ("M-[" . awesome-pair-wrap-bracket)
+              ("M-{" . awesome-pair-wrap-curly)
+              ("M-(" . awesome-pair-wrap-round)
+              ("M-]" . awesome-pair-unwrap)
+              ("M-n" . awesome-pair-jump-right)
+              ("M-p" . awesome-pair-jump-left)
+              ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                      全局搜索                             ;;
@@ -493,7 +518,7 @@ read-only or not file-visiting."
 
   (when IS-WINDOWS
     (setq projectile-git-submodule-command nil
-      projectile-enable-caching nil))
+          projectile-enable-caching nil))
 
   )
 
@@ -620,6 +645,7 @@ read-only or not file-visiting."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package flycheck
+  :config
   (global-flycheck-mode +1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -657,8 +683,8 @@ read-only or not file-visiting."
 
 (use-package lsp-python-ms
   :hook (python-mode . (lambda ()
-                          (require 'lsp-python-ms)
-                          (lsp))))
+                         (require 'lsp-python-ms)
+                         (lsp))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   C++!!!                                  ;;
@@ -708,6 +734,8 @@ read-only or not file-visiting."
           (t (newline-and-indent))))
 
   (add-hook 'c++-mode-hook 'talon-set-c-style)
+  :bind (:map c++-mode-map
+              ("RET" . talon-c-new-line))
   )
 
 
@@ -785,7 +813,6 @@ See URL
   (setq easy-hugo-basedir (expand-file-name +my-blog-root-dir)
         easy-hugo-postdir "blog"
         easy-hugo-org-header t)
-  (evil-set-initial-state 'easy-hugo-mode 'emacs)
   (advice-add #'easy-hugo--org-headers :override #'+my-blog*easy-hugo--org-headers)
   )
 
@@ -842,7 +869,7 @@ See URL
         org-agenda-files (list (concat talon-org-dir "gtd.org"))
         )
 
-    (setcar (nthcdr 0 org-emphasis-regexp-components) " \t('\"{[:nonascii:]")
+  (setcar (nthcdr 0 org-emphasis-regexp-components) " \t('\"{[:nonascii:]")
   (setcar (nthcdr 1 org-emphasis-regexp-components) "- \t.,:!?;'\")}\\[[:nonascii:]")
   (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
   (org-element-update-syntax)
