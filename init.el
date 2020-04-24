@@ -212,75 +212,12 @@ read-only or not file-visiting."
   )
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                                   Evil                                    ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(use-package evil
-  :init
-  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-  (setq evil-want-keybinding nil)
-  :config
-  (evil-mode +1))
-
-(use-package evil-collection
-  :after evil
-  :hook (after-init. evil-collection-init))
-
-(use-package evil-escape
-  :init
-  (setq evil-escape-excluded-states '(normal visual multiedit emacs motion)
-        evil-escape-excluded-major-modes '(neotree-mode treemacs-mode vterm-mode)
-        evil-escape-key-sequence "jk"
-        evil-escape-delay 0.15)
-  :config
-  (evil-escape-mode +1))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   Keybindings                             ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defconst talon-leader-key "SPC")
-
-(defconst talon-localleader-key "SPC m")
-
-(use-package general
-  :config
-  (general-define-key
-   :states 'insert
-   "C-f" 'forward-char
-   "C-b" 'backward-char
-   "C-n" 'next-line
-   "C-p" 'previous-line
-   )
-  (general-create-definer
-    talon-leader-def
-    :prefix talon-leader-key)
-
-  ;; 默认的键绑定
-  (talon-leader-def
-    :keymaps 'normal
-    ;; window
-    "wq" 'delete-window
-    "wv" 'split-window-horizontally
-    "ws" 'split-window-vertically
-    "wj" 'evil-window-down
-    "wk" 'evil-window-up
-    "wh" 'evil-window-left
-    "wl" 'evil-window-right
-    ;; help
-    "hf" 'describe-function
-    "hk" 'describe-key
-    "hv" 'describe-variable
-
-    ;; buffer
-    "bk" 'kill-current-buffer
-    )
-
-  )
-
-
+(use-package general)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                             最近打开文件                                      ;;
@@ -298,10 +235,6 @@ read-only or not file-visiting."
                 (lambda (file) (file-in-directory-p file package-user-dir))))
   :config
   (push (expand-file-name recentf-save-file) recentf-exclude)
-  (talon-leader-def
-    :keymaps 'normal
-    "fr" #'(lambda()(interactive)(snails '(snails-backend-recentf)))
-    )
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -309,14 +242,7 @@ read-only or not file-visiting."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(use-package evil-nerd-commenter
-  :config
-  (general-define-key
-   :states 'insert
-   "C-/" 'evilnc-comment-or-uncomment-lines)
-  (general-define-key
-   :states 'normal
-   "C-/" 'evilnc-comment-or-uncomment-lines))
+(use-package evil-nerd-commenter)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -335,11 +261,7 @@ read-only or not file-visiting."
   :load-path (lambda() (expand-file-name "awesome-tab" talon-ext-dir))
   :config
   (setq awesome-tab-height 100)
-  (awesome-tab-mode +1)
-  (talon-leader-def
-    :keymaps 'normal
-    "t" 'awesome-tab-ace-jump)
-  )
+  (awesome-tab-mode +1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   主题设置                                ;;
@@ -418,7 +340,7 @@ read-only or not file-visiting."
 
 
 
-  (setq awesome-tray-active-modules '("flycheck" "rime" "evil"  "location" "mode-name" "git" "encoding" "date"))
+  (setq awesome-tray-active-modules '("flycheck" "rime" "location" "mode-name" "git" "encoding" "date"))
 
   (awesome-tray-mode +1))
 
@@ -438,9 +360,7 @@ read-only or not file-visiting."
 ;;                                   好看的字体                                 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(if IS-WINDOWS
-    (set-frame-font      "-outline-等距更纱黑体 SC-normal-normal-normal-mono-30-*-*-*-c-*-iso8859-1")
-  (set-frame-font  "-outline-Sarasa Term SC-normal-normal-normal-mono-30-*-*-*-c-*-iso8859-1"))
+(set-frame-font      "-outline-等距更纱黑体 SC-normal-normal-normal-mono-30-*-*-*-c-*-iso8859-1")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   好看的括号                                 ;;
@@ -468,7 +388,6 @@ read-only or not file-visiting."
           ) . awesome-pair-mode)
   :config
   (general-define-key
-   :states 'insert
    "(" 'awesome-pair-open-round
    ")" 'awesome-pair-close-round
    "[" 'awesome-pair-open-bracket
@@ -509,20 +428,10 @@ read-only or not file-visiting."
   :bind (("C-s" . snails)
          ([remap execute-extended-command] . (lambda()(interactive)(snails '(snails-backend-command)))))
   :config
-  (evil-set-initial-state 'snails-mode 'emacs)
-  (talon-leader-def
-    :keymaps 'normal
-    "sb" #'(lambda()(interactive)(snails '(snails-backend-current-buffer)))
-    "bb" #'(lambda()(interactive)(snails '(snails-backend-buffer)))
-    "f." #'(lambda()(interactive(snails '(snails-backend-directory-files) (file-name-directory (buffer-file-name)))))
-    "." #'(lambda()(interactive(snails '(snails-backend-directory-files))))
-    )
   )
 
 (use-package color-rg
-  :load-path (lambda() (expand-file-name "color-rg" talon-ext-dir))
-  :config
-  (evil-set-initial-state 'color-rg-mode 'emacs))
+  :load-path (lambda() (expand-file-name "color-rg" talon-ext-dir)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                       补全                                ;;
@@ -545,8 +454,6 @@ read-only or not file-visiting."
         '(not comint-mode erc-mode message-mode help-mode gud-mode)
         company-frontends '(company-pseudo-tooltip-frontend company-echo-metadata-frontend)
         company-backends '(company-capf))
-  :config
-  (add-hook 'global-company-mode-hook 'evil-collection-company-setup)
   )
 
 (use-package company-posframe
@@ -588,9 +495,6 @@ read-only or not file-visiting."
     (setq projectile-git-submodule-command nil
       projectile-enable-caching nil))
 
-  (talon-leader-def
-    :keymaps 'normal
-    "sp" #'(lambda()(interactive)(snails '(snails-backend-projectile))))
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -627,10 +531,7 @@ read-only or not file-visiting."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package xref
-  :ensure nil
-  :bind (:map evil-normal-state-map
-          ("gd" . xref-find-definitions)
-          ("gr" . xref-find-references)))
+  :ensure nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   shackle                                 ;;
@@ -709,35 +610,16 @@ read-only or not file-visiting."
 ;;                                   magit                                   ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package magit
-  :init
-  (setq magit-auto-revert-mode nil)
-  :config
-  (talon-leader-def
-    :keymaps 'normal
-    "gg" #'magit-status)
+(use-package magit)
 
-  (general-define-key
-   :states 'normal
-   "zu" 'smerge-keep-upper
-   "zl" 'smerge-keep-lower)
-  )
 
 (use-package magit-todos)
-
-(use-package evil-magit)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   flycheck                                ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package flycheck
-  :config
-  (general-define-key
-   :states 'normal
-   :keymaps 'flycheck-error-list-mode-map
-   "<RET>" 'flycheck-error-list-goto-error
-   "q"     'quit-window)
   (global-flycheck-mode +1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -746,10 +628,6 @@ read-only or not file-visiting."
 
 (use-package lsp-mode
   :commands (lsp)
-  :bind (:map lsp-mode-map
-          ([remap xref-find-definitions] . lsp-find-definition)
-          ([remap xref-find-references] . lsp-find-references)
-          )
   :config
   (setq lsp-auto-guess-root t
         lsp-prefer-capf t
@@ -830,10 +708,6 @@ read-only or not file-visiting."
           (t (newline-and-indent))))
 
   (add-hook 'c++-mode-hook 'talon-set-c-style)
-  (general-define-key
-   :states 'insert
-   :keymaps 'c++-mode-map
-   "<RET>" 'talon-c-new-line)
   )
 
 
@@ -913,10 +787,6 @@ See URL
         easy-hugo-org-header t)
   (evil-set-initial-state 'easy-hugo-mode 'emacs)
   (advice-add #'easy-hugo--org-headers :override #'+my-blog*easy-hugo--org-headers)
-
-  (talon-leader-def
-    :keymaps 'normal
-    "ob" 'easy-hugo)
   )
 
 (defun +my-blog/publish()
@@ -958,12 +828,7 @@ See URL
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package visual-regexp
-  :commands (vr/query-replace vr/replace)
-  :config
-  (talon-leader-def
-    :keymaps 'normal
-    "rr" 'vr/query-replace
-    "rR" 'vr/replace))
+  :commands (vr/query-replace vr/replace))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   org                                     ;;
@@ -1024,7 +889,6 @@ See URL
   (when IS-WINDOWS
     (setq eaf-python-command "python"))
   :config
-  (evil-set-initial-state 'eaf-mode 'emacs)
   (eaf-setq eaf-browser-default-zoom  "2")
   (setq eaf-grip-token "ab9d3961d8564bf818d705ba19f83979d9c2b9a7")
   (defun talon-eaf-open-current-file()
