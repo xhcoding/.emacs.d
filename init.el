@@ -212,43 +212,6 @@ read-only or not file-visiting."
   )
 
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                                   Keybindings                             ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(use-package hydra
-  :config
-  (defhydra hydra-zoom (global-map "<f2>")
-    "zoom"
-    ("g" text-scale-increase "in")
-    ("l" text-scale-decrease "out"))
-  (defhydra hydra-move (:color red :body-pre (next-line))
-    "move"
-    ("n" next-line)
-    ("p" previous-line)
-    ("f" forward-char)
-    ("b" backward-char)
-    ("a" beginning-of-line)
-    ("e" move-end-of-line)
-    ("v" scroll-up-command)
-    ;; Converting M-v to V here by analogy.
-    ("V" scroll-down-command)
-    ("l" recenter-top-bottom))
-
-  (global-set-key (kbd "C-n") 'hydra-move/body)
-
-  (defhydra hydra-goto-line (goto-map ""
-                                      :pre (display-line-numbers-mode +1)
-                                      :post (display-line-numbers-mode -1))
-    "goto-line"
-  ("g" goto-line "go")
-  ("m" set-mark-command "mark" :bind nil)
-  ("q" nil "quit"))
-  )
-
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                             最近打开文件                                      ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -272,7 +235,8 @@ read-only or not file-visiting."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(use-package evil-nerd-commenter)
+(use-package evil-nerd-commenter
+  :bind ("C-/" . evilnc-comment-or-uncomment-lines))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -291,7 +255,10 @@ read-only or not file-visiting."
   :load-path (lambda() (expand-file-name "awesome-tab" talon-ext-dir))
   :config
   (setq awesome-tab-height 100)
-  (awesome-tab-mode +1))
+  (awesome-tab-mode +1)
+  :bind ("C-t" . awesome-tab-ace-jump))
+
+(use-package avy)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   主题设置                                ;;
@@ -435,6 +402,30 @@ read-only or not file-visiting."
               ("M-n" . awesome-pair-jump-right)
               ("M-p" . awesome-pair-jump-left)
               ))
+
+(use-package expand-region
+  :config
+  (defhydra hydra-region (global-map "C-c")
+    "expand-region"
+    ("e" er/expand-region)))
+
+(use-package thing-edit
+  :load-path (lambda() (expand-file-name "thing-edit" talon-ext-dir))
+  :config
+  (defhydra hydra-thing-edit()
+    "thing edit"
+    ("w" thing-copy-word)
+    ("W" thing-cut-word)
+    ("f" thing-copy-file-name)
+    ("F" thing-cut-file-name)
+    ("u" thing-copy-url)
+    ("U" thing-cut-url)
+    ("x" thing-copy-sexp)
+    ("X" thing-cut-sexp)
+    ("p" thing-copy-parentheses)
+    ("P" thing-cut-parentheses))
+  (global-set-key (kbd "C-.")'hydra-thing-edit/body)
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                      全局搜索                             ;;
@@ -924,6 +915,48 @@ See URL
 
 (use-package markdown-toc
   :commands (markdown-toc-generate-or-refresh-toc))
+
+(use-package qt-pro-mode
+  :mode ("\\.pro\\'" "\\.pri\\'"))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                   Keybindings                             ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package hydra
+  :config
+  (defhydra hydra-zoom (global-map "<f2>")
+    "zoom"
+    ("g" text-scale-increase "in")
+    ("l" text-scale-decrease "out"))
+  (defhydra hydra-move (:color red :body-pre (next-line))
+    "move"
+    ("n" next-line)
+    ("p" previous-line)
+    ("f" forward-char)
+    ("b" backward-char)
+    ("a" beginning-of-line)
+    ("e" move-end-of-line)
+    ("v" scroll-up-command)
+    ;; Converting M-v to V here by analogy.
+    ("V" scroll-down-command)
+    ("l" recenter-top-bottom)
+    ("c" avy-goto-char)
+    ("m" set-mark-command :bind nil))
+
+  (global-set-key (kbd "C-n") 'hydra-move/body)
+
+  (defhydra hydra-goto-line (goto-map ""
+                                      :pre (display-line-numbers-mode +1)
+                                      :post (display-line-numbers-mode -1))
+    "goto-line"
+  ("g" goto-line "go")
+  ("m" set-mark-command "mark" :bind nil)
+  ("q" nil "quit"))
+  )
+
+
 
 ;; server
 (setq server-name "emacs-server-file")
