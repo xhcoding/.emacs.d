@@ -6,8 +6,6 @@
 
 (use-package lsp-mode
   :diminish
-  :hook (prog-mode . (lambda()
-                       (lsp-deferred)))
   :init
   (setq read-process-output-max (* 1024 1024))
 
@@ -26,14 +24,17 @@
 
 (use-package lsp-python-ms
   :hook (python-mode . (lambda ()
-                         (require 'lsp-python-ms)))
+                         (require 'lsp-python-ms)
+                         (lsp)))
   :config
   (when (executable-find "python3")
     (setq lsp-python-ms-python-executable-cmd "python3")))
 
 
 (use-package ccls
-  :hook ((c-mode c++-mode) . (lambda()(require 'ccls)))
+  :hook ((c-mode c++-mode) . (lambda()
+                               (require 'ccls)
+                               (lsp)))
   :config
   (setq ccls-initialization-options
         `(:cache (:directory ,(expand-file-name "~/Code/ccls_cache"))

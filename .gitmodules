@@ -31,3 +31,6 @@
 [submodule "extensions/emacs-rime"]
 	path = extensions/emacs-rime
 	url = https://github.com/DogLooksGood/emacs-rime.git
+[submodule "extensions/thing-edit"]
+	path = extensions/thing-edit
+	url = https://github.com/manateelazycat/thing-edit.git

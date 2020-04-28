@@ -5,7 +5,10 @@
 ;;; Code:
 
 
-(use-package magit)
+(use-package magit
+  :config
+    (when IS-WINDOWS
+      (setenv "GIT_ASKPASS" "git-gui--askpass")))
 
 
 (use-package magit-todos)
