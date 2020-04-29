@@ -8,17 +8,20 @@
   :load-path (lambda()(expand-file-name "emacs-rime" talon-ext-dir))
   :init
   (setq rime--module-path (expand-file-name (concat "librime-emacs" module-file-suffix) talon-lib-dir))
+  (when IS-WINDOWS
+      (setq rime-share-data-dir (expand-file-name "rime-data" talon-etc-dir)))
   :custom
   (default-input-method "rime")
   (rime-show-candidate 'posframe)
-  (rime-share-data-dir (expand-file-name "rime-data" talon-etc-dir))
   (rime-user-data-dir (expand-file-name "rime-user" talon-etc-dir))
   :config
-  (setq rime-posframe-properties
-        (list :background-color "#333333"
-              :foreground-color "#dcdccc"
-              :font "微软雅黑"
-              :internal-border-width 10))
+  (let ((font (face-attribute 'default :family)))
+    (setq rime-posframe-properties
+          (list
+           :background-color "#333333"
+           :foreground-color "#dcdccc"
+           :font font
+           :internal-border-width 10)))
 
   (setq rime-disable-predicates
         '(rime-predicate-after-alphabet-char-p

@@ -9,6 +9,7 @@ build
 pyim
 *.userdb
 user.yaml
+etc/rime-user/installation.yaml
 server
 transient
 tramp
