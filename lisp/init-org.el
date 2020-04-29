@@ -86,6 +86,30 @@ prepended to the element after the #+HEADER: tag."
         org-src-fontify-natively t
         org-src-tab-acts-natively t)
 
+  (require 'org-protocol)
+
+  (setq org-capture-templates
+        `(
+          ("ts" "Study Task" entry
+           (file+headline ,(expand-file-name "gtd.org" talon-org-dir) "Tasks")
+           "* TODO %^{Brief Description}\tAdded: %U\t:Study:\n%?")
+          ("tp" "Project Task" entry
+           (file+headline ,(expand-file-name "gtd.org" talon-org-dir) "Tasks")
+           "* TODO %^{Brief Description}\tAdded: %U\t:Project:\n%?")
+          ("wc" "Work Code Note" entry
+           (file+headline ,(expand-file-name "work-note.org" talon-org-dir) "Code")
+           "* %^{Brief Description}\tAdded: %U\t:Work:\n%?")
+          ("sn" "Study Note" entry
+           (file+headline ,(expand-file-name "study-note.org" talon-org-dir) "Note")
+           "* %^{Brief Description}\tAdded: %U\t:Study: :Note:\n%?")
+          ("ps" "Protocol Text" plain
+           (file+function ,(expand-file-name "web.org" talon-org-dir) org-capture-template-goto-link)
+           "Added: %U\n\t%:initial" :empty-lines 1 :immediate-finish t :kill-buffer t)
+          ("pb" "Protocol Bookmarks" entry
+           (file+headline ,(expand-file-name "web.org" talon-org-dir) "Bookmarks")
+           "* %:annotation\tAdded: %U" :empty-lines 1 :immediate-finish t :kill-buffer t)
+          ))
+
   (defvar load-language-list '((emacs-lisp . t)
                                (perl . t)
                                (python . t)
