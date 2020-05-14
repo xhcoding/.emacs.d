@@ -4,6 +4,9 @@
 
 ;;; Code:
 
+;; 使用 buffer local
+(setq enable-local-variables :all)
+
 ;; visible
 (setq visible-bell 0)
 

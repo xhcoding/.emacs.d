@@ -76,7 +76,7 @@ prepended to the element after the #+HEADER: tag."
   (setq org-ellipsis " ▼ "
         org-directory talon-org-dir
         org-agenda-files (list (concat talon-org-dir "gtd.org"))
-        )
+        org-M-RET-may-split-line `((default . nil)))
 
   (setcar (nthcdr 0 org-emphasis-regexp-components) " \t('\"{[:nonascii:]")
   (setcar (nthcdr 1 org-emphasis-regexp-components) "- \t.,:!?;'\")}\\[[:nonascii:]")

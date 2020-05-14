@@ -6,7 +6,7 @@
 
 
 (defun talon-rename-this-file-and-buffer (new-name)
-  "Rename both current buffer and file it's visiting to NEW_NAME"
+  "Rename both current buffer and file it's visiting to NEW_NAME."
   (interactive "sNew name: ")
   (let ((name (buffer-name))
         (filename (buffer-file-name)))
@@ -17,6 +17,17 @@
         (rename-file filename new-name 1))
       (set-visited-file-name new-name)
       (rename-buffer new-name))))
+
+;; Dos2Unix/Unix2Dos
+(defun dos2unix ()
+  "Convert the current buffer to UNIX file format."
+  (interactive)
+  (set-buffer-file-coding-system 'undecided-unix nil))
+
+(defun unix2dos ()
+  "Convert the current buffer to DOS file format."
+  (interactive)
+  (set-buffer-file-coding-system 'undecided-dos nil))
 
 (provide 'init-functions)
 

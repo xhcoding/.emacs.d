@@ -31,6 +31,7 @@
 (require 'init-chinese)
 (require 'init-blog)
 (require 'init-vcs)
+(require 'init-eaf)
 
 ;; program
 (require 'init-flycheck)
@@ -40,6 +41,7 @@
 (require 'init-cc)
 (require 'init-org)
 (require 'init-python)
+(require 'init-javascript)
 (require 'init-markdown)
 (require 'init-others)
 (require 'init-finish)

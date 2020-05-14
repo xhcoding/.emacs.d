@@ -19,7 +19,25 @@
   :config (setq avy-all-windows nil
                 avy-all-windows-alt nil
                 avy-background t
-                avy-style 'pre))
+                avy-style 'pre)
+  :pretty-hydra
+  ((:title (pretty-hydra-title "Go To" 'faicon "rocket") :quit-key "q")
+  ("Base Move"
+   (("n" next-line "next line")
+    ("p" previous-line "previous line")
+    ("f" forward-char "forward char")
+    ("b" backward-char "backward char"))
+   "Char Move"
+   (("c" avy-goto-char-2)
+    ("C" avy-goto-char-timer)
+    ("l" avy-goto-char-in-line))
+   "Other Move"
+   (("L" avy-goto-line)
+    ("e" flycheck-next-error)
+    ("E" flycheck-previous-error))
+   "Mark"
+   (("m" set-mark-command))))
+  :bind (("M-l" . avy-hydra/body)))
 
 (use-package evil-nerd-commenter
   :bind ("C-/" . evilnc-comment-or-uncomment-lines))
@@ -121,12 +139,15 @@ read-only or not file-visiting."
   ((:title "Thing Edit" :color teal :quit-key "q")
    ("Copy"
     (("w" thing-copy-word "copy word")
-     ("p" thing-copy-parentheses "copy round"))
+     ("p" thing-copy-parentheses "copy round")
+     ("l" thing-copy-line "Copy line"))
     "Cut"
     (("W" thing-cut-word "cut word")
-     ("P" thing-cut-parentheses "cut round"))
+     ("P" thing-cut-parentheses "cut round")
+     ("L" thing-cut-line "Cut line"))
    "Replace"
-    (("r" thing-replace-parentheses "replace round"))))
+   (("rp" thing-replace-parentheses "replace round")
+    ("rl" thing-replace-line))))
   :bind ("C-." . thing-edit-hydra/body))
 
 

@@ -7,7 +7,7 @@
 (use-package cmake-mode
   :hook (cmake-mode . (lambda()
                         (set (make-local-variable 'company-backends)
-                             '(company-cmake company-dabbrev-code)))))
+                             '((company-cmake company-dabbrev-code))))))
 
 (use-package qt-pro-mode
   :mode ("\\.pro\\'" "\\.pri\\'"))
@@ -66,7 +66,7 @@
   "A C/C++ style checker using cpplint.
 See URL
 `https://github.com/cpplint/cpplint'"
-  :command ("cpplint" source-original)
+  :command ("cpplint --filter=-whitespace/indent" source-original)
   :error-patterns
   ((warning line-start (file-name) ":" line ":  " (message) line-end))
   :modes (c-mode c++-mode))
