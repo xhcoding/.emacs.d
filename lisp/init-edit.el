@@ -151,6 +151,9 @@ read-only or not file-visiting."
   :bind ("C-." . thing-edit-hydra/body))
 
 
+(use-package format-all
+  :commands (format-all-buffer))
+
 (provide 'init-edit)
 
 

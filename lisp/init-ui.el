@@ -17,6 +17,7 @@
 
 
 (use-package awesome-tray
+  :disabled t
   :load-path (lambda() (expand-file-name "awesome-tray" talon-ext-dir))
   :config
   (defun talon-module-flycheck-info ()
@@ -92,6 +93,7 @@
   (awesome-tray-mode +1))
 
 (use-package lazycat-theme
+  :disabled t
   :load-path (lambda() (expand-file-name "lazycat-theme" talon-ext-dir))
   :commands (lazycat-theme-toggle)
   :config
@@ -112,6 +114,12 @@
   (awesome-tab-mode +1)
   :bind ("C-t" . awesome-tab-ace-jump))
 
+(use-package doom-themes
+  :config
+  (load-theme 'doom-one t))
+
+(use-package doom-modeline
+  :init (doom-modeline-mode 1))
 
 (provide 'init-ui)
 

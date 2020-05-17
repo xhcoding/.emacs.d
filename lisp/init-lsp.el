@@ -14,7 +14,7 @@
         lsp-flycheck-live-reporting nil
         lsp-keep-workspace-alive nil
         lsp-prefer-capf t
-        lsp-signature-auto-activate t
+        lsp-signature-auto-activate nil
 
         lsp-enable-file-watchers nil
         lsp-enable-folding nil
@@ -37,10 +37,8 @@
                                (lsp)))
   :config
   (setq ccls-initialization-options
-        `(:cache (:directory ,(expand-file-name "~/Code/ccls_cache"))
+        `(:cache (:directory ,(expand-file-name "ccls_cache" talon-code-dir))
                  :compilationDatabaseDirectory "build")))
-
-
 
 
 (provide 'init-lsp)

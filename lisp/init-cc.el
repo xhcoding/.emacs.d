@@ -61,25 +61,6 @@
   )
 
 
-;; checkers
-(flycheck-define-checker c/c++-cpplint
-  "A C/C++ style checker using cpplint.
-See URL
-`https://github.com/cpplint/cpplint'"
-  :command ("cpplint --filter=-whitespace/indent" source-original)
-  :error-patterns
-  ((warning line-start (file-name) ":" line ":  " (message) line-end))
-  :modes (c-mode c++-mode))
-
-(add-to-list 'flycheck-checkers 'c/c++-cpplint 'append)
-
-(defun talon-append-checkers()
-  "."
-  (flycheck-add-next-checker 'lsp
-                             '(warning . c/c++-cpplint)))
-
-(add-hook 'lsp-after-initialize-hook 'talon-append-checkers)
-
 
 (provide 'init-cc)
 

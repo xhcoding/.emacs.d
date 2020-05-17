@@ -15,7 +15,9 @@
   :load-path (lambda() (expand-file-name "snails" talon-ext-dir))
   :commands (snails snails-search-point)
   :bind (("C-s" . snails)
-         ("C-x C-f" . (lambda()(interactive)(snails '(snails-backend-directory-files)))))
+         ("C-x C-f" . (lambda()(interactive)(snails '(snails-backend-directory-files))))
+         ("C-x C-r" . (lambda()(interactive)(snails '(snails-backend-recentf))))
+         ("C-x b" . (lambda()(interactive)(snails '(snails-backend-buffer)))))
   :config (setq snails-default-backends
                 '(
                   snails-backend-awesome-tab-group
