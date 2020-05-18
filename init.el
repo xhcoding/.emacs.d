@@ -14,6 +14,15 @@
 (setq user-full-name "xhcoding"
       user-mail-address "xhcoding@163.com")
 
+(defvar talon-dumped-load-path
+  "Dumped load path.")
+
+(when talon-dumped-load-path
+  (setq load-path talon-dumped-load-path)
+  (global-font-lock-mode)
+  (transient-mark-mode)
+  )
+
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
 (require 'init-accelerate)
@@ -41,7 +50,7 @@
 (require 'init-cc)
 (require 'init-org)
 (require 'init-python)
-(require 'init-javascript)
+(require 'init-web)
 (require 'init-markdown)
 (require 'init-others)
 (require 'init-finish)

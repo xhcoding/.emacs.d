@@ -30,7 +30,7 @@
 
 ;; use-package 的设置
 (eval-and-compile
-  (setq use-package-always-ensure t)
+  (setq use-package-always-ensure nil)
   (setq use-package-always-demand t)
   (setq use-package-expand-minimally t)
   (setq use-package-enable-imenu-support t))

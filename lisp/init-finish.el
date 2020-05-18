@@ -5,13 +5,15 @@
 ;;; Code:
 
 
-
 ;; server
 (setq server-name "emacs-server-file")
 (server-start)
 
 (toggle-frame-fullscreen)
 
+(with-temp-file (expand-file-name "package.list" user-emacs-directory)
+  (insert (mapconcat 'symbol-name package-activated-list "\n"))
+  )
 
 (provide 'init-finish)
 

@@ -116,7 +116,11 @@
 
 (use-package doom-themes
   :config
-  (load-theme 'doom-one t))
+  (if talon-dumped-load-path
+      (enable-theme 'doom-one)
+    (load-theme 'doom-one t)
+    )
+  )
 
 (use-package doom-modeline
   :init (doom-modeline-mode 1))
