@@ -16,3 +16,4 @@ tramp
 .cache
 eaf
 !extensions/flycheck*
+emacs.pdump
