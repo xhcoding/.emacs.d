@@ -14,7 +14,7 @@
 (setq user-full-name "xhcoding"
       user-mail-address "xhcoding@163.com")
 
-(defvar talon-dumped-load-path
+(defvar talon-dumped-load-path nil
   "Dumped load path.")
 
 (when talon-dumped-load-path
