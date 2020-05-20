@@ -17,6 +17,7 @@ evil-nerd-commenter
 expand-region
 flycheck
 format-all
+git-messenger
 gnu-elpa-keyring-update
 groovy-mode
 language-id

@@ -47,6 +47,7 @@
   :init
   (setq make-backup-files nil)
   (setq auto-save-default nil)
+  (setq auto-save-idle 3)
   :config
   (auto-save-enable)
   (setq auto-save-silent t)

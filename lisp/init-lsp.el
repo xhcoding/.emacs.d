@@ -6,6 +6,8 @@
 
 (use-package lsp-mode
   :diminish
+  :hook (
+         (c++-mode . lsp))
   :init
   (setq read-process-output-max (* 1024 1024))
 
@@ -20,7 +22,12 @@
         lsp-enable-folding nil
         lsp-enable-indentation nil
         lsp-enable-on-type-formatting nil
-        lsp-enable-symbol-highlighting nil))
+        lsp-enable-symbol-highlighting nil)
+
+  :config
+  (require 'lsp-clients)
+  (setq lsp-clients-clangd-args '("--compile-commands-dir=build" "--header-insertion=never"))
+  )
 
 (use-package lsp-python-ms
   :hook (python-mode . (lambda ()
@@ -32,6 +39,7 @@
 
 
 (use-package ccls
+  :disabled t
   :hook ((c-mode c++-mode) . (lambda()
                                (require 'ccls)
                                (lsp)))
