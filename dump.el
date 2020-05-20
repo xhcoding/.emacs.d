@@ -26,6 +26,12 @@
                      "color-rg"
                      "thing-edit"
                      "awesome-pair"
+                     "recentf"
+                     "smerge-mode"
+                     "cc-mode"
+                     "whitespace"
+                     "org"
+                     "python"
                      ))
     (add-to-list 'package-list package))
   (dolist (package package-list)

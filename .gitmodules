@@ -10,9 +10,6 @@
 [submodule "extensions/awesome-tray"]
 	path = extensions/awesome-tray
 	url = https://github.com/manateelazycat/awesome-tray.git
-[submodule "extensions/snails"]
-	path = extensions/snails
-	url = https://github.com/manateelazycat/snails.git
 [submodule "extensions/awesome-pair"]
 	path = extensions/awesome-pair
 	url = https://github.com/manateelazycat/awesome-pair.git
@@ -28,3 +25,6 @@
 [submodule "extensions/thing-edit"]
 	path = extensions/thing-edit
 	url = https://github.com/manateelazycat/thing-edit.git
+[submodule "extensions/snails"]
+	path = extensions/snails
+	url = git@github.com:xhcoding/snails.git

@@ -91,7 +91,7 @@
   (advice-add #'git-messenger:popup-message :override #'my-git-messenger:popup-message))
 
 (use-package magit-todos
-  :init (magit-todo-mode +1)
+  :init (magit-todos-mode +1)
   )
 
 ;; Resolve diff3 conflicts
