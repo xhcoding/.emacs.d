@@ -1,8 +1,6 @@
-posframe
 ace-window
 auto-package-update
 avy
-ccls
 cmake-mode
 company-box
 company-ctags
@@ -39,6 +37,7 @@ pcre2el
 plantuml-mode
 popup
 pos-tip
+posframe
 prescient
 pretty-hydra
 dash-functional

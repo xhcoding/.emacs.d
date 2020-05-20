@@ -38,16 +38,6 @@
     (setq lsp-python-ms-python-executable-cmd "python3")))
 
 
-(use-package ccls
-  :hook ((c-mode c++-mode) . (lambda()
-                               (require 'ccls)
-                               (lsp)))
-  :config
-  (setq ccls-initialization-options
-        `(:cache (:directory ,(expand-file-name "ccls_cache" talon-code-dir))
-                 :compilationDatabaseDirectory "build")))
-
-
 (provide 'init-lsp)
 
 ;;; init-lsp.el ends here
