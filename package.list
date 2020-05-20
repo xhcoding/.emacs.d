@@ -8,6 +8,7 @@ company-ctags
 company-prescient
 company-quickhelp
 company
+counsel
 diminish
 doom-modeline
 all-the-icons
@@ -56,6 +57,8 @@ f
 dash
 s
 spinner
+swiper
+ivy
 transient
 use-package
 bind-key

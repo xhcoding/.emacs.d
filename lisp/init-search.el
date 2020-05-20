@@ -22,10 +22,24 @@
                 '(
                   snails-backend-awesome-tab-group
                   snails-backend-buffer
-                  snails-backend-recentf)))
+                  snails-backend-recentf)
+                snails-prefix-backends
+                '((">" '(snails-backend-command))
+                  ("@" '(snails-backend-imenu))
+                  ("#" '(snails-backend-current-buffer))
+                  ("!" '(snails-backend-rg))
+                  ("?" '(snails-backend-projectile)))
+                ))
 
 (use-package color-rg
   :load-path (lambda() (expand-file-name "color-rg" talon-ext-dir)))
+
+(use-package counsel
+  :hook ((after-init . ivy-mode)
+         (ivy-mode . counsel-mode))
+  :init
+  (when IS-WINDOWS
+    (setq ivy-dynamic-exhibit-delay-ms 200)))
 
 (provide 'init-search)
 
