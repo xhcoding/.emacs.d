@@ -1,3 +1,4 @@
+posframe
 ace-window
 auto-package-update
 avy
@@ -38,7 +39,6 @@ pcre2el
 plantuml-mode
 popup
 pos-tip
-posframe
 prescient
 pretty-hydra
 dash-functional

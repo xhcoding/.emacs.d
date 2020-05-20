@@ -39,7 +39,6 @@
 
 
 (use-package ccls
-  :disabled t
   :hook ((c-mode c++-mode) . (lambda()
                                (require 'ccls)
                                (lsp)))

@@ -4,6 +4,9 @@
 
 ;;; Code:
 
+(use-package posframe
+  :ensure t)
+
 (use-package rime
   :load-path (lambda()(expand-file-name "emacs-rime" talon-ext-dir))
   :init
