@@ -18,18 +18,26 @@
          ("C-x C-f" . (lambda()(interactive)(snails '(snails-backend-directory-files))))
          ("C-x C-r" . (lambda()(interactive)(snails '(snails-backend-recentf))))
          ("C-x b" . (lambda()(interactive)(snails '(snails-backend-buffer)))))
-  :config (setq snails-default-backends
-                '(
-                  snails-backend-awesome-tab-group
-                  snails-backend-buffer
-                  snails-backend-recentf)
-                snails-prefix-backends
-                '((">" '(snails-backend-command))
-                  ("@" '(snails-backend-imenu))
-                  ("#" '(snails-backend-current-buffer))
-                  ("!" '(snails-backend-rg))
-                  ("?" '(snails-backend-projectile)))
-                ))
+  :config
+  (setq snails-default-backends
+        '(
+          snails-backend-awesome-tab-group
+          snails-backend-buffer
+          snails-backend-recentf)
+        snails-prefix-backends
+        '((">" '(snails-backend-command))
+          ("@" '(snails-backend-imenu))
+          ("#" '(snails-backend-current-buffer))
+          ("!" '(snails-backend-rg))
+          ("?" '(snails-backend-projectile))))
+
+  (setq snails-backend-buffer-blacklist
+        (append (list
+                 snails-tips-buffer
+                  " *company-box"
+                  ) snails-backend-buffer-blacklist))
+
+  )
 
 (use-package color-rg
   :load-path (lambda() (expand-file-name "color-rg" talon-ext-dir)))
