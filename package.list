@@ -1,6 +1,7 @@
 ace-window
 auto-package-update
 avy
+ccls
 cmake-mode
 company-box
 company-ctags
@@ -34,6 +35,7 @@ markdown-mode
 memoize
 mixed-pitch
 ox-hugo
+pandoc
 pcre2el
 plantuml-mode
 popup

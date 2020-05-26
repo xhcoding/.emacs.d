@@ -29,6 +29,15 @@
   (setq lsp-clients-clangd-args '("--compile-commands-dir=build" "--header-insertion=never"))
   )
 
+(use-package ccls
+  :hook ((c-mode c++-mode) . (lambda()
+                               (require 'ccls)
+                               (lsp)))
+  :config
+  (setq ccls-initialization-options
+        `(:cache (:directory ,(expand-file-name "ccls_cache" talon-code-dir))
+                 :compilationDatabaseDirectory "build")))
+
 (use-package lsp-python-ms
   :hook (python-mode . (lambda ()
                          (require 'lsp-python-ms)

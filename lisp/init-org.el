@@ -128,7 +128,20 @@ prepended to the element after the #+HEADER: tag."
 (use-package plantuml-mode
   :init
   (setq org-plantuml-jar-path (expand-file-name "plantuml.jar" talon-etc-dir))
-  (setq plantuml-jar-path (expand-file-name "plantuml.jar" talon-etc-dir)))
+  (setq plantuml-jar-path (expand-file-name "plantuml.jar" talon-etc-dir))
+  (setq plantuml-default-exec-mode 'jar)
+  :config
+  (add-to-list 'org-babel-default-header-args:plantuml
+               '(:cmdline . "-charset utf-8"))
+  )
+
+(use-package pandoc
+  :init
+  (add-to-list 'org-export-backends 'pandoc)
+      (setq org-pandoc-options
+          '((standalone . t)
+            (mathjax . t)
+            (variable . "revealjs-url=https://revealjs.com"))))
 
 (provide 'init-org)
 

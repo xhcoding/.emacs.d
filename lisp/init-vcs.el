@@ -90,9 +90,7 @@
   (advice-add #'git-messenger:popup-close :override #'ignore)
   (advice-add #'git-messenger:popup-message :override #'my-git-messenger:popup-message))
 
-(use-package magit-todos
-  :init (magit-todos-mode +1)
-  )
+(use-package magit-todos)
 
 ;; Resolve diff3 conflicts
 (use-package smerge-mode
