@@ -49,7 +49,7 @@
                company-box-backends-colors nil
                company-box-show-single-candidate t
                company-box-max-candidates 50
-               company-box-doc-delay 0.2)
+               company-box-doc-enable nil)
   (with-no-warnings
     ;; Prettify icons
     (defun my-company-box-icons--elisp (candidate)

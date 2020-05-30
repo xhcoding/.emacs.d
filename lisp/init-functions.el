@@ -5,7 +5,7 @@
 ;;; Code:
 
 
-(defun talon-rename-this-file-and-buffer (new-name)
+(defun talon/rename-this-file-and-buffer (new-name)
   "Rename both current buffer and file it's visiting to NEW_NAME."
   (interactive "sNew name: ")
   (let ((name (buffer-name))
@@ -29,7 +29,18 @@
   (interactive)
   (set-buffer-file-coding-system 'undecided-dos nil))
 
-
+(defun talon/kill-all-buffers()
+  "Kill all buffers."
+  (interactive)
+  (let ((buffer-list (buffer-list)))
+    (save-some-buffers)
+    (delete-other-windows)
+    (when (memq (current-buffer) buffer-list)
+      (switch-to-buffer "*scratch*"))
+    (mapc #'kill-buffer buffer-list)
+    (message "Killed %d buffers"
+             (- (length buffer-list)
+                (length (cl-remove-if-not #'buffer-live-p buffer-list))))))
 
 (provide 'init-functions)
 

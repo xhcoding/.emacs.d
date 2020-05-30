@@ -7,7 +7,9 @@
 (use-package lsp-mode
   :diminish
   :hook (
-         (c++-mode . lsp))
+         (c++-mode . lsp)
+         (lsp-mode . lsp-flycheck-enable)
+         )
   :init
   (setq read-process-output-max (* 1024 1024))
 
@@ -17,7 +19,9 @@
         lsp-keep-workspace-alive nil
         lsp-prefer-capf t
         lsp-signature-auto-activate nil
+        lsp-auto-configure nil
 
+        lsp-enable-snippet nil
         lsp-enable-file-watchers nil
         lsp-enable-folding nil
         lsp-enable-indentation nil
@@ -36,7 +40,8 @@
   :config
   (setq ccls-initialization-options
         `(:cache (:directory ,(expand-file-name "ccls_cache" talon-code-dir))
-                 :compilationDatabaseDirectory "build")))
+                 :compilationDatabaseDirectory "build"
+                 :index (:threads 2))))
 
 (use-package lsp-python-ms
   :hook (python-mode . (lambda ()
@@ -102,7 +107,7 @@
 	     ([remap xref-find-references]  . lsp-ui-peek-find-references)
          )
   :hook (lsp-mode . lsp-ui-mode)
-  :init (setq lsp-ui-doc-enable t
+  :init (setq lsp-ui-doc-enable nil
               lsp-ui-doc-use-webkit nil
               lsp-ui-doc-delay 0.2
               lsp-ui-doc-include-signature t

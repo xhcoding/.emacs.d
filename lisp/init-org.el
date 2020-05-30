@@ -56,7 +56,11 @@ prepended to the element after the #+HEADER: tag."
      ("S" (hot-expand "<s" "sh") "sh")
      ("g" (hot-expand "<s" "go :imports '\(\"fmt\"\)") "golang"))
     "Misc"
-    (("u" (hot-expand "<s" "plantuml :file CHANGE.png") "plantuml")
+    (("u" (hot-expand "<s" "plantuml :file CHANGE.png"
+                      (concat "plantuml :file ../images/"
+                              (file-name-base buffer-file-name)
+                              (format-time-string "_%Y%H%M%S")))
+      "plantuml")
      ("Y" (hot-expand "<s" "ipython :session :exports both :results raw drawer\n$0") "ipython")
      ("P" (progn
             (insert "#+HEADERS: :results output :exports both :shebang \"#!/usr/bin/env perl\"\n")
@@ -132,7 +136,7 @@ prepended to the element after the #+HEADER: tag."
   (setq plantuml-default-exec-mode 'jar)
   :config
   (add-to-list 'org-babel-default-header-args:plantuml
-               '(:cmdline . "-charset utf-8"))
+               `(:cmdline . ,(concat "-charset utf-8")))
   )
 
 (use-package pandoc
@@ -140,8 +144,7 @@ prepended to the element after the #+HEADER: tag."
   (add-to-list 'org-export-backends 'pandoc)
       (setq org-pandoc-options
           '((standalone . t)
-            (mathjax . t)
-            (variable . "revealjs-url=https://revealjs.com"))))
+            (mathjax . t))))
 
 (provide 'init-org)
 

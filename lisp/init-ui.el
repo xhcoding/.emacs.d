@@ -108,6 +108,7 @@
 
 
 (use-package awesome-tab
+  :disabled t
   :load-path (lambda() (expand-file-name "awesome-tab" talon-ext-dir))
   :config
   (setq awesome-tab-height 100)

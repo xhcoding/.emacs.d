@@ -90,6 +90,7 @@ read-only or not file-visiting."
                 (lambda (file) (file-in-directory-p file package-user-dir))))
   :config
   (push (expand-file-name recentf-save-file) recentf-exclude)
+  (recentf-load-list)
   )
 
 

@@ -21,7 +21,6 @@
   :config
   (setq snails-default-backends
         '(
-          snails-backend-awesome-tab-group
           snails-backend-buffer
           snails-backend-recentf)
         snails-prefix-backends
