@@ -22,10 +22,10 @@
   (dolist (package '(
                      "snails"
                      "auto-save"
-                     "awesome-tab"
                      "color-rg"
                      "thing-edit"
                      "awesome-pair"
+                     "company-english-helper"
                      "recentf"
                      "smerge-mode"
                      "cc-mode"

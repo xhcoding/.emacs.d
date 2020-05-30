@@ -1,15 +1,6 @@
-[submodule "extensions/awesome-tab"]
-	path = extensions/awesome-tab
-	url = https://github.com/manateelazycat/awesome-tab.git
 [submodule "extensions/auto-save"]
 	path = extensions/auto-save
 	url = https://github.com/manateelazycat/auto-save.git
-[submodule "extensions/lazycat-theme"]
-	path = extensions/lazycat-theme
-	url = https://github.com/manateelazycat/lazycat-theme.git
-[submodule "extensions/awesome-tray"]
-	path = extensions/awesome-tray
-	url = https://github.com/manateelazycat/awesome-tray.git
 [submodule "extensions/awesome-pair"]
 	path = extensions/awesome-pair
 	url = https://github.com/manateelazycat/awesome-pair.git
@@ -28,3 +19,6 @@
 [submodule "extensions/snails"]
 	path = extensions/snails
 	url = git@github.com:xhcoding/snails.git
+[submodule "extensions/company-english-helper"]
+	path = extensions/company-english-helper
+	url = https://github.com/manateelazycat/company-english-helper.git

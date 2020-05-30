@@ -124,7 +124,14 @@
   )
 
 (use-package doom-modeline
-  :init (doom-modeline-mode 1))
+  :hook (after-init . doom-modeline-mode)
+  :custom
+  (doom-modeline-icon t)
+  (doom-modeline-unicode-fallback t)
+  :init
+  (unless after-init-time
+    (setq doom-modeline--default-format mode-line-format)
+    (setq-default mode-line-format nil)))
 
 (provide 'init-ui)
 

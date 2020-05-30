@@ -106,6 +106,9 @@
 
 (use-package company-ctags)
 
+(use-package company-english-helper
+  :load-path (lambda() (expand-file-name "company-english-helper" talon-ext-dir)))
+
 (provide 'init-completion)
 
 ;;; init-completion.el ends here
