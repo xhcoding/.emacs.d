@@ -30,7 +30,7 @@
 
   :config
   (require 'lsp-clients)
-  (setq lsp-clients-clangd-args '("--compile-commands-dir=build" "--header-insertion=never"))
+  (setq lsp-clients-clangd-args '("--compile-commands-dir=build" "--header-insertion=never" "--completion-style=detailed"))
   )
 
 (use-package ccls

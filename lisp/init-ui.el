@@ -118,8 +118,8 @@
 (use-package doom-themes
   :config
   (if talon-dumped-load-path
-      (enable-theme 'doom-one)
-    (load-theme 'doom-one t)
+      (enable-theme 'doom-one-light)
+    (load-theme 'doom-one-light t)
     )
   )
 

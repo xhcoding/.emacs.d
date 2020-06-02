@@ -40,6 +40,7 @@
   )
 
 (load-theme 'doom-one t t)
+(load-theme 'doom-one-light t t)
 
 (dump-emacs-portable (expand-file-name "emacs.pdump" user-emacs-directory))
 

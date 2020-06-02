@@ -21,6 +21,7 @@ format-all
 git-messenger
 gnu-elpa-keyring-update
 groovy-mode
+js2-mode
 language-id
 lsp-python-ms
 lsp-ui
