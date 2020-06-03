@@ -29,18 +29,11 @@
   (interactive)
   (set-buffer-file-coding-system 'undecided-dos nil))
 
-(defun talon/kill-all-buffers()
-  "Kill all buffers."
-  (interactive)
-  (let ((buffer-list (buffer-list)))
-    (save-some-buffers)
-    (delete-other-windows)
-    (when (memq (current-buffer) buffer-list)
-      (switch-to-buffer "*scratch*"))
-    (mapc #'kill-buffer buffer-list)
-    (message "Killed %d buffers"
-             (- (length buffer-list)
-                (length (cl-remove-if-not #'buffer-live-p buffer-list))))))
+
+(defun talon*inner-comment-p()
+  "Check whether in comment."
+  (nth 4 (syntax-ppss)))
+
 
 (provide 'init-functions)
 

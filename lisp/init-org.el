@@ -68,6 +68,7 @@ prepended to the element after the #+HEADER: tag."
      ("<" self-insert-command "ins"))))
   :bind (("C-c a" . org-agenda)
          ("C-c b" . org-switchb)
+         ("C-c c" . org-capture)
          :map org-mode-map
          ("<" . (lambda ()
                   "Insert org template."
@@ -79,7 +80,10 @@ prepended to the element after the #+HEADER: tag."
   :config
   (setq org-ellipsis " ▼ "
         org-directory talon-org-dir
-        org-agenda-files (list (concat talon-org-dir "gtd.org"))
+        org-agenda-files `(
+                           ,(expand-file-name "inbox.org" talon-org-dir)
+                           ,(expand-file-name "gtd.org" talon-org-dir)
+                           ,(expand-file-name "tickler.org" talon-org-dir))
         org-M-RET-may-split-line `((default . nil)))
 
   (setcar (nthcdr 0 org-emphasis-regexp-components) " \t('\"{[:nonascii:]")
@@ -90,29 +94,67 @@ prepended to the element after the #+HEADER: tag."
         org-src-fontify-natively t
         org-src-tab-acts-natively t)
 
+  (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+  (setq org-enforce-todo-checkbox-dependencies t
+        org-enforce-todo-dependencies t)
+
   (require 'org-protocol)
 
   (setq org-capture-templates
         `(
-          ("ts" "Study Task" entry
-           (file+headline ,(expand-file-name "gtd.org" talon-org-dir) "Tasks")
-           "* TODO %^{Brief Description}\tAdded: %U\t:Study:\n%?")
-          ("tp" "Project Task" entry
-           (file+headline ,(expand-file-name "gtd.org" talon-org-dir) "Tasks")
-           "* TODO %^{Brief Description}\tAdded: %U\t:Project:\n%?")
-          ("wc" "Work Code Note" entry
-           (file+headline ,(expand-file-name "work-note.org" talon-org-dir) "Code")
-           "* %^{Brief Description}\tAdded: %U\t:Work:\n%?")
-          ("sn" "Study Note" entry
-           (file+headline ,(expand-file-name "study-note.org" talon-org-dir) "Note")
-           "* %^{Brief Description}\tAdded: %U\t:Study: :Note:\n%?")
-          ("ps" "Protocol Text" plain
-           (file+function ,(expand-file-name "web.org" talon-org-dir) org-capture-template-goto-link)
-           "Added: %U\n\t%:initial" :empty-lines 1 :immediate-finish t :kill-buffer t)
-          ("pb" "Protocol Bookmarks" entry
-           (file+headline ,(expand-file-name "web.org" talon-org-dir) "Bookmarks")
-           "* %:annotation\tAdded: %U" :empty-lines 1 :immediate-finish t :kill-buffer t)
+          ("t" "Todo [inbox]" entry
+           (file+headline ,(expand-file-name "inbox.org" talon-org-dir) "Tasks")
+           "* TODO %i%?")
+          ("T" "Tickler" entry
+           (file+headline ,(expand-file-name "tickler.org" talon-org-dir) "Tickler")
+           "* %i%? \n %U")
           ))
+
+  (setq org-refile-targets `((,(expand-file-name "gtd.org" talon-org-dir) :maxlevel . 3)
+                             (,(expand-file-name "someday.org" talon-org-dir) :level . 1)
+                             (,(expand-file-name "tickler.org" talon-org-dir) :maxlevel . 2)))
+
+  (setq org-agenda-custom-commands
+        '(("o" "At the office" tags-todo "@office"
+           ((org-agenda-overriding-header "Office")
+            (org-agenda-skip-function #'my-org-agenda-skip-all-siblings-but-first)))))
+
+  (defun my-org-agenda-skip-all-siblings-but-first ()
+    "Skip all but the first non-done entry."
+    (let (should-skip-entry)
+      (unless (org-current-is-todo)
+        (setq should-skip-entry t))
+      (save-excursion
+        (while (and (not should-skip-entry) (org-goto-sibling t))
+          (when (org-current-is-todo)
+            (setq should-skip-entry t))))
+      (when should-skip-entry
+        (or (outline-next-heading)
+            (goto-char (point-max))))))
+
+  (defun org-current-is-todo ()
+    (string= "TODO" (org-get-todo-state)))
+  ;; (setq org-capture-templates
+  ;;       `(
+  ;;         ("ts" "Study Task" entry
+  ;;          (file+headline ,(expand-file-name "gtd.org" talon-org-dir) "Tasks")
+  ;;          "* TODO %^{Brief Description}\tAdded: %U\t:Study:\n%?")
+  ;;         ("tp" "Project Task" entry
+  ;;          (file+headline ,(expand-file-name "gtd.org" talon-org-dir) "Tasks")
+  ;;          "* TODO %^{Brief Description}\tAdded: %U\t:Project:\n%?")
+  ;;         ("wc" "Work Code Note" entry
+  ;;          (file+headline ,(expand-file-name "work-note.org" talon-org-dir) "Code")
+  ;;          "* %^{Brief Description}\tAdded: %U\t:Work:\n%?")
+  ;;         ("sn" "Study Note" entry
+  ;;          (file+headline ,(expand-file-name "study-note.org" talon-org-dir) "Note")
+  ;;          "* %^{Brief Description}\tAdded: %U\t:Study: :Note:\n%?")
+  ;;         ("ps" "Protocol Text" plain
+  ;;          (file+function ,(expand-file-name "web.org" talon-org-dir) org-capture-template-goto-link)
+  ;;          "Added: %U\n\t%:initial" :empty-lines 1 :immediate-finish t :kill-buffer t)
+  ;;         ("pb" "Protocol Bookmarks" entry
+  ;;          (file+headline ,(expand-file-name "web.org" talon-org-dir) "Bookmarks")
+  ;;          "* %:annotation\tAdded: %U" :empty-lines 1 :immediate-finish t :kill-buffer t)
+  ;;         ))
 
   (defvar load-language-list '((emacs-lisp . t)
                                (perl . t)
@@ -142,9 +184,9 @@ prepended to the element after the #+HEADER: tag."
 (use-package pandoc
   :init
   (add-to-list 'org-export-backends 'pandoc)
-      (setq org-pandoc-options
-          '((standalone . t)
-            (mathjax . t))))
+  (setq org-pandoc-options
+        '((standalone . t)
+          (mathjax . t))))
 
 (provide 'init-org)
 

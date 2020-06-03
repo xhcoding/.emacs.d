@@ -22,3 +22,6 @@
 [submodule "extensions/company-english-helper"]
 	path = extensions/company-english-helper
 	url = https://github.com/manateelazycat/company-english-helper.git
+[submodule "extensions/magit-pretty-graph"]
+	path = extensions/magit-pretty-graph
+	url = https://github.com/georgek/magit-pretty-graph.git

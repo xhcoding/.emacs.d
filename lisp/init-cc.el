@@ -49,14 +49,11 @@
       (next-line)
       (c-indent-line)))
 
-  (defun talon--inner-comment-p()
-    (nth 4 (syntax-ppss)))
-
   (defun talon-c-new-line()
     "Newline and indent."
     (interactive)
     (cond ((talon--inner-bracket-p) (talon--inner-bracket-ret))
-          ((talon--inner-comment-p) (c-indent-new-comment-line))
+          ((talon*inner-comment-p) (c-indent-new-comment-line))
           (t (newline-and-indent))))
 
   (add-hook 'c++-mode-hook 'talon-set-c-style)
