@@ -104,7 +104,7 @@ prepended to the element after the #+HEADER: tag."
         `(
           ("t" "Todo [inbox]" entry
            (file+headline ,(expand-file-name "inbox.org" talon-org-dir) "Tasks")
-           "* TODO %i%?")
+           "* TODO %i%? %^G")
           ("T" "Tickler" entry
            (file+headline ,(expand-file-name "tickler.org" talon-org-dir) "Tickler")
            "* %i%? \n %U")
@@ -187,6 +187,17 @@ prepended to the element after the #+HEADER: tag."
   (setq org-pandoc-options
         '((standalone . t)
           (mathjax . t))))
+
+(use-package org-roam-server
+  :config
+  (require 'org-roam-protocol)
+  (setq org-roam-directory (expand-file-name "org-roam" talon-org-dir)
+        org-roam-server-host "127.0.0.1"
+        org-roam-server-port 8080
+        org-roam-server-authenticate nil
+        org-roam-server-label-truncate t
+        org-roam-server-label-truncate-length 60
+        org-roam-server-label-wrap-length 20))
 
 (provide 'init-org)
 

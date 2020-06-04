@@ -47,6 +47,7 @@
 (require 'init-project)
 (require 'init-yasnippet)
 (require 'init-lsp)
+(require 'init-dap)
 (require 'init-cc)
 (require 'init-org)
 (require 'init-python)
