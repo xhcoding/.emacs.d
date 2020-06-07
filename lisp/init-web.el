@@ -23,12 +23,15 @@
         js2-highlight-level 3
         js2-highlight-external-variables t)
 
+  (defun talon--js-comment-new-line()
+    (newline-and-indent)
+    (insert "* "))
+
   (defun talon-js-new-line()
     "Newline and indent."
     (interactive)
-    (cond ((talon*inner-comment-p) (c-indent-new-comment-line))
+    (cond ((talon*inner-comment-p) (talon--js-comment-new-line))
           (t (newline-and-indent))))
-
 
   :bind (:map js2-mode-map
               ("RET" . talon-js-new-line)))

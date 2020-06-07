@@ -95,8 +95,6 @@ prepended to the element after the #+HEADER: tag."
         org-src-tab-acts-natively t)
 
   (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
-  (setq org-enforce-todo-checkbox-dependencies t
-        org-enforce-todo-dependencies t)
 
   (require 'org-protocol)
 
