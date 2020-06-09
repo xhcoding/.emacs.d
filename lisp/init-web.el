@@ -36,6 +36,14 @@
   :bind (:map js2-mode-map
               ("RET" . talon-js-new-line)))
 
+(use-package js-comint
+  :config
+  (add-hook 'js2-mode-hook
+          (lambda ()
+            (local-set-key (kbd "C-x C-e") 'js-send-last-sexp)
+            (local-set-key (kbd "C-c b") 'js-send-buffer)
+            (local-set-key (kbd "C-c C-b") 'js-send-buffer-and-go))))
+
 (provide 'init-web)
 
 ;;; init-web.el ends here
