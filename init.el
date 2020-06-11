@@ -52,6 +52,7 @@
 (require 'init-org)
 (require 'init-python)
 (require 'init-web)
+(require 'init-rust)
 (require 'init-markdown)
 (require 'init-others)
 (require 'init-finish)

@@ -1,4 +1,5 @@
 auto-package-update
+cargo
 ccls
 cmake-mode
 company-box
@@ -57,6 +58,8 @@ qt-pro-mode
 rainbow-delimiters
 request
 restclient
+rust-mode
+rust-playground
 shackle
 shrink-path
 simple-httpd
