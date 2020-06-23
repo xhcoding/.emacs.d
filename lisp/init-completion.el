@@ -17,8 +17,7 @@
          :map company-active-map
          ("C-p" . company-select-previous)
          ("C-n" . company-select-next)
-         ("<tab>" . company-complete-common-or-cycle)
-         ("<backtab>" . my-company-yasnippet)
+         ("<tab>" . my-company-yasnippet)
          :map company-search-map
          ("C-p" . company-select-previous)
          ("C-n" . company-select-next))
@@ -36,6 +35,12 @@
         '(not comint-mode erc-mode message-mode help-mode gud-mode)
         company-frontends '(company-pseudo-tooltip-frontend company-echo-metadata-frontend)
         company-backends '(company-capf))
+
+  (defun my-company-yasnippet ()
+    "Hide the current completeions and expand snippets."
+    (interactive)
+    (company-cancel)
+    (call-interactively 'yas-expand))
   :config
   (use-package company-prescient
     :init (company-prescient-mode 1))

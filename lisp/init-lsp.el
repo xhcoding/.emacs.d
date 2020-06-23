@@ -30,6 +30,7 @@
 
   :config
   (require 'lsp-clients)
+  (require 'lsp-pwsh)
   (setq lsp-clients-clangd-args '("--compile-commands-dir=build" "--header-insertion=never" "--completion-style=detailed"))
   )
 

@@ -34,6 +34,9 @@
   "Check whether in comment."
   (nth 4 (syntax-ppss)))
 
+;; (defun talon/format-buffer-or-region()
+;;   (cond ((equal major-mode 'emacs-lisp-mod))))
+
 
 (provide 'init-functions)
 

@@ -8,6 +8,7 @@
   :diminish yas-minor-mode
   :hook (after-init . yas-global-mode)
   :config
+  (setq yas-indent-line 'fixed)
   (add-to-list 'yas-snippet-dirs talon-private-snippets-dir))
 
 

@@ -54,6 +54,7 @@
 (require 'init-web)
 (require 'init-rust)
 (require 'init-markdown)
+(require 'init-powershell)
 (require 'init-others)
 (require 'init-finish)
 
