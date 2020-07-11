@@ -34,9 +34,14 @@
   "Check whether in comment."
   (nth 4 (syntax-ppss)))
 
-;; (defun talon/format-buffer-or-region()
-;;   (cond ((equal major-mode 'emacs-lisp-mod))))
 
+(defun talon/run()
+  (interactive)
+  (cond
+   ((eq major-mode 'rust-mode) (rust-run))
+   (t (message "not impl"))))
+
+(global-set-key (kbd "C-<f5>") #'talon/run)
 
 (provide 'init-functions)
 

@@ -7,7 +7,6 @@
 (use-package lsp-mode
   :diminish
   :hook (
-         (c++-mode . lsp)
          (lsp-mode . lsp-flycheck-enable)
          )
   :init
@@ -31,10 +30,12 @@
   :config
   (require 'lsp-clients)
   (require 'lsp-pwsh)
+  (require 'lsp-rust)
   (setq lsp-clients-clangd-args '("--compile-commands-dir=build" "--header-insertion=never" "--completion-style=detailed"))
   )
 
 (use-package ccls
+  :disabled t
   :hook ((c-mode c++-mode) . (lambda()
                                (require 'ccls)
                                (lsp)))

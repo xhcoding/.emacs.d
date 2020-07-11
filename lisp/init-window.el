@@ -107,6 +107,7 @@
         shackle-default-rule nil
         shackle-rules
         '((("*Help*" "*Apropos*") :select t :size 0.3 :align 'below :autoclose t)
+          (compilation-mode :select t :size 0.3 :align 'below :autoclose t)
           ("*Flycheck errors*" :select t :size 0.3 :align 'below :autoclose t))))
 
 

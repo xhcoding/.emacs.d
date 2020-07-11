@@ -35,7 +35,29 @@
 
   (when IS-WINDOWS
     (setq projectile-git-submodule-command nil
-          projectile-enable-caching nil)))
+          projectile-enable-caching nil))
+
+  (add-to-list 'projectile-project-root-files-top-down-recurring "configure")
+  )
+
+(use-package treemacs
+  :bind (([f8] . treemacs)
+         ("M-0" . treemacs-select-window))
+
+  :config
+  (setq treemacs-collapse-dirs           (if treemacs-python-executable 3 0)
+        treemacs-sorting                 'alphabetic-asc
+        treemacs-follow-after-init       t
+        treemacs-is-never-other-window   t
+        treemacs-silent-filewatch        t
+        treemacs-silent-refresh          t
+        treemacs-width                   30
+        treemacs-no-png-images           nil))
+
+(use-package treemacs-projectile
+  :after projectile
+  :bind (:map projectile-command-map
+              ("h" . treemacs-projectile)))
 
 (provide 'init-project)
 

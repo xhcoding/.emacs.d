@@ -5,7 +5,6 @@
 ;;; Code:
 
 (use-package flycheck
-  :hook (prog-mode . flycheck-mode)
   :config
   (setq flycheck-global-modes
         '(not text-mode outline-mode fundamental-mode org-mode

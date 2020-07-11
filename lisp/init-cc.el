@@ -16,7 +16,14 @@
 (use-package cc-mode
   :ensure nil
   :mode ("\\.h\\'" . c++-mode)
+  :hook (c++-mode . try-start-lsp)
   :config
+
+  (defun try-start-lsp()
+    (interactive)
+    (when (file-exists-p (expand-file-name "build/compile_commands.json" (projectile-project-root)))
+      (lsp)))
+
   (defun talon-set-c-style()
     "Set current buffer's c-style to my style."
     (interactive)

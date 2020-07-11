@@ -7,6 +7,7 @@ company-ctags
 company-prescient
 company-quickhelp
 company
+counsel-etags
 counsel
 dap-mode
 bui
@@ -52,9 +53,6 @@ powershell
 prescient
 pretty-hydra
 dash-functional
-projectile
-pkg-info
-epl
 qt-pro-mode
 rainbow-delimiters
 request
@@ -68,6 +66,7 @@ spinner
 swiper
 ivy
 transient
+treemacs-projectile
 treemacs
 ht
 hydra
@@ -78,6 +77,9 @@ avy
 f
 s
 dash
+projectile
+pkg-info
+epl
 use-package
 bind-key
 visual-regexp

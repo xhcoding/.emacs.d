@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: head
+# key: head
+# --
+;;; `(file-name-nondirectory buffer-file-name)` --- $1  -*- lexical-binding: t no-byte-compile: t; -*-
+
+;;; Commentary:
+
+;;; Code:
+
+$0
+
+;;; `(file-name-nondirectory buffer-file-name)` ends here

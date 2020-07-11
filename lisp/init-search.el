@@ -48,6 +48,9 @@
   (when IS-WINDOWS
     (setq ivy-dynamic-exhibit-delay-ms 200)))
 
+(use-package counsel-etags
+  :bind (("C-]" . counsel-etags-find-tag-at-point)))
+
 (provide 'init-search)
 
 ;;; init-search.el ends here
