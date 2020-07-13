@@ -83,7 +83,7 @@
                  file-path)
                 0))
         (progn
-          (let* ((image-url (concat  +my-blog-res-url (string-trim-left file-path +my-blog-root-dir)))
+          (let* ((image-url (concat  +my-blog-res-url (string-trim-left file-path (expand-file-name +my-blog-root-dir))))
                  (new-link (org-element-put-property link :path image-url )))
             `(,new-link ,desc ,info)))
       `(,link ,desc ,info))))
