@@ -91,6 +91,7 @@ read-only or not file-visiting."
   :config
   (push (expand-file-name recentf-save-file) recentf-exclude)
   (recentf-load-list)
+  (remove-hook 'kill-emacs-hook 'recentf-save-list)
   )
 
 
