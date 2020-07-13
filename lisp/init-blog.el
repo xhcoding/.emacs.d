@@ -12,6 +12,10 @@
   (expand-file-name "images/" +my-blog-root-dir)
   "Blog's image directory.")
 
+(defconst +my-blog-res-url
+  "http://source.xhcoding.cn/"
+  "Blog's source address.")
+
 (use-package ox-hugo)
 
 (defun +my-blog*easy-hugo--org-headers (file)
@@ -64,6 +68,27 @@
            (org-hugo-export-to-md))))
      files)))
 
+;; ~/Documents/Blog/images/1.png ==> http://source.xhcoding.cn/1.png
+(defun +my-blog*export-blog-image-url(args)
+  (let* ((link (nth 0 args))
+         (desc (nth 1 args))
+         (info (nth 2 args))
+         (old-raw-path (org-element-property :path link))
+         (file-path (expand-file-name old-raw-path))
+         (type (org-element-property :type link)))
+    (if (and (string= type "file")
+               (equal
+                (string-match-p
+                 (regexp-quote (expand-file-name +my-blog-root-dir))
+                 file-path)
+                0))
+        (progn
+          (let* ((image-url (concat  +my-blog-res-url (string-trim-left file-path +my-blog-root-dir)))
+                 (new-link (org-element-put-property link :path image-url )))
+            `(,new-link ,desc ,info)))
+      `(,link ,desc ,info))))
+
+(advice-add #'org-hugo-link :filter-args #'+my-blog*export-blog-image-url)
 
 (provide 'init-blog)
 
