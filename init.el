@@ -21,6 +21,7 @@
   (setq load-path talon-dumped-load-path)
   (global-font-lock-mode)
   (transient-mark-mode)
+  (advice-add 'url-retrieve-synchronously :override #'(lambda(&rest args)(message "url-retrieve-synchronously will crash")))
   )
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
