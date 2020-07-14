@@ -20,7 +20,6 @@
          (split-string (buffer-string)))))
 
   (dolist (package '(
-                     "snails"
                      "auto-save"
                      "color-rg"
                      "thing-edit"

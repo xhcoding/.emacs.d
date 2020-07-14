@@ -16,9 +16,6 @@
 [submodule "extensions/thing-edit"]
 	path = extensions/thing-edit
 	url = https://github.com/manateelazycat/thing-edit.git
-[submodule "extensions/snails"]
-	path = extensions/snails
-	url = git@github.com:xhcoding/snails.git
 [submodule "extensions/company-english-helper"]
 	path = extensions/company-english-helper
 	url = https://github.com/manateelazycat/company-english-helper.git

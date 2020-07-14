@@ -1,6 +1,5 @@
 auto-package-update
 cargo
-ccls
 cmake-mode
 company-box
 company-ctags
