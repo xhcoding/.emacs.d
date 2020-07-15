@@ -19,3 +19,6 @@
 [submodule "extensions/company-english-helper"]
 	path = extensions/company-english-helper
 	url = https://github.com/manateelazycat/company-english-helper.git
+[submodule "extensions/snails"]
+	path = extensions/snails
+	url = https://github.com/xhcoding/snails.git

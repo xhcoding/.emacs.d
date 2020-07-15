@@ -21,6 +21,7 @@
 
   (dolist (package '(
                      "auto-save"
+                     "snails"
                      "color-rg"
                      "thing-edit"
                      "awesome-pair"
