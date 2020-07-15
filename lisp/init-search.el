@@ -16,8 +16,7 @@
 (use-package snails
   :load-path (lambda() (expand-file-name "snails" talon-ext-dir))
   :commands (snails snails-search-point)
-  :bind (("C-c r" . (lambda()(interactive)(snails '(snails-backend-rg))))
-         ("C-c p" . (lambda()(interactive)(snails '(snails-backend-projectile-switch-project)))))
+  :bind (("C-c r" . (lambda()(interactive)(snails '(snails-backend-rg)))))
   :config
   (setq snails-default-backends
         '(

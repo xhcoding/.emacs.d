@@ -40,6 +40,11 @@
   (add-to-list 'projectile-project-root-files-top-down-recurring "configure")
   )
 
+(use-package counsel-projectile
+  :hook (counsel-mode . counsel-projectile-mode)
+  :bind (("C-x p p" . counsel-projectile-switch-project))
+  :init (setq counsel-projectile-grep-initial-input '(ivy-thing-at-point)))
+
 (use-package treemacs
   :bind (([f8] . treemacs)
          ("M-0" . treemacs-select-window))
