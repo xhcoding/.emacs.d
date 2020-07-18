@@ -3,3 +3,16 @@
 git clone https://github.com/xhcoding/.emacs.d.git
 git submodule update --init
 #+END_SRC
+
+* Dump
+  dump package
+
+  #+begin_src shell
+    "C:\Program Files\Emacs\x86_64\bin\emacs.exe" --batch -q -l C:\Users\xhcoding\.emacs.d\dump.el
+  #+end_src
+
+  start
+
+  #+begin_src shell
+    "C:\Program Files\Emacs\x86_64\bin\runemacs.exe" --dump-file="C:\Users\xhcoding\.emacs.d\emacs.pdump"
+  #+end_src
