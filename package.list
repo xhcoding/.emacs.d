@@ -1,13 +1,12 @@
-counsel-projectile
 auto-package-update
 cargo
 cmake-mode
 company-box
 company-ctags
 company-prescient
-company-quickhelp
 company
 counsel-etags
+counsel-projectile
 counsel
 dap-mode
 bui

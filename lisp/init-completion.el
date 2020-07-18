@@ -101,14 +101,6 @@
           (Template . ,(all-the-icons-material "format_align_left" :height 0.8 :v-adjust -0.15)))
         company-box-icons-alist 'company-box-icons-all-the-icons))
 
-(use-package company-quickhelp
-  :defines company-quickhelp-delay
-  :bind (:map company-active-map
-              ([remap company-show-doc-buffer] . company-quickhelp-manual-begin))
-  :hook (global-company-mode . company-quickhelp-mode)
-  :init (setq company-quickhelp-delay 0.5))
-
-
 (use-package company-ctags)
 
 (use-package company-english-helper

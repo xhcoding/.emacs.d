@@ -16,9 +16,6 @@
   )
 
 (use-package wucuo
-  :init
-  (when IS-WINDOWS
-    (add-to-list 'exec-path "C:/msys64/mingw64/bin/"))
   :config
   (setq ispell-personal-dictionary (expand-file-name ".aspell.en.pws" talon-etc-dir)))
 
