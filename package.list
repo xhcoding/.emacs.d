@@ -79,6 +79,7 @@ dash
 projectile
 pkg-info
 epl
+undo-tree
 use-package
 bind-key
 visual-regexp

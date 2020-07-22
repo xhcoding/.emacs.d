@@ -20,3 +20,6 @@ emacs.pdump
 .exten*
 .dap*
 bookmarks
+projects
+eshell/
+

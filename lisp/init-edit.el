@@ -154,6 +154,9 @@ read-only or not file-visiting."
     ("rl" thing-replace-line))))
   :bind ("C-." . thing-edit-hydra/body))
 
+(use-package undo-tree
+  :hook (after-init . global-undo-tree-mode))
+
 
 (use-package format-all
   :commands (format-all-buffer))

@@ -48,10 +48,7 @@
 (use-package lsp-python-ms
   :hook (python-mode . (lambda ()
                          (require 'lsp-python-ms)
-                         (lsp)))
-  :config
-  (when (executable-find "python3")
-    (setq lsp-python-ms-python-executable-cmd "python3")))
+                         (lsp))))
 
 (use-package lsp-ui
   :custom-face
