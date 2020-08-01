@@ -1,17 +1,31 @@
-* Install
+* 安装
 #+BEGIN_SRC shell
 git clone https://github.com/xhcoding/.emacs.d.git
 git submodule update --init
 #+END_SRC
 
+将 lib 目录下的 dll 复制到 emacs.exe 同级目录
+
+** 必须的依赖
+   - ripgrep - 搜索工具 ： https://github.com/BurntSushi/ripgrep
+   - 字体：https://github.com/be5invis/Sarasa-Gothic
+
+** 其它依赖
+   - fd - 文件查找工具: https://github.com/sharkdp/fd
+   - hugo - 博客配置：https://github.com/gohugoio/hugo
+   - ctags - 生成 tags 文件 : https://github.com/universal-ctags/ctags
+   - clangd - C++ LSP 服务端 : https://clangd.llvm.org/
+   - git for windows : https://git-scm.com/downloads 
+
 * Dump
-  dump package
+
+  只对包加载做了 dump ，新加了一个包时，用下面的命令 dump
 
   #+begin_src shell
     "C:\Program Files\Emacs\x86_64\bin\emacs.exe" --batch -q -l C:\Users\xhcoding\.emacs.d\dump.el
   #+end_src
 
-  start
+  以 dump 模式启动
 
   #+begin_src shell
     "C:\Program Files\Emacs\x86_64\bin\runemacs.exe" --dump-file="C:\Users\xhcoding\.emacs.d\emacs.pdump"

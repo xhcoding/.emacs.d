@@ -5,6 +5,7 @@
 ;;; Code:
 
 (use-package eaf
+  :if (file-exists-p (expand-file-name "ELisp/emacs-application-framework" talon-code-dir))
   :load-path (lambda()(expand-file-name "ELisp/emacs-application-framework" talon-code-dir))
   :init
   (when IS-WINDOWS
