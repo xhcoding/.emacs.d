@@ -15,7 +15,8 @@ git submodule update --init
    - hugo - 博客配置：https://github.com/gohugoio/hugo
    - ctags - 生成 tags 文件 : https://github.com/universal-ctags/ctags
    - clangd - C++ LSP 服务端 : https://clangd.llvm.org/
-   - git for windows : https://git-scm.com/downloads 
+   - git for windows : https://git-scm.com/downloads
+   - im-select 输入法切换工具 ：https://github.com/daipeihust/im-select
 
 * Dump
 
