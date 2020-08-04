@@ -32,6 +32,7 @@
   (require 'lsp-pwsh)
   (require 'lsp-rust)
   (setq lsp-clients-clangd-args '("--compile-commands-dir=build" "--header-insertion=never" "--completion-style=detailed"))
+
   )
 
 (use-package ccls
@@ -45,9 +46,10 @@
                  :compilationDatabaseDirectory "build"
                  :index (:threads 2))))
 
-(use-package lsp-python-ms
+(use-package lsp-pylance
+  :load-path  talon-ext-dir
   :hook (python-mode . (lambda ()
-                         (require 'lsp-python-ms)
+                         (require 'lsp-pylance)
                          (lsp))))
 
 (use-package lsp-ui
@@ -102,8 +104,8 @@
          :map lsp-ui-mode-map
          ("M-<f6>" . lsp-ui-hydra/body)
          ("M-RET" . lsp-ui-sideline-apply-code-actions)
-	     ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
-	     ([remap xref-find-references]  . lsp-ui-peek-find-references)
+         ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+         ([remap xref-find-references]  . lsp-ui-peek-find-references)
          )
   :hook (lsp-mode . lsp-ui-mode)
   :init (setq lsp-ui-doc-enable nil

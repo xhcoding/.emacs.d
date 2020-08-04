@@ -25,7 +25,6 @@ groovy-mode
 js-comint
 js2-mode
 language-id
-lsp-python-ms
 lsp-treemacs
 lsp-ui
 lsp-mode
