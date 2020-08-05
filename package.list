@@ -36,12 +36,13 @@ markdown-toc
 markdown-mode
 memoize
 mixed-pitch
+org-download
 org-roam-server
 org-roam
 emacsql-sqlite3
 emacsql
 ox-hugo
-pandoc
+ox-pandoc
 pcre2el
 plantuml-mode
 popup

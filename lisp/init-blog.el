@@ -23,7 +23,8 @@
   (let ((date
          (format-time-string "%Y-%m-%d")))
     (concat
-     "#+HUGO_BASE_DIR: ../"
+     " -*- mode: Org; org-download-image-dir: \"../images\"; -*-"
+     "\n#+HUGO_BASE_DIR: ../"
      "\n#+HUGO_SECTION: post"
      "\n#+TITLE: " file
      "\n#+DATE: " date
@@ -42,6 +43,13 @@
         easy-hugo-org-header t)
   (advice-add #'easy-hugo--org-headers :override #'+my-blog*easy-hugo--org-headers)
   )
+
+
+(use-package org-download
+  :config
+  (when IS-WINDOWS
+    (setq org-download-screenshot-method "i_view64 /capture=4 /convert=\"%s\""
+          org-download-display-inline-images 'posframe)))
 
 (defun +my-blog/publish()
   "Publish my blog."

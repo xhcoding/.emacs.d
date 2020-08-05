@@ -179,7 +179,7 @@ prepended to the element after the #+HEADER: tag."
                `(:cmdline . ,(concat "-charset utf-8")))
   )
 
-(use-package pandoc
+(use-package ox-pandoc
   :init
   (add-to-list 'org-export-backends 'pandoc)
   (setq org-pandoc-options
@@ -196,6 +196,8 @@ prepended to the element after the #+HEADER: tag."
         org-roam-server-label-truncate t
         org-roam-server-label-truncate-length 60
         org-roam-server-label-wrap-length 20))
+
+
 
 (provide 'init-org)
 
