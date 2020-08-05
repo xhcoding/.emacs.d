@@ -5,9 +5,7 @@
 ;;; Code:
 
 (use-package cmake-mode
-  :hook (cmake-mode . (lambda()
-                        (set (make-local-variable 'company-backends)
-                             '((company-cmake company-dabbrev-code))))))
+  :hook (cmake-mode . lsp))
 
 (use-package qt-pro-mode
   :mode ("\\.pro\\'" "\\.pri\\'"))

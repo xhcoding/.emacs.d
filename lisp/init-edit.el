@@ -109,6 +109,7 @@ read-only or not file-visiting."
           python-mode
           js-mode
           rust-mode
+          groovy-mode
           ) . awesome-pair-mode)
   :bind (:map awesome-pair-mode-map
               ("(" . awesome-pair-open-round)
