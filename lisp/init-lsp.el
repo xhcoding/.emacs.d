@@ -20,7 +20,7 @@
         lsp-signature-auto-activate nil
         lsp-auto-configure nil
 
-        lsp-enable-snippet nil
+        lsp-enable-snippet t
         lsp-enable-file-watchers nil
         lsp-enable-folding nil
         lsp-enable-indentation nil
@@ -31,7 +31,7 @@
   (require 'lsp-clients)
   (require 'lsp-pwsh)
   (require 'lsp-rust)
-  (setq lsp-clients-clangd-args '("--compile-commands-dir=build" "--header-insertion=never" "--completion-style=detailed"))
+  (setq lsp-clients-clangd-args '("--compile-commands-dir=build" "--completion-style=detailed" "--clang-tidy"))
 
   )
 

@@ -23,8 +23,7 @@
   (let ((date
          (format-time-string "%Y-%m-%d")))
     (concat
-     " -*- mode: Org; org-download-image-dir: \"../images\"; -*-"
-     "\n#+HUGO_BASE_DIR: ../"
+     "#+HUGO_BASE_DIR: ../"
      "\n#+HUGO_SECTION: post"
      "\n#+TITLE: " file
      "\n#+DATE: " date
@@ -48,8 +47,9 @@
 (use-package org-download
   :config
   (when IS-WINDOWS
-    (setq org-download-screenshot-method "i_view64 /capture=4 /convert=\"%s\""
-          org-download-display-inline-images 'posframe)))
+    (setq org-download-screenshot-method "i_view64 /clippaste /convert=\"%s\""
+          org-download-display-inline-images 'posframe
+          org-download-image-dir +my-blog-img-dir)))
 
 (defun +my-blog/publish()
   "Publish my blog."

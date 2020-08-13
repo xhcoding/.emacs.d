@@ -42,7 +42,8 @@
 
 (use-package counsel-projectile
   :hook (counsel-mode . counsel-projectile-mode)
-  :bind (("C-x p p" . counsel-projectile-switch-project))
+  :bind (("C-x p p" . counsel-projectile-switch-project)
+         ("C-x p f" . counsel-projectile-find-file))
   :init (setq counsel-projectile-grep-initial-input '(ivy-thing-at-point)))
 
 (use-package treemacs

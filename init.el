@@ -41,6 +41,7 @@
 (require 'init-chinese)
 (require 'init-blog)
 (require 'init-vcs)
+(require 'init-tramp)
 (require 'init-eaf)
 
 ;; program
