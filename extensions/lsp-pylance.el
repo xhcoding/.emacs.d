@@ -5,8 +5,17 @@
 ;;; Code:
 
 (setq lsp-pylance-server-cmd  `("node"
-                                ,(expand-file-name "~/.vscode/extensions/ms-python.vscode-pylance-2020.8.0/server/server.bundle.js")
+                                ,(expand-file-name "~/.vscode/extensions/ms-python.vscode-pylance-2020.8.1/server/server.bundle.js")
                                 "--stdio"))
+
+(lsp-register-custom-settings
+ `(("python.analysis.typeCheckingMode" "off")
+   ("python.analysis.diagnosticMode" "openFilesOnly")
+   ("python.analysis.stubPath" "./typings")
+   ("python.analysis.autoSearchPaths" t)
+   ("python.analysis.extraPaths" [])
+   ("python.analysis.useLibraryCodeForTypes" t)
+   ("python.analysis.autoImportCompletions" t)))
 
 
 (lsp-register-client
