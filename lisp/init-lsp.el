@@ -6,9 +6,6 @@
 
 (use-package lsp-mode
   :diminish
-  :hook (
-         (lsp-mode . lsp-flycheck-enable)
-         )
   :init
   (setq read-process-output-max (* 1024 1024))
 
@@ -18,7 +15,7 @@
         lsp-keep-workspace-alive nil
         lsp-prefer-capf t
         lsp-signature-auto-activate nil
-        lsp-auto-configure nil
+        lsp-auto-configure t
 
         lsp-enable-snippet t
         lsp-enable-file-watchers nil
@@ -108,21 +105,7 @@
          ([remap xref-find-references]  . lsp-ui-peek-find-references)
          )
   :hook (lsp-mode . lsp-ui-mode)
-  :init (setq lsp-ui-doc-enable nil
-              lsp-ui-doc-use-webkit nil
-              lsp-ui-doc-delay 0.2
-              lsp-ui-doc-include-signature t
-              lsp-ui-doc-position 'at-point
-              lsp-ui-doc-border (face-foreground 'default)
-              lsp-eldoc-enable-hover nil ; Disable eldoc displays in minibuffer
-
-              lsp-ui-sideline-enable t
-              lsp-ui-sideline-show-hover nil
-              lsp-ui-sideline-show-diagnostics nil
-              lsp-ui-sideline-show-code-actions t
-              lsp-ui-sideline-ignore-duplicate t
-
-              lsp-ui-imenu-enable t
+  :init (setq lsp-ui-doc-border (face-foreground 'default)
               lsp-ui-imenu-colors `(,(face-foreground 'font-lock-keyword-face)
                                     ,(face-foreground 'font-lock-string-face)
                                     ,(face-foreground 'font-lock-constant-face)
@@ -139,6 +122,9 @@
               (setq lsp-ui-doc-border (face-foreground 'default))
               (set-face-background 'lsp-ui-doc-background
                                    (face-background 'tooltip)))))
+
+
+(use-package lsp-ivy)
 
 (provide 'init-lsp)
 
