@@ -9,7 +9,7 @@
                                 "--stdio"))
 
 (lsp-register-custom-settings
- `(("python.analysis.typeCheckingMode" "off")
+ `(("python.analysis.typeCheckingMode" "strict")
    ("python.analysis.diagnosticMode" "openFilesOnly")
    ("python.analysis.stubPath" "./typings")
    ("python.analysis.autoSearchPaths" t)

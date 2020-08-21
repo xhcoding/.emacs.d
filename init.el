@@ -28,6 +28,7 @@
 
 (require 'init-accelerate)
 (require 'init-const)
+(require 'init-private nil t)
 (require 'init-functions)
 (require 'init-custom)
 (require 'init-package)

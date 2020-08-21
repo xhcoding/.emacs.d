@@ -12,7 +12,7 @@
     (setq eaf-python-command "python"))
   :config
   (eaf-setq eaf-browser-default-zoom  "2")
-  (setq eaf-grip-token "ab9d3961d8564bf818d705ba19f83979d9c2b9a7")
+  (setq eaf-grip-token talon-github-grip-token)
   (defun talon-eaf-open-current-file()
     (interactive)
     (eaf-open (buffer-file-name))))
