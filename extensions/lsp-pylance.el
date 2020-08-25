@@ -5,7 +5,7 @@
 ;;; Code:
 
 (setq lsp-pylance-server-cmd  `("node"
-                                ,(expand-file-name "~/.vscode/extensions/ms-python.vscode-pylance-2020.8.1/server/server.bundle.js")
+                                ,(expand-file-name "~/.vscode/extensions/ms-python.vscode-pylance-2020.8.2/server/server.bundle.js")
                                 "--stdio"))
 
 (lsp-register-custom-settings
