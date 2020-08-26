@@ -15,7 +15,8 @@
    ("python.analysis.autoSearchPaths" t)
    ("python.analysis.extraPaths" [])
    ("python.analysis.useLibraryCodeForTypes" t)
-   ("python.analysis.autoImportCompletions" t)))
+   ("python.analysis.autoImportCompletions" t)
+   ("python.analysis.completeFunctionParens" t)))
 
 
 (lsp-register-client

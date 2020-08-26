@@ -25,7 +25,7 @@
         lsp-enable-symbol-highlighting nil)
 
   :config
-  (require 'lsp-clients)
+  (require 'lsp-clangd)
   (require 'lsp-pwsh)
   (require 'lsp-rust)
   (setq lsp-clients-clangd-args '("--compile-commands-dir=build"
@@ -128,6 +128,36 @@
 
 
 (use-package lsp-ivy)
+
+(use-package company-tabnine
+  :custom
+  (company-tabnine-max-num-results 9)
+  :hook
+  (lsp-completion-mode . (lambda ()
+                      (setq-local company-tabnine-max-num-results 3)
+                      (add-to-list 'company-transformers 'company//sort-by-tabnine t)
+                      (setq-local company-backends '((company-capf :with company-tabnine :separate)))))
+  :config
+
+  (defun company//sort-by-tabnine (candidates)
+    (if (or (functionp company-backend)
+            (not (and (listp company-backend) (memq 'company-tabnine company-backend))))
+        candidates
+      (let ((candidates-table (make-hash-table :test #'equal))
+            candidates-lsp
+            candidates-tabnine)
+        (dolist (candidate candidates)
+          (if (eq (get-text-property 0 'company-backend candidate)
+                  'company-tabnine)
+              (unless (gethash candidate candidates-table)
+                (push candidate candidates-tabnine))
+            (push candidate candidates-lsp)
+            (puthash candidate t candidates-table)))
+        (setq candidates-lsp (nreverse candidates-lsp))
+        (setq candidates-tabnine (nreverse candidates-tabnine))
+        (nconc (seq-take candidates-lsp 6)
+               (seq-take candidates-tabnine 3)))))
+  )
 
 (provide 'init-lsp)
 

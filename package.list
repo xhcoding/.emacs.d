@@ -4,6 +4,7 @@ cmake-mode
 company-box
 company-ctags
 company-prescient
+company-tabnine
 company
 counsel-etags
 counsel-projectile
@@ -75,11 +76,13 @@ ace-window
 avy
 f
 s
-dash
 projectile
 pkg-info
 epl
 undo-tree
+unicode-escape
+dash
+names
 use-package
 bind-key
 visual-regexp

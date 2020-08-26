@@ -23,7 +23,7 @@
          ("C-n" . company-select-next))
   :init
   (setq company-idle-delay 0
-        company-tooltip-limit 10
+        company-tooltip-limit 9
         company-minimum-prefix-length 2
         company-dabbrev-downcase nil
         company-show-numbers t
