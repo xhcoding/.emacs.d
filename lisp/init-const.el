@@ -22,7 +22,7 @@
 (defconst talon-etc-dir (expand-file-name "etc" user-emacs-directory))
 
 ;; org
-(defconst talon-org-dir (expand-file-name "~/Documents/Org/"))
+(defconst talon-org-dir (expand-file-name "~/Org/"))
 
 (defconst talon-private-snippets-dir (expand-file-name "private/snippets/" talon-org-dir))
 

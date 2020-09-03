@@ -191,11 +191,16 @@ prepended to the element after the #+HEADER: tag."
   (require 'org-roam-protocol)
   (setq org-roam-directory (expand-file-name "org-roam" talon-org-dir)
         org-roam-server-host "127.0.0.1"
-        org-roam-server-port 8080
+        org-roam-server-port 9000
         org-roam-server-authenticate nil
         org-roam-server-label-truncate t
         org-roam-server-label-truncate-length 60
-        org-roam-server-label-wrap-length 20))
+        org-roam-server-label-wrap-length 20)
+
+  (defun talon/open-roam-browser()
+    (interactive)
+    (shell-command (format "explorer.exe http://127.0.0.1:%s" org-roam-server-port)))
+  )
 
 
 
