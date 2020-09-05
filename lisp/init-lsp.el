@@ -35,17 +35,6 @@
 
   )
 
-(use-package ccls
-  :disabled t
-  :hook ((c-mode c++-mode) . (lambda()
-                               (require 'ccls)
-                               (lsp)))
-  :config
-  (setq ccls-initialization-options
-        `(:cache (:directory ,(expand-file-name "ccls_cache" talon-code-dir))
-                 :compilationDatabaseDirectory "build"
-                 :index (:threads 2))))
-
 (use-package lsp-pylance
   :load-path  talon-ext-dir
   :hook (python-mode . (lambda ()

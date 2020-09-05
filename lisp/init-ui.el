@@ -25,14 +25,6 @@
   :hook (prog-mode . rainbow-delimiters-mode))
 
 
-(use-package awesome-tab
-  :disabled t
-  :load-path (lambda() (expand-file-name "awesome-tab" talon-ext-dir))
-  :config
-  (setq awesome-tab-height 100)
-  (awesome-tab-mode +1)
-  :bind ("C-t" . awesome-tab-ace-jump))
-
 (use-package doom-themes
   :config
   (if talon-dumped-load-path
