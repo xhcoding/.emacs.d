@@ -78,12 +78,11 @@ prepended to the element after the #+HEADER: tag."
                     (self-insert-command 1)))))
 
   :config
+
+  (require 'org-habit)
+
   (setq org-ellipsis " ▼ "
         org-directory talon-org-dir
-        org-agenda-files `(
-                           ,(expand-file-name "inbox.org" talon-org-dir)
-                           ,(expand-file-name "gtd.org" talon-org-dir)
-                           ,(expand-file-name "tickler.org" talon-org-dir))
         org-M-RET-may-split-line `((default . nil)))
 
   (setcar (nthcdr 0 org-emphasis-regexp-components) " \t('\"{[:nonascii:]")
@@ -93,66 +92,6 @@ prepended to the element after the #+HEADER: tag."
   (setq org-confirm-babel-evaluate nil
         org-src-fontify-natively t
         org-src-tab-acts-natively t)
-
-  (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
-
-  (require 'org-protocol)
-
-  (setq org-capture-templates
-        `(
-          ("t" "Todo [inbox]" entry
-           (file+headline ,(expand-file-name "inbox.org" talon-org-dir) "Tasks")
-           "* TODO %i%? %^G")
-          ("T" "Tickler" entry
-           (file+headline ,(expand-file-name "tickler.org" talon-org-dir) "Tickler")
-           "* %i%? \n %U")
-          ))
-
-  (setq org-refile-targets `((,(expand-file-name "gtd.org" talon-org-dir) :maxlevel . 3)
-                             (,(expand-file-name "someday.org" talon-org-dir) :level . 1)
-                             (,(expand-file-name "tickler.org" talon-org-dir) :maxlevel . 2)))
-
-  (setq org-agenda-custom-commands
-        '(("o" "At the office" tags-todo "@office"
-           ((org-agenda-overriding-header "Office")
-            (org-agenda-skip-function #'my-org-agenda-skip-all-siblings-but-first)))))
-
-  (defun my-org-agenda-skip-all-siblings-but-first ()
-    "Skip all but the first non-done entry."
-    (let (should-skip-entry)
-      (unless (org-current-is-todo)
-        (setq should-skip-entry t))
-      (save-excursion
-        (while (and (not should-skip-entry) (org-goto-sibling t))
-          (when (org-current-is-todo)
-            (setq should-skip-entry t))))
-      (when should-skip-entry
-        (or (outline-next-heading)
-            (goto-char (point-max))))))
-
-  (defun org-current-is-todo ()
-    (string= "TODO" (org-get-todo-state)))
-  ;; (setq org-capture-templates
-  ;;       `(
-  ;;         ("ts" "Study Task" entry
-  ;;          (file+headline ,(expand-file-name "gtd.org" talon-org-dir) "Tasks")
-  ;;          "* TODO %^{Brief Description}\tAdded: %U\t:Study:\n%?")
-  ;;         ("tp" "Project Task" entry
-  ;;          (file+headline ,(expand-file-name "gtd.org" talon-org-dir) "Tasks")
-  ;;          "* TODO %^{Brief Description}\tAdded: %U\t:Project:\n%?")
-  ;;         ("wc" "Work Code Note" entry
-  ;;          (file+headline ,(expand-file-name "work-note.org" talon-org-dir) "Code")
-  ;;          "* %^{Brief Description}\tAdded: %U\t:Work:\n%?")
-  ;;         ("sn" "Study Note" entry
-  ;;          (file+headline ,(expand-file-name "study-note.org" talon-org-dir) "Note")
-  ;;          "* %^{Brief Description}\tAdded: %U\t:Study: :Note:\n%?")
-  ;;         ("ps" "Protocol Text" plain
-  ;;          (file+function ,(expand-file-name "web.org" talon-org-dir) org-capture-template-goto-link)
-  ;;          "Added: %U\n\t%:initial" :empty-lines 1 :immediate-finish t :kill-buffer t)
-  ;;         ("pb" "Protocol Bookmarks" entry
-  ;;          (file+headline ,(expand-file-name "web.org" talon-org-dir) "Bookmarks")
-  ;;          "* %:annotation\tAdded: %U" :empty-lines 1 :immediate-finish t :kill-buffer t)
-  ;;         ))
 
   (defvar load-language-list '((emacs-lisp . t)
                                (perl . t)
@@ -166,8 +105,271 @@ prepended to the element after the #+HEADER: tag."
                                (plantuml . t)))
 
   (org-babel-do-load-languages 'org-babel-load-languages
-                               load-language-list))
+                               load-language-list)
 
+
+  ;; gtd 相关配置
+
+  (setq org-agenda-files `(,(expand-file-name "gtd" talon-org-dir)))
+
+  (setq org-default-notes-file (expand-file-name "gtd/inbox.org" talon-org-dir))
+
+  (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)"  "|" "DONE(d)" "CANCELLED(c@/!)")
+                            (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)")))
+
+  (setq org-todo-keyword-faces
+        (quote (("TODO" :foreground "red" :weight bold)
+                ("NEXT" :foreground "blue" :weight bold)
+                ("DONE" :foreground "forest green" :weight bold)
+                ("WAITING" :foreground "orange" :weight bold)
+                ("HOLD" :foreground "magenta" :weight bold)
+                ("CANCELLED" :foreground "forest green" :weight bold))))
+
+  (setq org-treat-S-cursor-todo-selection-as-state-change nil)
+
+  (setq org-todo-state-tags-triggers
+        (quote (("CANCELLED" ("CANCELLED" . t))
+                ("WAITING" ("WAITING" . t))
+                ("HOLD" ("WAITING") ("HOLD" . t))
+                (done ("WAITING") ("HOLD"))
+                ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+                ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
+
+  (require 'org-protocol)
+
+  (setq org-capture-templates
+        `(("t"
+           "todo"
+           entry
+           (file  ,(expand-file-name "gtd/inbox.org" talon-org-dir))
+           "* TODO %?\n%U\n")
+          ("h"
+           "Habit"
+           entry
+           (file ,(expand-file-name "gtd/inbox.org" talon-org-dir))
+           "* NEXT %?\n%U\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")
+          ))
+
+  (setq org-refile-targets '((nil :maxlevel . 9)
+                             (org-agenda-files :maxlevel . 9)))
+
+  (setq org-refile-use-outline-path t)
+  (setq org-outline-path-complete-in-steps nil)
+  (setq org-refile-allow-creating-parent-nodes 'confirm)
+
+  (defun talon-verify-refile-target ()
+    "Exclude todo keywords with a done state from refile targets"
+    (not (member (nth 2 (org-heading-components)) org-done-keywords)))
+
+  (setq org-refile-target-verify-function 'talon-verify-refile-target)
+
+
+  (setq org-agenda-dim-blocked-tasks nil)
+
+  (setq org-agenda-compact-blocks t)
+
+  (defvar  talon-hide-scheduled-and-waiting-next-tasks t)
+
+  (defun talon*is-project-p ()
+    "Any task with a todo keyword subtask"
+    (save-restriction
+      (widen)
+      (let ((has-subtask)
+            (subtree-end (save-excursion (org-end-of-subtree t)))
+            (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
+        (save-excursion
+          (forward-line 1)
+          (while (and (not has-subtask)
+                      (< (point) subtree-end)
+                      (re-search-forward "^\*+ " subtree-end t))
+            (when (member (org-get-todo-state) org-todo-keywords-1)
+              (setq has-subtask t))))
+        (and is-a-task has-subtask))))
+
+
+  (defun talon*find-project-task ()
+    "Move point to the parent (project) task if any"
+    (save-restriction
+      (widen)
+      (let ((parent-task (save-excursion (org-back-to-heading 'invisible-ok) (point))))
+        (while (org-up-heading-safe)
+          (when (member (nth 2 (org-heading-components)) org-todo-keywords-1)
+            (setq parent-task (point))))
+        (goto-char parent-task)
+        parent-task)))
+
+  (defun talon*is-project-subtree-p ()
+    "Any task with a todo keyword that is in a project subtree.
+Callers of this function already widen the buffer view."
+    (let ((task (save-excursion (org-back-to-heading 'invisible-ok)
+                                (point))))
+      (save-excursion
+        (talon*find-project-task)
+        (if (equal (point) task)
+            nil
+          t))))
+
+  (defun talon*is-task-p ()
+    "Any task with a todo keyword and no subtask"
+    (save-restriction
+      (widen)
+      (let ((has-subtask)
+            (subtree-end (save-excursion (org-end-of-subtree t)))
+            (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
+        (save-excursion
+          (forward-line 1)
+          (while (and (not has-subtask)
+                      (< (point) subtree-end)
+                      (re-search-forward "^\*+ " subtree-end t))
+            (when (member (org-get-todo-state) org-todo-keywords-1)
+              (setq has-subtask t))))
+        (and is-a-task (not has-subtask)))))
+
+  (defun talon*is-subproject-p ()
+    "Any task which is a subtask of another project"
+    (let ((is-subproject)
+          (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
+      (save-excursion
+        (while (and (not is-subproject) (org-up-heading-safe))
+          (when (member (nth 2 (org-heading-components)) org-todo-keywords-1)
+            (setq is-subproject t))))
+      (and is-a-task is-subproject)))
+
+  (defun talon*skip-non-stuck-projects ()
+    "Skip trees that are not stuck projects"
+    (save-restriction
+      (widen)
+      (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
+        (if (talon*is-project-p)
+            (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
+                   (has-next ))
+              (save-excursion
+                (forward-line 1)
+                (while (and (not has-next) (< (point) subtree-end) (re-search-forward "^\\*+ NEXT " subtree-end t))
+                  (unless (member "WAITING" (org-get-tags-at))
+                    (setq has-next t))))
+              (if has-next
+                  next-headline
+                nil)) ; a stuck project, has subtasks but no next task
+          next-headline))))
+
+  (defun talon*skip-non-projects ()
+    "Skip trees that are not projects"
+    (if (save-excursion (talon*skip-non-stuck-projects))
+        (save-restriction
+          (widen)
+          (let ((subtree-end (save-excursion (org-end-of-subtree t))))
+            (cond
+             ((talon*is-project-p)
+              nil)
+             ((and (talon*is-project-subtree-p) (not (talon*is-task-p)))
+              nil)
+             (t
+              subtree-end))))
+      (save-excursion (org-end-of-subtree t))))
+
+  (defun talon*skip-projects-and-habits-and-single-tasks ()
+    "Skip trees that are projects, tasks that are habits, single non-project tasks"
+    (save-restriction
+      (widen)
+      (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
+        (cond
+         ((org-is-habit-p)
+          next-headline)
+         ((and talon-hide-scheduled-and-waiting-next-tasks
+               (member "WAITING" (org-get-tags-at)))
+          next-headline)
+         ((talon*is-project-p)
+          next-headline)
+         ((and (talon*is-task-p) (not (talon*is-project-subtree-p)))
+          next-headline)
+         (t
+          nil)))))
+
+  (defun talon*skip-non-project-tasks ()
+    "Show project tasks.
+Skip project and sub-project tasks, habits, and loose non-project tasks."
+    (save-restriction
+      (widen)
+      (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
+             (next-headline (save-excursion (or (outline-next-heading) (point-max)))))
+        (cond
+         ((talon*is-project-p)
+          next-headline)
+         ((org-is-habit-p)
+          subtree-end)
+         ((and (talon*is-project-subtree-p)
+               (member (org-get-todo-state) (list "NEXT")))
+          subtree-end)
+         ((not (talon*is-project-subtree-p))
+          subtree-end)
+         (t
+          nil)))))
+
+  (setq org-agenda-span 'day)
+  (setq org-agenda-custom-commands
+        '(("h" "Habits" tags-todo "STYLE=\"habit\""
+           ((org-agenda-overriding-header "Habits")
+            (org-agenda-sorting-strategy
+             '(todo-state-down effort-up category-keep))))
+          ("o" "Agenda"
+           ((agenda "" nil)
+            (tags "INBOX"
+                  ((org-agenda-overriding-header "Tasks To Refile")
+                   (org-tags-match-list-sublevels nil)))
+            (tags-todo "-CANCELLED/!"
+                       ((org-agenda-overriding-header "Stuck Projects")
+                        (org-agenda-skip-function 'talon*skip-non-stuck-projects)
+                        (org-agenda-sorting-strategy
+                         '(category-keep))))
+            (tags-todo "-HOLD-CANCELLED/!"
+                       ((org-agenda-overriding-header "Projects")
+                        (org-agenda-skip-function 'talon*skip-non-projects)
+                        (org-tags-match-list-sublevels 'indented)
+                        (org-agenda-sorting-strategy
+                         '(category-keep))))
+
+            (tags-todo "-CANCELLED/!NEXT"
+                       ((org-agenda-overriding-header (concat "Project Next Tasks"
+                                                              (if talon-hide-scheduled-and-waiting-next-tasks
+                                                                  ""
+                                                                " (including WAITING and SCHEDULED tasks)")))
+                        (org-agenda-skip-function 'talon*skip-projects-and-habits-and-single-tasks)
+                        (org-tags-match-list-sublevels t)
+                        (org-agenda-todo-ignore-scheduled talon-hide-scheduled-and-waiting-next-tasks)
+                        (org-agenda-todo-ignore-deadlines talon-hide-scheduled-and-waiting-next-tasks)
+                        (org-agenda-todo-ignore-with-date talon-hide-scheduled-and-waiting-next-tasks)
+                        (org-agenda-sorting-strategy
+                         '(todo-state-down effort-up category-keep))))
+
+
+            (tags-todo "-INBOX-CANCELLED-WAITING/!"
+                       ((org-agenda-overriding-header (concat "Project Subtasks"
+                                    (if talon-hide-scheduled-and-waiting-next-tasks ""
+                                      " (including WAITING and SCHEDULED tasks)")))
+                  (org-agenda-skip-function 'talon*skip-non-project-tasks)
+                  (org-agenda-todo-ignore-scheduled talon-hide-scheduled-and-waiting-next-tasks)
+                  (org-agenda-todo-ignore-deadlines talon-hide-scheduled-and-waiting-next-tasks)
+                  (org-agenda-todo-ignore-with-date talon-hide-scheduled-and-waiting-next-tasks)
+                  (org-agenda-sorting-strategy
+                   '(category-keep))))
+
+            ))))
+
+  (setq org-tag-alist '((:startgroup)
+                        ("@office" . ?o)
+                        ("@home" . ?H)
+                        (:endgroup)
+                        ("WAITING" . ?w)
+                        ("HOLD" . ?h)
+                        ("CANCELLED" . ?c)
+                        ("PERSONAL" . ?P)
+                        ("WORK" . ?W)))
+
+  (setq org-fast-tag-selection-single-key 'expert)
+  (setq org-agenda-tags-todo-honor-ignore-options t)
+
+  )
 
 (use-package plantuml-mode
   :init
