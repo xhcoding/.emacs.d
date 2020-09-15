@@ -147,7 +147,7 @@ prepended to the element after the #+HEADER: tag."
            "Habit"
            entry
            (file ,(expand-file-name "gtd/inbox.org" talon-org-dir))
-           "* NEXT %?\n%U\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")
+           "* TODO %?\n%U\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+2d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: TODO\n:END:\n")
           ))
 
   (setq org-refile-targets '((nil :maxlevel . 9)
@@ -306,9 +306,32 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
          (t
           nil)))))
 
+  (defun talon*skip-non-archivable-tasks ()
+  "Skip trees that are not available for archiving"
+  (save-restriction
+    (widen)
+    ;; Consider only tasks with done todo headings as archivable candidates
+    (let ((next-headline (save-excursion (or (outline-next-heading) (point-max))))
+          (subtree-end (save-excursion (org-end-of-subtree t))))
+      (if (member (org-get-todo-state) org-todo-keywords-1)
+          (if (member (org-get-todo-state) org-done-keywords)
+              (let* ((daynr (string-to-int (format-time-string "%d" (current-time))))
+                     (a-month-ago (* 60 60 24 (+ daynr 1)))
+                     (last-month (format-time-string "%Y-%m-" (time-subtract (current-time) (seconds-to-time a-month-ago))))
+                     (this-month (format-time-string "%Y-%m-" (current-time)))
+                     (subtree-is-current (save-excursion
+                                           (forward-line 1)
+                                           (and (< (point) subtree-end)
+                                                (re-search-forward (concat last-month "\\|" this-month) subtree-end t)))))
+                (if subtree-is-current
+                    subtree-end ; Has a date in this month or last month, skip it
+                  nil))  ; available to archive
+            (or subtree-end (point-max)))
+        next-headline))))
+
   (setq org-agenda-span 'day)
   (setq org-agenda-custom-commands
-        '(("h" "Habits" tags-todo "STYLE=\"habit\""
+        '(("h" "Habits" tags-todo "STYLE=habit"
            ((org-agenda-overriding-header "Habits")
             (org-agenda-sorting-strategy
              '(todo-state-down effort-up category-keep))))
@@ -353,8 +376,16 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
                   (org-agenda-todo-ignore-with-date talon-hide-scheduled-and-waiting-next-tasks)
                   (org-agenda-sorting-strategy
                    '(category-keep))))
+            (tags "-REFILE/"
+                  ((org-agenda-overriding-header "Tasks to Archive")
+                   (org-agenda-skip-function 'talon*skip-non-archivable-tasks)
+                   (org-tags-match-list-sublevels nil)))
 
             ))))
+
+  ;; archive
+  (setq org-archive-mark-done nil)
+  (setq org-archive-location "%s_archive::* Archived Tasks")
 
   (setq org-tag-alist '((:startgroup)
                         ("@office" . ?o)

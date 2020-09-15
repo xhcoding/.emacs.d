@@ -80,6 +80,7 @@ s
 projectile
 pkg-info
 epl
+typescript-mode
 undo-tree
 unicode-escape
 dash
@@ -87,6 +88,7 @@ names
 use-package
 bind-key
 visual-regexp
+web-mode
 which-key
 with-editor
 async

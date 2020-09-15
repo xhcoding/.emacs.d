@@ -22,21 +22,21 @@
                 avy-style 'pre)
   :pretty-hydra
   ((:title (pretty-hydra-title "Go To" 'faicon "rocket") :quit-key "q")
-  ("Base Move"
-   (("n" next-line "next line")
-    ("p" previous-line "previous line")
-    ("f" forward-char "forward char")
-    ("b" backward-char "backward char"))
-   "Char Move"
-   (("c" avy-goto-char-2)
-    ("C" avy-goto-char-timer)
-    ("l" avy-goto-char-in-line))
-   "Other Move"
-   (("L" avy-goto-line)
-    ("e" flycheck-next-error)
-    ("E" flycheck-previous-error))
-   "Mark"
-   (("m" set-mark-command))))
+   ("Base Move"
+    (("n" next-line "next line")
+     ("p" previous-line "previous line")
+     ("f" forward-char "forward char")
+     ("b" backward-char "backward char"))
+    "Char Move"
+    (("c" avy-goto-char-2)
+     ("C" avy-goto-char-timer)
+     ("l" avy-goto-char-in-line))
+    "Other Move"
+    (("L" avy-goto-line)
+     ("e" flycheck-next-error)
+     ("E" flycheck-previous-error))
+    "Mark"
+    (("m" set-mark-command))))
   :bind (("M-l" . avy-hydra/body)))
 
 (use-package evil-nerd-commenter
@@ -150,27 +150,35 @@ read-only or not file-visiting."
     (("W" thing-cut-word "cut word")
      ("P" thing-cut-parentheses "cut round")
      ("L" thing-cut-line "Cut line"))
-   "Replace"
-   (("rp" thing-replace-parentheses "replace round")
-    ("rl" thing-replace-line))))
+    "Replace"
+    (("rp" thing-replace-parentheses "replace round")
+     ("rl" thing-replace-line))))
   :bind ("C-." . thing-edit-hydra/body))
 
 (use-package undo-tree
   :hook (after-init . global-undo-tree-mode)
   :config
   (eval-after-load 'undo-tree
-  '(progn
-     (define-key undo-tree-map (kbd "C-/") nil)
-     (define-key undo-tree-map (kbd "C-_") nil)
-     (define-key undo-tree-map (kbd "C-?") nil)
-     (define-key undo-tree-map (kbd "M-_") nil)
-     (define-key undo-tree-map (kbd "C-z") 'undo-tree-undo)
-     (define-key undo-tree-map (kbd "C-S-z") 'undo-tree-redo)))
+    '(progn
+       (define-key undo-tree-map (kbd "C-/") nil)
+       (define-key undo-tree-map (kbd "C-_") nil)
+       (define-key undo-tree-map (kbd "C-?") nil)
+       (define-key undo-tree-map (kbd "M-_") nil)
+       (define-key undo-tree-map (kbd "C-z") 'undo-tree-undo)
+       (define-key undo-tree-map (kbd "C-S-z") 'undo-tree-redo)))
   )
 
 
 (use-package format-all
-  :commands (format-all-buffer))
+  :commands (format-all-buffer)
+  :bind ("C-M-\\" . talon/format-buffer)
+  :config
+  (defun talon/format-buffer()
+    (interactive)
+    (if (memq major-mode '(c++-mode))
+        (lsp-format-buffer)
+      (format-all-buffer)))
+  )
 
 (provide 'init-edit)
 
