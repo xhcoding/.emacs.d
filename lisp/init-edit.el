@@ -180,6 +180,26 @@ read-only or not file-visiting."
       (format-all-buffer)))
   )
 
+(use-package multiple-cursors
+  :bind (("C-S-c C-S-c"   . mc/edit-lines)
+         ("C->"           . mc/mark-next-like-this)
+         ("C-<"           . mc/mark-previous-like-this)
+         ("C-c C-<"       . mc/mark-all-like-this)
+         ("C-M->"         . mc/skip-to-next-like-this)
+         ("C-M-<"         . mc/skip-to-previous-like-this)
+         ("s-<mouse-1>"   . mc/add-cursor-on-click)
+         ("C-S-<mouse-1>" . mc/add-cursor-on-click)
+         :map mc/keymap
+         ("C-|" . mc/vertical-align-with-space)))
+
+(use-package goto-chg
+  :bind ("C-," . goto-last-change))
+
+(use-package goto-last-point
+  :diminish
+  :bind ("C-M-," . goto-last-point)
+  :hook (after-init . goto-last-point-mode))
+
 (provide 'init-edit)
 
 

@@ -23,6 +23,8 @@ format-all
 frame-local
 git-messenger
 gnu-elpa-keyring-update
+goto-chg
+goto-last-point
 groovy-mode
 js-comint
 js2-mode
@@ -39,6 +41,7 @@ markdown-toc
 markdown-mode
 memoize
 mixed-pitch
+multiple-cursors
 org-download
 org-roam-server
 org-roam
