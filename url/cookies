@@ -3,13 +3,12 @@
 
 (setq url-cookie-storage
  '(("plantuml.com"
-  [url-cookie "active_template::173770" "pub_site.1587976772" "Wed, 29 Apr 2020 08:39:32 UTC" "/" "plantuml.com" nil]
-  [url-cookie "ezepvv" "1581" "Tue, 28 Apr 2020 08:39:32 UTC" "/" "plantuml.com" nil]
-  [url-cookie "ezovuuidtime_173770" "1587976772" "Wed, 29 Apr 2020 08:39:32 UTC" "/" "plantuml.com" nil]
   [url-cookie "ezCMPCCS" "true" "Tue, 27 Apr 2021 08:39:32 GMT" "/" "plantuml.com" nil]))
 )
 (setq url-cookie-secure-storage
- 'nil)
+ '((".visualstudio.com"
+  [url-cookie "VstsSession" "%7B%22PersistentSessionId%22%3A%225b8f877f-6525-4a69-80a1-14ca786f587e%22%2C%22PendingAuthenticationSessionId%22%3A%2200000000-0000-0000-0000-000000000000%22%2C%22CurrentAuthenticationSessionId%22%3A%2200000000-0000-0000-0000-000000000000%22%2C%22SignInState%22%3A%7B%7D%7D" "Sun, 28-Sep-2025 01:10:51 GMT" "/" ".visualstudio.com" t]))
+)
 
 ;; Local Variables:
 ;; version-control: never

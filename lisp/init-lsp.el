@@ -30,9 +30,7 @@
   (require 'lsp-rust)
   (setq lsp-clients-clangd-args '("--compile-commands-dir=build"
                                   "--completion-style=detailed"
-                                  "--clang-tidy"
                                   "--header-insertion=never"))
-
   )
 
 (use-package lsp-pylance

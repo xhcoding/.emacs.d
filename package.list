@@ -16,6 +16,7 @@ doom-modeline
 all-the-icons
 doom-themes
 easy-hugo
+edit-indirect
 evil-nerd-commenter
 expand-region
 flycheck
@@ -29,6 +30,8 @@ groovy-mode
 js-comint
 js2-mode
 language-id
+load-relative
+loc-changes
 lsp-ivy
 lsp-treemacs
 lsp-ui
@@ -42,6 +45,7 @@ markdown-mode
 memoize
 mixed-pitch
 multiple-cursors
+nsis-mode
 org-download
 org-roam-server
 org-roam
@@ -69,6 +73,7 @@ simple-httpd
 spinner
 swiper
 ivy
+test-simple
 transient
 treemacs-projectile
 treemacs
