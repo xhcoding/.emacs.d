@@ -419,6 +419,19 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
         '((standalone . t)
           (mathjax . t))))
 
+(use-package org-roam
+  :bind (("C-c m f" . org-roam-find-file)
+         ("C-c m c" . org-roam-capture)
+         ("C-c m i" . org-roam-insert))
+
+  :config
+  (setq org-roam-capture-templates
+      '(
+        ("d" "default" plain (function org-roam-capture--get-point)
+         "%?"
+         :file-name "%<%Y%m%d%H%M%S>-${slug}"
+         :head "#+title: ${title}\n#+roam_alias:\n#+roam_tags: \n"))))
+
 (use-package org-roam-server
   :config
   (require 'org-roam-protocol)

@@ -28,6 +28,7 @@
 
   (setq rime-disable-predicates
         '(rime-predicate-after-alphabet-char-p
+          rime-predicate-prog-in-code-p
           rime-predicate-hydra-p
           rime-predicate-punctuation-after-ascii-p)))
 

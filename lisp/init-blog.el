@@ -56,10 +56,12 @@
   (interactive)
   (let ((default-directory +my-blog-root-dir))
     (call-process-shell-command "hugo")
-    (setq default-directory (expand-file-name "public" +my-blog-root-dir))
-    (call-process-shell-command "git add .")
-    (call-process-shell-command "git commit -m \"publish\"")
-    (call-process-shell-command "git push")
+    (call-process-shell-command
+     (concat "d:/Software/cwrsync/bin/rsync.exe"
+             " -e /cygdrive/d/Software/cwrsync/bin/ssh.exe"
+             " -avz --delete"
+             " /cygdrive/c/Users/xhcoding/Blog/public/"
+             " xhcoding@xhcoding.cn:~/public/"))
     (message "publish finished")))
 
 (defun +my-blog/export-all()
@@ -85,11 +87,11 @@
          (file-path (expand-file-name old-raw-path))
          (type (org-element-property :type link)))
     (if (and (string= type "file")
-               (equal
-                (string-match-p
-                 (regexp-quote (expand-file-name +my-blog-root-dir))
-                 file-path)
-                0))
+             (equal
+              (string-match-p
+               (regexp-quote (expand-file-name +my-blog-root-dir))
+               file-path)
+              0))
         (progn
           (let* ((image-url (concat  +my-blog-res-url (string-trim-left file-path (expand-file-name +my-blog-root-dir))))
                  (new-link (org-element-put-property link :path image-url )))

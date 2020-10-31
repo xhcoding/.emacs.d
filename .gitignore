@@ -24,3 +24,4 @@ projects
 eshell/
 groovy-language-server/
 lisp/init-private.el
+org-roam.db
