@@ -10,6 +10,5 @@
 
 (use-package groovy-mode)
 
-
 (provide 'init-others)
 ;;; init-others.el ends here

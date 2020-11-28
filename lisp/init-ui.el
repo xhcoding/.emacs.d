@@ -19,10 +19,10 @@
 (if (member "等距更纱黑体 SC" (font-family-list))
 
     (if (> (x-display-pixel-height) 2000)
-        (set-frame-font "-outline-等距更纱黑体 SC-normal-normal-normal-mono-30-*-*-*-c-*-iso8859-1" nil t)
+        (set-frame-font "-outline-等距更纱黑体 SC-normal-normal-normal-mono-32-*-*-*-c-*-iso8859-1" nil t)
       (set-frame-font "-outline-等距更纱黑体 SC-normal-normal-normal-mono-15-*-*-*-c-*-iso8859-1" nil t))
   (if (> (x-display-pixel-height) 2000)
-      (set-frame-font "-outline-Sarasa Mono SC-normal-normal-normal-mono-30-*-*-*-c-*-iso8859-1" nil t)
+      (set-frame-font "-outline-Sarasa Mono SC-normal-normal-normal-mono-32-*-*-*-c-*-iso8859-1" nil t)
     (set-frame-font "-outline-Sarasa Mono SC-normal-normal-normal-mono-15-*-*-*-c-*-iso8859-1" nil t)))
 
 (use-package rainbow-delimiters
@@ -32,8 +32,8 @@
 (use-package doom-themes
   :config
   (if talon-dumped-load-path
-      (enable-theme 'doom-one-light)
-    (load-theme 'doom-one-light t)
+      (enable-theme 'doom-solarized-light)
+    (load-theme 'doom-solarized-light t)
     )
   )
 

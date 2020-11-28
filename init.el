@@ -52,6 +52,7 @@
 (require 'init-lsp)
 (require 'init-dap)
 (require 'init-cc)
+(require 'init-qml)
 (require 'init-org)
 (require 'init-python)
 (require 'init-web)

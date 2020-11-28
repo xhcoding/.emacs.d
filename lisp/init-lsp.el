@@ -33,11 +33,11 @@
                                   "--header-insertion=never"))
   )
 
-(use-package lsp-pylance
-  :load-path  talon-ext-dir
+
+(use-package lsp-pyright
   :hook (python-mode . (lambda ()
-                         (require 'lsp-pylance)
-                         (lsp))))
+                          (require 'lsp-pyright)
+                          (lsp))))
 
 (use-package lsp-ui
   :custom-face

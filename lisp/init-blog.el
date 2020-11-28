@@ -4,6 +4,7 @@
 
 ;;; Code:
 
+
 (defconst +my-blog-root-dir
   "~/Blog/"
   "Blog root directory.")
@@ -72,7 +73,11 @@
                                  "blog" +my-blog-root-dir))))
     (seq-each
      (lambda(file)
-       (when (and (not (string-equal "." file)) (not (string-equal ".." file)) (not (string-equal "config.toml" file)))
+       (when (and
+              (not (string-equal "." file))
+              (not (string-equal ".." file))
+              (not (string-equal "config.toml" file))
+              (not (string-equal ".dir-locals.el" file)))
          (with-temp-buffer
            (find-file file)
            (org-hugo-export-to-md))))

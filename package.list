@@ -4,7 +4,9 @@ cmake-mode
 company-box
 company-ctags
 company-prescient
+company-qml
 company-tabnine
+company
 counsel-etags
 counsel-projectile
 counsel
@@ -21,18 +23,15 @@ flycheck
 format-all
 frame-local
 git-messenger
-gkroam
-company
-db
 gnu-elpa-keyring-update
 goto-chg
 goto-last-point
 groovy-mode
 js-comint
 js2-mode
-kv
 language-id
 lsp-ivy
+lsp-pyright
 lsp-treemacs
 lsp-ui
 lsp-mode
@@ -45,6 +44,7 @@ markdown-mode
 memoize
 mixed-pitch
 multiple-cursors
+nsis-mode
 org-download
 org-roam-server
 org-roam
@@ -60,6 +60,7 @@ powershell
 prescient
 pretty-hydra
 dash-functional
+qml-mode
 qt-pro-mode
 rainbow-delimiters
 request
