@@ -5,7 +5,7 @@
 ;;; Code:
 
 (use-package rust-mode
-  :init (setq rust-format-on-save t)
+  :hook (rust-mode . lsp)
   :config
   (use-package cargo
     :diminish cargo-minor-mode

@@ -31,9 +31,11 @@
     (defconst talon-code-dir (expand-file-name "D:/Code"))
   (defconst talon-code-dir (expand-file-name "~/Code")))
 
-;;
-;; (when IS-WINDOWS
-;;   (add-to-list 'exec-path "C:/msys64/mingw64/bin/"))
+;; archives dir
+(if IS-WINDOWS
+    (defconst talon-archive-dir (expand-file-name "D:/Archives"))
+  (defconst talon-archive-dir (expand-file-name "~/Archives")))
+
 
 (provide 'init-const)
 

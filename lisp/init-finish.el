@@ -19,9 +19,13 @@
   )
 
 ;; 将系统输入法切换成英文输入法
-(when (and IS-WINDOWS (executable-find "im-select"))
-  (shell-command-to-string "im-select 1033")
+(defun talon/switch-input-to-english()
+  (when (and IS-WINDOWS (executable-find "im-select"))
+    (shell-command-to-string "im-select 1033")
+    )
   )
+
+(add-hook 'after-init-hook #'talon/switch-input-to-english)
 
 (provide 'init-finish)
 

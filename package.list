@@ -29,6 +29,9 @@ goto-last-point
 groovy-mode
 js-comint
 js2-mode
+json-mode
+json-reformat
+json-snatcher
 language-id
 lsp-ivy
 lsp-pyright

@@ -48,9 +48,15 @@
 (use-package org-download
   :config
   (when IS-WINDOWS
-    (setq org-download-screenshot-method "i_view64 /clippaste /convert=\"%s\""
+    (setq org-download-screenshot-method "irfanview /capture=4 /convert=\"%s\""
           org-download-display-inline-images 'posframe
-          org-download-image-dir +my-blog-img-dir)))
+          org-download-abbreviate-filename-function 'expand-file-name))
+  (defun talon/org-download-clipboard()
+    (interactive)
+    (let ((org-download-screenshot-method "irfanview /clippaste /convert=\"%s\""))
+      (org-download-screenshot)))
+
+  )
 
 (defun +my-blog/publish()
   "Publish my blog."
@@ -58,8 +64,8 @@
   (let ((default-directory +my-blog-root-dir))
     (call-process-shell-command "hugo")
     (call-process-shell-command
-     (concat "d:/Software/cwrsync/bin/rsync.exe"
-             " -e /cygdrive/d/Software/cwrsync/bin/ssh.exe"
+     (concat "D:/Applications/Scoop/apps/cwrsync/current/bin/rsync.exe"
+             " -e /cygdrive/d/Applications/Scoop/apps/cwrsync/current/bin/ssh.exe"
              " -avz --delete"
              " /cygdrive/c/Users/xhcoding/Blog/public/"
              " xhcoding@xhcoding.cn:~/public/"))
