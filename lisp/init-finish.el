@@ -8,7 +8,7 @@
 ;; server
 (setq server-name "emacs-server-file")
 
-(unless (server-running-p server-name)
+(ignore-errors
   (server-start))
 
 (toggle-frame-fullscreen)
