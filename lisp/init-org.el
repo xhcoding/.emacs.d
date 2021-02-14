@@ -52,7 +52,7 @@ prepended to the element after the #+HEADER: tag."
      ("m" (hot-expand "<s" "emacs-lisp") "emacs-lisp")
      ("y" (hot-expand "<s" "python :results output") "python")
      ("p" (hot-expand "<s" "perl") "perl")
-     ("r" (hot-expand "<s" "ruby") "ruby")
+     ("r" (hot-expand "<s" "rust") "rust")
      ("S" (hot-expand "<s" "sh") "sh")
      ("g" (hot-expand "<s" "go :imports '\(\"fmt\"\)") "golang"))
     "Misc"
@@ -447,8 +447,6 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
     (interactive)
     (shell-command (format "explorer.exe http://127.0.0.1:%s" org-roam-server-port)))
   )
-
-
 
 (provide 'init-org)
 

@@ -25,3 +25,7 @@ eshell/
 groovy-language-server/
 lisp/init-private.el
 org-roam.db
+/.org-jira/
+/eln-cache/
+network-security.data
+/request/

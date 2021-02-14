@@ -22,7 +22,8 @@
         lsp-enable-folding nil
         lsp-enable-indentation nil
         lsp-enable-on-type-formatting nil
-        lsp-enable-symbol-highlighting nil)
+        lsp-enable-symbol-highlighting nil
+        )
 
   :config
   (require 'lsp-clangd)
@@ -117,6 +118,7 @@
 (use-package lsp-ivy)
 
 (use-package company-tabnine
+  :disabled t
   :custom
   (company-tabnine-max-num-results 9)
   :hook
@@ -145,6 +147,7 @@
         (nconc (seq-take candidates-lsp 6)
                (seq-take candidates-tabnine 3)))))
   )
+
 
 (provide 'init-lsp)
 

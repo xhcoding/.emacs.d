@@ -108,7 +108,7 @@ read-only or not file-visiting."
           emacs-lisp-mode
           python-mode
           js-mode
-          rust-mode
+          rustic-mode
           groovy-mode
           ) . awesome-pair-mode)
   :bind (:map awesome-pair-mode-map
