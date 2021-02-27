@@ -331,10 +331,7 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
 
   (setq org-agenda-span 'day)
   (setq org-agenda-custom-commands
-        '(("h" "Habits" tags-todo "STYLE=habit"
-           ((org-agenda-overriding-header "Habits")
-            (org-agenda-sorting-strategy
-             '(todo-state-down effort-up category-keep))))
+        '(
           ("o" "Agenda"
            ((agenda "" nil)
             (tags "INBOX"

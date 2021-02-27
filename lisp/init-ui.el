@@ -32,10 +32,8 @@
 (use-package doom-themes
   :config
   (if talon-dumped-load-path
-      (enable-theme 'doom-solarized-light)
-    (load-theme 'doom-solarized-light t)
-    )
-  )
+      (enable-theme 'doom-one-light)
+    (load-theme 'doom-one-light t)))
 
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode)

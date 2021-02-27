@@ -16,7 +16,6 @@
 (use-package snails
   :load-path (lambda() (expand-file-name "snails" talon-ext-dir))
   :commands (snails snails-search-point)
-  :bind (("C-c r" . (lambda()(interactive)(snails '(snails-backend-rg)))))
   :config
   (setq snails-default-backends
         '(
@@ -39,7 +38,8 @@
   :hook ((after-init . ivy-mode)
          (ivy-mode . counsel-mode))
   :bind (("C-s"   . swiper)
-         ("C-x C-r" . counsel-recentf))
+         ("C-x C-r" . counsel-recentf)
+         ("C-c r" . counsel-rg))
   :init
   (when IS-WINDOWS
     (setq ivy-dynamic-exhibit-delay-ms 200))
