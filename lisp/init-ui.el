@@ -16,14 +16,13 @@
   :diminish)
 
 
-(if (member "等距更纱黑体 SC" (font-family-list))
-
+(if (member "Sarasa Mono SC" (font-family-list))
     (if (> (x-display-pixel-height) 2000)
-        (set-frame-font "-outline-等距更纱黑体 SC-normal-normal-normal-mono-34-*-*-*-c-*-iso8859-1" nil t)
-      (set-frame-font "-outline-等距更纱黑体 SC-normal-normal-normal-mono-15-*-*-*-c-*-iso8859-1" nil t))
+        (set-frame-font "-outline-Sarasa Mono SC-normal-normal-normal-mono-34-*-*-*-c-*-iso8859-1" nil t)
+      (set-frame-font "-outline-Sarasa Mono SC-normal-normal-normal-mono-15-*-*-*-c-*-iso8859-1" nil t))
   (if (> (x-display-pixel-height) 2000)
-      (set-frame-font "-outline-Sarasa Mono SC-normal-normal-normal-mono-34-*-*-*-c-*-iso8859-1" nil t)
-    (set-frame-font "-outline-Sarasa Mono SC-normal-normal-normal-mono-15-*-*-*-c-*-iso8859-1" nil t)))
+      (set-frame-font "-outline-等距更纱黑体 SC-normal-normal-normal-mono-34-*-*-*-c-*-iso8859-1" nil t)
+    (set-frame-font "-outline-等距更纱黑体 SC-normal-normal-normal-mono-15-*-*-*-c-*-iso8859-1" nil t)))
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))

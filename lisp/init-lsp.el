@@ -118,7 +118,6 @@
 (use-package lsp-ivy)
 
 (use-package company-tabnine
-  :disabled t
   :custom
   (company-tabnine-max-num-results 9)
   :hook
