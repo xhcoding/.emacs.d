@@ -1,5 +1,4 @@
 auto-package-update
-benchmark-init
 cmake-mode
 company-box
 company-ctags
@@ -11,6 +10,7 @@ counsel-projectile
 counsel
 dap-mode
 bui
+dash-functional
 diminish
 doom-modeline
 all-the-icons
@@ -46,7 +46,6 @@ hl-todo
 markdown-toc
 mixed-pitch
 multiple-cursors
-nord-theme
 org-download
 async
 org-roam-server
@@ -61,7 +60,6 @@ popup
 powershell
 prescient
 pretty-hydra
-dash-functional
 qml-mode
 qt-pro-mode
 rainbow-delimiters
@@ -71,6 +69,7 @@ rustic
 markdown-mode
 shackle
 shrink-path
+f
 simple-httpd
 spinner
 swiper
@@ -86,7 +85,6 @@ lv
 pfuture
 ace-window
 avy
-f
 s
 projectile
 pkg-info
