@@ -15,6 +15,7 @@
 ;; 插件镜像
 (setq package-archives
       '(("melpa-cn" . "http://elpa.emacs-china.org/melpa/")
+        ("melpa-cn-stable"   . "http://elpa.emacs-china.org/melpa-stable/")
         ("org-cn"   . "http://elpa.emacs-china.org/org/")
         ("gnu-cn"   . "http://elpa.emacs-china.org/gnu/")))
 

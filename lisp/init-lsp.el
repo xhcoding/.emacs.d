@@ -5,6 +5,7 @@
 ;;; Code:
 
 (use-package lsp-mode
+  :pin melpa-cn-stable
   :diminish
   :init
   (setq read-process-output-max (* 1024 1024))
@@ -23,12 +24,15 @@
         lsp-enable-indentation nil
         lsp-enable-on-type-formatting nil
         lsp-enable-symbol-highlighting nil
+        lsp-eldoc-enable-hover nil
+        lsp-modeline-diagnostics-enable nil
+        lsp-modeline-code-actions-enable nil
         )
 
   :config
-  (require 'lsp-clangd)
-  (require 'lsp-pwsh)
-  (require 'lsp-rust)
+  ;; (require 'lsp-clangd)
+  ;; (require 'lsp-pwsh)
+  ;; (require 'lsp-rust)
   (setq lsp-clients-clangd-args '("--compile-commands-dir=build"
                                   "--completion-style=detailed"
                                   "--header-insertion=never"))
@@ -103,6 +107,10 @@
                                     ,(face-foreground 'font-lock-variable-name-face)))
   :config
   (add-to-list 'lsp-ui-doc-frame-parameters '(right-fringe . 8))
+
+  (setq lsp-ui-doc-max-height 15
+        lsp-ui-doc-max-width 100
+        )
 
   ;; `C-g'to close doc
   (advice-add #'keyboard-quit :before #'lsp-ui-doc-hide)

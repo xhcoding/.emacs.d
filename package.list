@@ -10,7 +10,6 @@ counsel-projectile
 counsel
 dap-mode
 bui
-dash-functional
 diminish
 doom-modeline
 all-the-icons
@@ -39,6 +38,7 @@ lsp-pyright
 lsp-treemacs
 lsp-ui
 lsp-mode
+dash-functional
 magit-todos
 magit
 git-commit
