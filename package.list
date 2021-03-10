@@ -3,7 +3,6 @@ cmake-mode
 company-box
 company-ctags
 company-prescient
-company-tabnine
 company
 counsel-etags
 counsel-projectile
@@ -15,6 +14,8 @@ doom-modeline
 all-the-icons
 doom-themes
 easy-hugo
+elfeed-org
+elfeed
 epc
 ctable
 concurrent
@@ -75,6 +76,8 @@ spinner
 swiper
 ivy
 transient
+tree-sitter-langs
+tree-sitter
 treemacs-projectile
 treemacs
 cfrs
@@ -86,14 +89,13 @@ pfuture
 ace-window
 avy
 s
+dash
 projectile
 pkg-info
 epl
+tsc
 typescript-mode
 undo-tree
-unicode-escape
-dash
-names
 use-package
 bind-key
 visual-regexp

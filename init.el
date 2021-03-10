@@ -44,6 +44,7 @@
 (require 'init-vcs)
 (require 'init-tramp)
 (require 'init-eaf)
+(require 'init-elfeed)
 
 ;; program
 (require 'init-flycheck)

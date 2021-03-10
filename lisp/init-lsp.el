@@ -27,6 +27,7 @@
         lsp-eldoc-enable-hover nil
         lsp-modeline-diagnostics-enable nil
         lsp-modeline-code-actions-enable nil
+        lsp-enable-semantic-highlighting nil
         )
 
   :config
@@ -108,7 +109,8 @@
   :config
   (add-to-list 'lsp-ui-doc-frame-parameters '(right-fringe . 8))
 
-  (setq lsp-ui-doc-max-height 15
+  (setq lsp-ui-doc-position 'top
+        lsp-ui-doc-max-height 15
         lsp-ui-doc-max-width 100
         )
 
@@ -126,6 +128,7 @@
 (use-package lsp-ivy)
 
 (use-package company-tabnine
+  :disabled t
   :custom
   (company-tabnine-max-num-results 9)
   :hook

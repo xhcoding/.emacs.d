@@ -14,10 +14,10 @@
 
 ;; 插件镜像
 (setq package-archives
-      '(("melpa-cn" . "http://elpa.emacs-china.org/melpa/")
-        ("melpa-cn-stable"   . "http://elpa.emacs-china.org/melpa-stable/")
-        ("org-cn"   . "http://elpa.emacs-china.org/org/")
-        ("gnu-cn"   . "http://elpa.emacs-china.org/gnu/")))
+      '(("melpa-cn" . "http://mirrors.bfsu.edu.cn/elpa/melpa/")
+        ("melpa-cn-stable"  . "http://mirrors.bfsu.edu.cn/elpa/melpa-stable/")
+        ("org-cn"   . "http://mirrors.bfsu.edu.cn/elpa/org/")
+        ("gnu-cn"   . "http://mirrors.bfsu.edu.cn/elpa/gnu/")))
 
 ;; 初始化 package
 (unless (bound-and-true-p package--initialized)

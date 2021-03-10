@@ -15,9 +15,10 @@
     (setq eaf-wm-name "windows"))
   :config
   (eaf-setq eaf-browser-default-zoom  "2")
-  (defun talon-eaf-open-current-file()
-    (interactive)
-    (eaf-open (buffer-file-name))))
+  (eaf-setq eaf-browse-blank-page-url "https://duckduckgo.com")
+  (setq eaf-browser-default-search-engine "duckduckgo")
+)
+
 
 (provide 'init-eaf)
 
